@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "834846792103",
+    "project_id": "farmtotable-72546",
+    "storage_bucket": "farmtotable-72546.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834846792103:android:6cb08bb4a1bae0370afe82",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.FarmToTable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAP60kKY9b8tmgHmft6KLdxgbVSurdw2_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
