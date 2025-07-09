@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum CustomizationPart
@@ -16,69 +18,60 @@ public enum CustomizationPart
 
 public class CharacterCustomization
 {
-    public string HairId { get; private set; }
-    public string FaceId { get; private set; }
-    public string HatId { get; private set; }
-    public string TopId { get; private set; }
-    public string GloveId { get; private set; }
-    public string BottomId { get; private set; }
-    public string ShoesId { get; private set; }
-    public string BagId { get; private set; }
-    public string EyeDecoId { get; private set; }
+    public Dictionary<CustomizationPart, int> PartIndexMap { get; private set; }
 
-    public CharacterCustomization(
-        string hairId,
-        string faceId,
-        string hatId,
-        string topId,
-        string gloveId,
-        string bottomId,
-        string shoesId,
-        string bagId,
-        string eyeDecoId)
+    public CharacterCustomization()
     {
-        HairId = hairId;
-        FaceId = faceId;
-        HatId = hatId;
-        TopId = topId;
-        GloveId = gloveId;
-        BottomId = bottomId;
-        ShoesId = shoesId;
-        BagId = bagId;
-        EyeDecoId = eyeDecoId;
+        PartIndexMap = new Dictionary<CustomizationPart, int>();
+
+        foreach (CustomizationPart part in Enum.GetValues(typeof(CustomizationPart)))
+        {
+            PartIndexMap[part] = -1;
+        }
     }
 
-    public void ChangePart(CustomizationPart part, string newId)
+    public CharacterCustomization(Dictionary<CustomizationPart, int> partIndexMap)
     {
-        switch (part)
+        PartIndexMap = new Dictionary<CustomizationPart, int>(partIndexMap);
+    }
+
+    public void ChangePart(CustomizationPart part, int newIndex)
+    {
+        if (PartIndexMap.ContainsKey(part))
         {
-            case CustomizationPart.Hair:
-                HairId = newId;
-                break;
-            case CustomizationPart.Face:
-                FaceId = newId;
-                break;
-            case CustomizationPart.Hat:
-                HatId = newId;
-                break;
-            case CustomizationPart.Top:
-                TopId = newId;
-                break;
-            case CustomizationPart.Glove:
-                GloveId = newId;
-                break;
-            case CustomizationPart.Bottom:
-                BottomId = newId;
-                break;
-            case CustomizationPart.Shoes:
-                ShoesId = newId;
-                break;
-            case CustomizationPart.Bag:
-                BagId = newId;
-                break;
-            case CustomizationPart.EyeDeco:
-                EyeDecoId = newId;
-                break;
+            PartIndexMap[part] = newIndex;
         }
+    }
+
+    public int GetIndex(CustomizationPart part)
+    {
+        return PartIndexMap.ContainsKey(part) ? PartIndexMap[part] : -1;
+    }
+
+    public Dictionary<string, object> ToDictionary()
+    {
+        Dictionary<string, object> dict = new Dictionary<string, object>();
+
+        foreach (var kvp in PartIndexMap)
+        {
+            dict[kvp.Key.ToString()] = kvp.Value;
+        }
+
+        return dict;
+    }
+
+    public static CharacterCustomization FromDictionary(Dictionary<string, object> data)
+    {
+        Dictionary<CustomizationPart, int> map = new Dictionary<CustomizationPart, int>();
+
+        foreach (var kvp in data)
+        {
+            if (Enum.TryParse(kvp.Key, out CustomizationPart part))
+            {
+                map[part] = Convert.ToInt32(kvp.Value);
+            }
+        }
+
+        return new CharacterCustomization(map);
     }
 }

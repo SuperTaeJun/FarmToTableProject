@@ -2,31 +2,39 @@ using UnityEngine;
 using UnityEngine.UI;
 public class CustomizationUI : MonoBehaviour
 {
+    [Header("Buttons")]
     public Button HairButton;
     public Button HatButton;
+    public Button TopButton;
 
+
+    public Button SaveButton;
     private void Start()
     {
-        // 매니저 싱글톤 접근
-        CustomizationManager.Instance.OnPartChanged += HandlePartChanged;
-
-        HairButton.onClick.AddListener(() =>
-            CustomizationManager.Instance.ChangePart(CustomizationPart.Hair, "Hair_01"));
-
-        HatButton.onClick.AddListener(() =>
-            CustomizationManager.Instance.ChangePart(CustomizationPart.Hat, "Hat_01"));
-
+        // 버튼 연결
+        HairButton.onClick.AddListener(() => OnHairButtonClicked());
+        SaveButton.onClick.AddListener(() => OnSaveButtonClicked());
+        //HatButton.onClick.AddListener(() => OnHatButtonClicked());
+        //TopButton.onClick.AddListener(() => OnTopButtonClicked());
     }
-
-    private void HandlePartChanged(CustomizationPart part, string newId)
+    private async void OnSaveButtonClicked()
     {
-        Debug.Log($"[UI] {part}가 {newId}로 변경됨.");
-
+        await CustomizationManager.Instance.SaveCustomizationAsync();
     }
-
-    private void OnDestroy()
+    private void OnHairButtonClicked()
     {
-        if (CustomizationManager.Instance != null)
-            CustomizationManager.Instance.OnPartChanged -= HandlePartChanged;
+        // 예시로 HairIndex 2번 선택
+        CustomizationManager.Instance.ChangePart(CustomizationPart.Hair, 2);
     }
+
+    private void OnHatButtonClicked()
+    {
+        CustomizationManager.Instance.ChangePart(CustomizationPart.Hat, 1);
+    }
+
+    private void OnTopButtonClicked()
+    {
+        CustomizationManager.Instance.ChangePart(CustomizationPart.Top, 3);
+    }
+
 }

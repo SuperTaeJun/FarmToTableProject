@@ -1,42 +1,88 @@
 using System;
 using UnityEngine;
+using System.Threading.Tasks;
 
-public class CustomizationManager : MonoBehaviour
+public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 {
-    private static CustomizationManager _instance;
-    public static CustomizationManager Instance => _instance;
-
     public CharacterCustomization CurrentCustomization { get; private set; }
 
-    // 파츠가 변경되면 알리는 이벤트
-    public event Action<CustomizationPart, string> OnPartChanged;
+    public event Action<CustomizationPart, int> OnPartChanged;
 
-    private void Awake()
+    private CharacterCustomizationRepository _repo;
+    string userId = "DefaultUser";
+    protected override void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        base.Awake();
 
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
+        _repo = new CharacterCustomizationRepository();
+
+        CurrentCustomization = new CharacterCustomization();
     }
 
-    public void ChangePart(CustomizationPart part, string newId)
+    private async void Start()
+    {
+        await LoadCustomizationAsync(userId);
+    }
+
+    public void ChangePart(CustomizationPart part, int newIndex)
     {
         if (CurrentCustomization == null)
         {
-            CurrentCustomization = new CharacterCustomization(
-                null, null, null, null, null, null, null, null, null);
+            CurrentCustomization = new CharacterCustomization();
         }
 
-        CurrentCustomization.ChangePart(part, newId);
-        OnPartChanged?.Invoke(part, newId);
+        CurrentCustomization.ChangePart(part, newIndex);
+
+        Debug.Log($"[Manager] {part} changed to index {newIndex}");
+
+        OnPartChanged?.Invoke(part, newIndex);
     }
 
-    public void SetCustomization(CharacterCustomization customization)
+    public async Task SaveCustomizationAsync()
     {
-        CurrentCustomization = customization;
+        if (CurrentCustomization != null)
+        {
+            await _repo.SaveCustomizationAsync(userId, CurrentCustomization);
+        }
+    }
+
+    public async Task LoadCustomizationAsync(string userID)
+    {
+        CurrentCustomization = await _repo.LoadCustomizationAsync(userID);
+
+        if (IsAllPartsUnset(CurrentCustomization))
+        {
+            Debug.Log("[Manager] No saved customization found. Applying default values.");
+            ApplyDefaultCustomization();
+        }
+
+        NotifyAllPartsChanged();
+    }
+
+    private bool IsAllPartsUnset(CharacterCustomization customization)
+    {
+        foreach (var kvp in customization.PartIndexMap)
+        {
+            if (kvp.Value >= 0)
+                return false;
+        }
+        return true;
+    }
+
+    private void ApplyDefaultCustomization()
+    {
+        CurrentCustomization.ChangePart(CustomizationPart.Hair, 0);
+        CurrentCustomization.ChangePart(CustomizationPart.Face, 0);
+        CurrentCustomization.ChangePart(CustomizationPart.Top, 0);
+        CurrentCustomization.ChangePart(CustomizationPart.Bottom, 0);
+        // etc. 필요한 디폴트 값 세팅
+    }
+
+    private void NotifyAllPartsChanged()
+    {
+        foreach (var kvp in CurrentCustomization.PartIndexMap)
+        {
+            OnPartChanged?.Invoke(kvp.Key, kvp.Value);
+        }
     }
 }
