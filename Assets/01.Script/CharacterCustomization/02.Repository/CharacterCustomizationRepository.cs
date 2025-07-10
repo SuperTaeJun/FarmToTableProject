@@ -11,9 +11,7 @@ public class CharacterCustomizationRepository : FirebaseRepositoryBase
     {
         await ExecuteAsync(async () =>
         {
-            DocumentReference docRef = Firestore
-                .Collection(COLLECTION_NAME)
-                .Document(userId);
+            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(userId);
 
             Dictionary<string, object> data = customization.ToDictionary();
             await docRef.SetAsync(data, SetOptions.MergeAll);
@@ -24,9 +22,7 @@ public class CharacterCustomizationRepository : FirebaseRepositoryBase
     {
         return await ExecuteAsync(async () =>
         {
-            DocumentReference docRef = Firestore
-                .Collection(COLLECTION_NAME)
-                .Document(userId);
+            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(userId);
 
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 

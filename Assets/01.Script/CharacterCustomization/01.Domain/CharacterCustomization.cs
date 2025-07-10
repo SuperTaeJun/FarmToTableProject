@@ -11,59 +11,71 @@ public class CharacterCustomization
     public CharacterCustomization()
     {
         PartIndexMap = new Dictionary<CustomizationPart, int>();
-
-        EssentialParts = new List<CustomizationPart> 
+        EssentialParts = new List<CustomizationPart>
         {
-            CustomizationPart.Hair, CustomizationPart.Face, CustomizationPart.Top, CustomizationPart.Bottom, CustomizationPart.Shoes 
+            CustomizationPart.Hair,
+            CustomizationPart.Face,
+            CustomizationPart.Top,
+            CustomizationPart.Bottom,
+            CustomizationPart.Shoes
         };
 
+        InitializeAllParts();
+    }
+
+    private void InitializeAllParts()
+    {
         foreach (CustomizationPart part in Enum.GetValues(typeof(CustomizationPart)))
         {
             PartIndexMap[part] = 0;
         }
     }
 
-    public CharacterCustomization(Dictionary<CustomizationPart, int> partIndexMap)
-    {
-        PartIndexMap = new Dictionary<CustomizationPart, int>(partIndexMap);
-    }
-
     public void ChangePart(CustomizationPart part, int newIndex)
     {
-        if (PartIndexMap.ContainsKey(part))
+        if (!Enum.IsDefined(typeof(CustomizationPart), part))
         {
-            PartIndexMap[part] = newIndex;
+            throw new ArgumentException($"정의되지 않은 커스터마이징 파츠입니다: {part}", nameof(part));
         }
+
+        if (newIndex < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(newIndex), newIndex, "파츠 인덱스는 0 이상이어야 합니다.");
+        }
+
+        if (!PartIndexMap.ContainsKey(part))
+        {
+            throw new InvalidOperationException($"파츠 인덱스 맵에 '{part}' 파츠가 존재하지 않습니다.");
+        }
+
+        PartIndexMap[part] = newIndex;
     }
 
     public int GetIndex(CustomizationPart part)
     {
-        return PartIndexMap.ContainsKey(part) ? PartIndexMap[part] : -1;
+        if (!Enum.IsDefined(typeof(CustomizationPart), part))
+        {
+            throw new ArgumentException($"정의되지 않은 커스터마이징 파츠입니다: {part}", nameof(part));
+        }
+
+        return PartIndexMap.TryGetValue(part, out int value) ? value : -1;
     }
+
     public Dictionary<string, object> ToDictionary()
     {
-        Dictionary<string, object> dict = new Dictionary<string, object>();
+        if (PartIndexMap == null || PartIndexMap.Count == 0)
+        {
+            throw new InvalidOperationException("파츠 인덱스 맵이 비어있거나 초기화되지 않았습니다.");
+        }
+
+        var result = new Dictionary<string, object>();
 
         foreach (var kvp in PartIndexMap)
         {
-            dict[kvp.Key.ToString()] = kvp.Value;
+            result[kvp.Key.ToString()] = kvp.Value;
         }
 
-        return dict;
-    }
-    public static CharacterCustomization FromDictionary(Dictionary<string, object> data)
-    {
-        Dictionary<CustomizationPart, int> map = new Dictionary<CustomizationPart, int>();
-
-        foreach (var kvp in data)
-        {
-            if (Enum.TryParse(kvp.Key, out CustomizationPart part))
-            {
-                map[part] = Convert.ToInt32(kvp.Value);
-            }
-        }
-
-        return new CharacterCustomization(map);
+        return result;
     }
 }
 public enum CustomizationPart

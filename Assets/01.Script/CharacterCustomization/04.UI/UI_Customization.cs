@@ -16,14 +16,21 @@ public class CustomizationUI : MonoBehaviour
     public Button RandomButton;
     private void Start()
     {
+
+        // 이벤트 구독
         foreach (var partButtonInfo in PartButtons)
         {
-            //이벤트 구독
             CustomizationPart part = partButtonInfo.Part;
-            partButtonInfo.PrevButton.onClick.AddListener(() => ChangePart(part, isNext: false));
-            partButtonInfo.PrevButton.onClick.AddListener(() => ButtonDoTween(partButtonInfo.PrevButton.gameObject));
-            partButtonInfo.NextButton.onClick.AddListener(() => ChangePart(part, isNext: true));
-            partButtonInfo.NextButton.onClick.AddListener(() => ButtonDoTween(partButtonInfo.NextButton.gameObject));
+
+            partButtonInfo.PrevButton.onClick.AddListener(() => {
+                CustomizationManager.Instance.CyclePart(part, false);
+                ButtonDoTween(partButtonInfo.PrevButton.gameObject);
+            });
+
+            partButtonInfo.NextButton.onClick.AddListener(() => {
+                CustomizationManager.Instance.CyclePart(part, true);
+                ButtonDoTween(partButtonInfo.NextButton.gameObject);
+            });
         }
 
         CustomizationManager.Instance.OnPartChanged += ChangePartText;
@@ -33,34 +40,6 @@ public class CustomizationUI : MonoBehaviour
         RandomButton.onClick.AddListener(() => OnRandomButtonClicked());
         SetPartText();
 
-    }
-
-    private void ChangePart(CustomizationPart part, bool isNext)
-    {
-        int currentIndex = CustomizationManager.Instance.GetPartCurrentIndex(part);
-        int maxIndex = CustomizationManager.Instance.GetPartMaxIndex(part);
-        List<CustomizationPart> essentialParts = CustomizationManager.Instance.GetEssentialParts();
-
-        bool isEssential = essentialParts.Contains(part);
-
-        int minIndex = isEssential ? 1 : 0;
-
-        int newIndex;
-
-        if (isNext)
-        {
-            newIndex = currentIndex + 1;
-            if (newIndex > maxIndex)
-                newIndex = minIndex; // 필수 파츠는 최소 1부터
-        }
-        else
-        {
-            newIndex = currentIndex - 1;
-            if (newIndex < minIndex)
-                newIndex = maxIndex;
-        }
-
-        CustomizationManager.Instance.ChangePart(part, newIndex);
     }
     private void SetPartText()
     {
@@ -113,11 +92,11 @@ public class CustomizationUI : MonoBehaviour
     }
     private void ButtonDoTween(GameObject button)
     {
-        button.transform.DOKill(); // 기존 트윈 초기화 (중복 방지)
+        button.transform.DOKill();
 
-        button.transform
-            .DOPunchScale(
-                new Vector3(0.2f, 0.2f, 0), // 커졌다 작아질 크기
+        button.transform.DOPunchScale
+            (
+                new Vector3(0.3f, 0.3f, 0), // 커졌다 작아질 크기
                 0.3f,                      // 지속시간
                 10,                        // 진동 횟수
                 1                          // 탄성

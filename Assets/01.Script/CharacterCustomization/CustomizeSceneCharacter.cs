@@ -36,49 +36,24 @@ public class CustomizeSceneCharacter : MonoBehaviour
 
         foreach (var info in customInfo.PartIndexMap)
         {
-            foreach (var partObject in _partsList)
-            {
-                if (partObject.Part == info.Key)
-                {
-                    if (info.Value == 0)
-                    {
-                        foreach (var obj in partObject.Objects)
-                        {
-                            obj.SetActive(false);
-                            return;
-                        }
-                    }
-                    foreach (var obj in partObject.Objects)
-                    {
-                        obj.SetActive(false);
-                    }
-                    partObject.Objects[info.Value - 1].SetActive(true);
-                }
-            }
+            ChangePart(info.Key, info.Value); 
         }
-
-
     }
     private void ChangePart(CustomizationPart part, int index)
     {
-        foreach (var partObject in _partsList)
+        var partObject = _partsList.Find(p => p.Part == part);
+        if (partObject == null) return;
+
+        // 일단 모든 오브젝트 끄기
+        foreach (var obj in partObject.Objects)
         {
-            if (partObject.Part == part)
-            {
-                if (index == 0)
-                {
-                    foreach (var obj in partObject.Objects)
-                    {
-                        obj.SetActive(false);
-                        return;
-                    }
-                }
-                foreach (var obj in partObject.Objects)
-                {
-                    obj.SetActive(false);
-                }
-                partObject.Objects[index - 1].SetActive(true);
-            }
+            obj.SetActive(false);
+        }
+
+        // index가 0보다 크고 유효한 범위내면 해당 오브젝트 켜기
+        if (index > 0 && index <= partObject.Objects.Count)
+        {
+            partObject.Objects[index - 1].SetActive(true);
         }
     }
 

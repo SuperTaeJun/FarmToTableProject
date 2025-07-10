@@ -25,10 +25,11 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
         CurrentCustomization = new CharacterCustomization();
     }
 
-    private async void Start()
-    {
-        await LoadCustomizationAsync(userId);
-    }
+    //로딩씬에서 처리
+    //private async void Start()
+    //{
+    //    await LoadCustomizationAsync(userId);
+    //}
 
     public List<CustomizationPart> GetEssentialParts()
     {
@@ -95,7 +96,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
     {
         CurrentCustomization = await _repo.LoadCustomizationAsync(userID);
 
-        if (IsAllPartsUnset(CurrentCustomization))
+        if (IsAllPartsDefault(CurrentCustomization))
         {
             ApplyDefaultCustomization();
         }
@@ -107,7 +108,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
     }
 
     //디폴트 커마상태인지 확인
-    private bool IsAllPartsUnset(CharacterCustomization customization)
+    private bool IsAllPartsDefault(CharacterCustomization customization)
     {
         foreach (var kvp in customization.PartIndexMap)
         {
@@ -143,8 +144,30 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
     public void PlayAnim(ECustomizeCharacterAnimType type)
     {
-        OnPlayAnim.Invoke(type);
+        OnPlayAnim?.Invoke(type);
     }
+    public void CyclePart(CustomizationPart part, bool isNext)
+    {
+        int currentIndex = GetPartCurrentIndex(part);
+        int maxIndex = GetPartMaxIndex(part);
+        bool isEssential = CurrentCustomization.EssentialParts.Contains(part);
+        int minIndex = isEssential ? 1 : 0;
+
+        int newIndex;
+        if (isNext)
+        {
+            newIndex = currentIndex + 1;
+            if (newIndex > maxIndex) newIndex = minIndex;
+        }
+        else
+        {
+            newIndex = currentIndex - 1;
+            if (newIndex < minIndex) newIndex = maxIndex;
+        }
+
+        ChangePart(part, newIndex);
+    }
+
 }
 [System.Serializable]
 public class PartsMaxIndex
