@@ -1,17 +1,16 @@
-using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Rendering.LookDev;
+using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class CustomizationUI : MonoBehaviour
 {
     [Header("Buttons")]
     public PartButtonInfo[] PartButtons;
 
-    public Button SaveButton;
+    public Button NextButton;
     public Button DanceAnimationButton;
     public Button IdleAnimationButton;
     public Button RandomButton;
@@ -22,12 +21,13 @@ public class CustomizationUI : MonoBehaviour
             //이벤트 구독
             CustomizationPart part = partButtonInfo.Part;
             partButtonInfo.PrevButton.onClick.AddListener(() => ChangePart(part, isNext: false));
+            partButtonInfo.PrevButton.onClick.AddListener(() => ButtonDoTween(partButtonInfo.PrevButton.gameObject));
             partButtonInfo.NextButton.onClick.AddListener(() => ChangePart(part, isNext: true));
-
-            CustomizationManager.Instance.OnPartChanged += ChangePartText;
+            partButtonInfo.NextButton.onClick.AddListener(() => ButtonDoTween(partButtonInfo.NextButton.gameObject));
         }
 
-        SaveButton.onClick.AddListener(() => OnSaveButtonClicked());
+        CustomizationManager.Instance.OnPartChanged += ChangePartText;
+        NextButton.onClick.AddListener(() => OnSaveButtonClicked());
         DanceAnimationButton.onClick.AddListener(() => OnDanceAnimationButtonClicked());
         IdleAnimationButton.onClick.AddListener(() => OnIdleAnimationButtonClicked());
         RandomButton.onClick.AddListener(() => OnRandomButtonClicked());
@@ -93,18 +93,35 @@ public class CustomizationUI : MonoBehaviour
     private async void OnSaveButtonClicked()
     {
         await CustomizationManager.Instance.SaveCustomizationAsync();
+
+        SceneManager.LoadScene("MainScene");
     }
     private void OnDanceAnimationButtonClicked()
     {
+        ButtonDoTween(DanceAnimationButton.gameObject);
         CustomizationManager.Instance.PlayAnim(ECustomizeCharacterAnimType.Dance_2);
     }
     private void OnIdleAnimationButtonClicked()
     {
+        ButtonDoTween(IdleAnimationButton.gameObject);
         CustomizationManager.Instance.PlayAnim(ECustomizeCharacterAnimType.Idle);
     }
     private void OnRandomButtonClicked()
     {
+        ButtonDoTween(RandomButton.gameObject);
         CustomizationManager.Instance.GenerateRandomPart();
+    }
+    private void ButtonDoTween(GameObject button)
+    {
+        button.transform.DOKill(); // 기존 트윈 초기화 (중복 방지)
+
+        button.transform
+            .DOPunchScale(
+                new Vector3(0.2f, 0.2f, 0), // 커졌다 작아질 크기
+                0.3f,                      // 지속시간
+                10,                        // 진동 횟수
+                1                          // 탄성
+            );
     }
 
 }
