@@ -2,31 +2,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CustomizationPart
-{
-    Hair,
-    Face,
-    Hat,
-    Top,
-    Glove,
-    Bottom,
-    Shoes,
-    Bag,
-    EyeDeco
-}
 
 
 public class CharacterCustomization
 {
     public Dictionary<CustomizationPart, int> PartIndexMap { get; private set; }
-
+    public List<CustomizationPart> EssentialParts { get; private set; }
     public CharacterCustomization()
     {
         PartIndexMap = new Dictionary<CustomizationPart, int>();
 
+        EssentialParts = new List<CustomizationPart> 
+        {
+            CustomizationPart.Hair, CustomizationPart.Face, CustomizationPart.Top, CustomizationPart.Bottom, CustomizationPart.Shoes 
+        };
+
         foreach (CustomizationPart part in Enum.GetValues(typeof(CustomizationPart)))
         {
-            PartIndexMap[part] = -1;
+            PartIndexMap[part] = 0;
         }
     }
 
@@ -47,7 +40,6 @@ public class CharacterCustomization
     {
         return PartIndexMap.ContainsKey(part) ? PartIndexMap[part] : -1;
     }
-
     public Dictionary<string, object> ToDictionary()
     {
         Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -59,7 +51,6 @@ public class CharacterCustomization
 
         return dict;
     }
-
     public static CharacterCustomization FromDictionary(Dictionary<string, object> data)
     {
         Dictionary<CustomizationPart, int> map = new Dictionary<CustomizationPart, int>();
@@ -75,3 +66,16 @@ public class CharacterCustomization
         return new CharacterCustomization(map);
     }
 }
+public enum CustomizationPart
+{
+    Hair,
+    Face,
+    Hat,
+    Top,
+    Glove,
+    Bottom,
+    Shoes,
+    Bag,
+    EyeDeco
+}
+

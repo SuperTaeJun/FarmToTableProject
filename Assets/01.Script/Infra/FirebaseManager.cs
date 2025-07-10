@@ -32,7 +32,7 @@ public class FirebaseManager : MonoBehaviourSingleton<FirebaseManager>
             Debug.Log("Firebase 연결 성공");
 
             App = FirebaseApp.DefaultInstance;
-            Auth = FirebaseAuth.DefaultInstance;
+            //Auth = FirebaseAuth.DefaultInstance;
             Firestore = FirebaseFirestore.DefaultInstance;
 
             IsInitialized = true;

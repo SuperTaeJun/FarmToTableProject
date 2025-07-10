@@ -1,14 +1,20 @@
 using System;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEditor.Rendering.LookDev;
 
 public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 {
     public CharacterCustomization CurrentCustomization { get; private set; }
+    [SerializeField] private List<PartsMaxIndex> _partsMaxIndexMap;
 
     public event Action<CustomizationPart, int> OnPartChanged;
-
+    public event Action<ECustomizeCharacterAnimType> OnPlayAnim;
     private CharacterCustomizationRepository _repo;
+
+    //일단 디폴트유저로해둠
     string userId = "DefaultUser";
     protected override void Awake()
     {
@@ -24,6 +30,10 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
         await LoadCustomizationAsync(userId);
     }
 
+    public List<CustomizationPart> GetEssentialParts()
+    {
+        return CurrentCustomization.EssentialParts;
+    }
     public void ChangePart(CustomizationPart part, int newIndex)
     {
         if (CurrentCustomization == null)
@@ -33,9 +43,44 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
         CurrentCustomization.ChangePart(part, newIndex);
 
-        Debug.Log($"[Manager] {part} changed to index {newIndex}");
-
         OnPartChanged?.Invoke(part, newIndex);
+    }
+    public void GenerateRandomPart()
+    {
+        var keys = new List<CustomizationPart>(CurrentCustomization.PartIndexMap.Keys);
+
+        foreach (var key in keys)
+        {
+            int maxIndex = 0;
+
+            foreach (var maxIndexPart in _partsMaxIndexMap)
+            {
+                if (key == maxIndexPart.Part)
+                {
+                    maxIndex = maxIndexPart.MaxIndex;
+                    break;
+                }
+            }
+
+            if (maxIndex == 0)
+            {
+                Debug.LogWarning($"커스마이징 key값을 못찾아서 MaxIndex가 0인 상태 입니다.");
+                continue;
+            }
+
+            int randIndex;
+            if (CurrentCustomization.EssentialParts.Contains(key))
+            {
+                randIndex = UnityEngine.Random.Range(1, maxIndex + 1);
+            }
+            else
+            {
+                randIndex = UnityEngine.Random.Range(0, maxIndex + 1);
+            }
+
+            CurrentCustomization.ChangePart(key, randIndex);
+            OnPartChanged?.Invoke(key, randIndex);
+        }
     }
 
     public async Task SaveCustomizationAsync()
@@ -52,18 +97,21 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
         if (IsAllPartsUnset(CurrentCustomization))
         {
-            Debug.Log("[Manager] No saved customization found. Applying default values.");
             ApplyDefaultCustomization();
         }
 
-        NotifyAllPartsChanged();
+        foreach (var part in CurrentCustomization.PartIndexMap)
+        {
+            OnPartChanged?.Invoke(part.Key, part.Value);
+        }
     }
 
+    //디폴트 커마상태인지 확인
     private bool IsAllPartsUnset(CharacterCustomization customization)
     {
         foreach (var kvp in customization.PartIndexMap)
         {
-            if (kvp.Value >= 0)
+            if (kvp.Value > 0)
                 return false;
         }
         return true;
@@ -71,18 +119,36 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
     private void ApplyDefaultCustomization()
     {
-        CurrentCustomization.ChangePart(CustomizationPart.Hair, 0);
-        CurrentCustomization.ChangePart(CustomizationPart.Face, 0);
-        CurrentCustomization.ChangePart(CustomizationPart.Top, 0);
-        CurrentCustomization.ChangePart(CustomizationPart.Bottom, 0);
-        // etc. 필요한 디폴트 값 세팅
-    }
+        List<CustomizationPart> essentialParts = GetEssentialParts();
 
-    private void NotifyAllPartsChanged()
-    {
-        foreach (var kvp in CurrentCustomization.PartIndexMap)
+        foreach (var parts in essentialParts)
         {
-            OnPartChanged?.Invoke(kvp.Key, kvp.Value);
+            CurrentCustomization.ChangePart(parts, 1);
         }
     }
+
+    public int GetPartCurrentIndex(CustomizationPart part)
+    {
+        return CurrentCustomization.GetIndex(part);
+    }
+    public int GetPartMaxIndex(CustomizationPart part)
+    {
+        foreach (var partMaxIndex in _partsMaxIndexMap)
+        {
+            if (partMaxIndex.Part == part)
+                return partMaxIndex.MaxIndex;
+        }
+        return 0;
+    }
+
+    public void PlayAnim(ECustomizeCharacterAnimType type)
+    {
+        OnPlayAnim.Invoke(type);
+    }
+}
+[System.Serializable]
+public class PartsMaxIndex
+{
+    public CustomizationPart Part;
+    public int MaxIndex;
 }
