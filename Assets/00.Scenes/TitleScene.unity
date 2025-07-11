@@ -829,6 +829,7 @@ GameObject:
   - component: {fileID: 1292416484}
   - component: {fileID: 1292416483}
   - component: {fileID: 1292416482}
+  - component: {fileID: 1292416485}
   m_Layer: 5
   m_Name: NewGameButton
   m_TagString: Untagged
@@ -938,6 +939,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1292416480}
   m_CullTransparentMesh: 1
+--- !u!114 &1292416485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292416480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d061107fd4b6494b89edcbd9910f73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverSize: 1.2
 --- !u!1001 &1481819790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1067,6 +1081,7 @@ GameObject:
   - component: {fileID: 1720806985}
   - component: {fileID: 1720806984}
   - component: {fileID: 1720806983}
+  - component: {fileID: 1720806986}
   m_Layer: 5
   m_Name: 'LoadGameButton '
   m_TagString: Untagged
@@ -1176,6 +1191,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720806981}
   m_CullTransparentMesh: 1
+--- !u!114 &1720806986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720806981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d061107fd4b6494b89edcbd9910f73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverSize: 1.2
 --- !u!1 &1925586030
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,12 +23,10 @@ public class CustomizationUI : MonoBehaviour
 
             partButtonInfo.PrevButton.onClick.AddListener(() => {
                 CustomizationManager.Instance.CyclePart(part, false);
-                ButtonDoTween(partButtonInfo.PrevButton.gameObject);
             });
 
             partButtonInfo.NextButton.onClick.AddListener(() => {
                 CustomizationManager.Instance.CyclePart(part, true);
-                ButtonDoTween(partButtonInfo.NextButton.gameObject);
             });
         }
 
@@ -76,30 +74,15 @@ public class CustomizationUI : MonoBehaviour
     }
     private void OnDanceAnimationButtonClicked()
     {
-        ButtonDoTween(DanceAnimationButton.gameObject);
         CustomizationManager.Instance.PlayAnim(ECustomizeCharacterAnimType.Dance_2);
     }
     private void OnIdleAnimationButtonClicked()
     {
-        ButtonDoTween(IdleAnimationButton.gameObject);
         CustomizationManager.Instance.PlayAnim(ECustomizeCharacterAnimType.Idle);
     }
     private void OnRandomButtonClicked()
     {
-        ButtonDoTween(RandomButton.gameObject);
         CustomizationManager.Instance.GenerateRandomPart();
-    }
-    private void ButtonDoTween(GameObject button)
-    {
-        button.transform.DOKill();
-
-        button.transform.DOPunchScale
-            (
-                new Vector3(0.3f, 0.3f, 0), // 커졌다 작아질 크기
-                0.3f,                      // 지속시간
-                10,                        // 진동 횟수
-                1                          // 탄성
-            );
     }
 
 }
