@@ -14,16 +14,17 @@ public class PlayerLocomotionAbility : PlayerAbility
     {
         base.Awake();
 
+    }
+    private void Start()
+    {
         _currentMoveSpeed = _owner.Data.WalkSpeed;
+
     }
     private void Update()
     {
         HandleMovement();
 
-        if(Input.GetKeyDown(KeyCode.F1))
-        {
-            FadeManager.Instance.FadeToScene("CharacterSelectScene");
-        }
+
     }
 
     void HandleMovement()

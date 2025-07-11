@@ -8,4 +8,6 @@ public class SO_PlayerData : ScriptableObject
     public float WalkSpeed;
     public float RunSpeed;
     public float JumpPower;
+
+
 }
