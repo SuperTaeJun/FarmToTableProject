@@ -36,7 +36,7 @@ public class CustomizeSceneCharacter : MonoBehaviour
 
         foreach (var info in customInfo.PartIndexMap)
         {
-            ChangePart(info.Key, info.Value); 
+            ChangePart(info.Key, info.Value);
         }
     }
     private void ChangePart(CustomizationPart part, int index)
@@ -47,7 +47,11 @@ public class CustomizeSceneCharacter : MonoBehaviour
         // 일단 모든 오브젝트 끄기
         foreach (var obj in partObject.Objects)
         {
+            if (obj == null) 
+                return;
+
             obj.SetActive(false);
+
         }
 
         // index가 0보다 크고 유효한 범위내면 해당 오브젝트 켜기

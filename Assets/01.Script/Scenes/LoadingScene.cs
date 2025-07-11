@@ -33,12 +33,11 @@ public class LoadingScene : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogError($"로딩 중 오류 발생: {ex.Message}\n{ex.StackTrace}");
-            // 에러 UI 표시 등 처리 필요
         }
     }
 
     private void MoveNextScene()
     {
-        SceneManager.LoadScene(NEXT_SCENE_NAME);
+        FadeManager.Instance.FadeToScene(NEXT_SCENE_NAME);
     }
 }

@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
@@ -73,7 +72,7 @@ public class CustomizationUI : MonoBehaviour
     {
         await CustomizationManager.Instance.SaveCustomizationAsync();
 
-        SceneManager.LoadScene("MainScene");
+        FadeManager.Instance.FadeToScene("MainScene");
     }
     private void OnDanceAnimationButtonClicked()
     {
