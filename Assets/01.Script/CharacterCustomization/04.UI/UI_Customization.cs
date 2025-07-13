@@ -70,7 +70,7 @@ public class CustomizationUI : MonoBehaviour
     {
         await CustomizationManager.Instance.SaveCustomizationAsync();
 
-        FadeManager.Instance.FadeToScene("MainScene");
+        FadeManager.Instance.FadeToScene("WorldLodingScene");
     }
     private void OnDanceAnimationButtonClicked()
     {
