@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
+using UnityEngine.SceneManagement;
 public class WorldManager : MonoBehaviourSingleton<WorldManager>
 {
     [Header("Dynamic Generation")]
@@ -28,18 +29,19 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         base.Awake();
         repo = new WorldRepository();
 
-        // DynamicChunkGenerator가 없으면 자동으로 생성
-        if (dynamicGenerator == null)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainScene")
         {
-            var go = new GameObject("DynamicChunkGenerator");
-            go.transform.SetParent(this.transform);
-            dynamicGenerator = go.AddComponent<ChunkGenerator>();
+            PositionPlayerAtCenter();
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
     }
-
     private async void Start()
     {
-        await LoadWorldFromFirebase();
+        //await LoadWorldFromFirebase();
 
     }
     private void PositionPlayerAtCenter()
@@ -131,7 +133,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
         // 로딩 완료 알림
         OnLoadingComplete?.Invoke();
-        PositionPlayerAtCenter();
     }
 
     private async Task LoadChunkFromFirebase(ChunkPosition pos)
@@ -389,33 +390,21 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
     #region 공개 API
 
-    /// <summary>
-    /// 현재 로드된 청크 수 반환
-    /// </summary>
     public int GetLoadedChunkCount()
     {
         return loadedChunks.Count;
     }
 
-    /// <summary>
-    /// 특정 위치의 청크가 로드되어 있는지 확인
-    /// </summary>
     public bool IsChunkLoaded(ChunkPosition pos)
     {
         return loadedChunks.ContainsKey(pos);
     }
 
-    /// <summary>
-    /// 모든 로드된 청크의 위치 반환
-    /// </summary>
     public List<ChunkPosition> GetLoadedChunkPositions()
     {
         return new List<ChunkPosition>(loadedChunks.Keys);
     }
 
-    /// <summary>
-    /// 특정 월드 좌표의 블록 타입 반환
-    /// </summary>
     public async Task<EBlockType?> GetBlockType(int worldX, int worldY, int worldZ)
     {
         int chunkX = worldX / Chunk.ChunkSize;

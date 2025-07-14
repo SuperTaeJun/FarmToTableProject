@@ -1,9 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
-using System.Collections.Generic;
+using System;
+
 public class FadeManager : MonoBehaviourSingleton<FadeManager>
 {
     public Image fadeImage;
@@ -20,7 +21,7 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
         StartCoroutine(FadeRoutine(sceneName));
     }
 
-    private IEnumerator FadeRoutine(string sceneName)
+    private IEnumerator FadeRoutine(string sceneName,Action onComplete = null)
     {
         Canvas canvas = fadeImage.GetComponentInParent<Canvas>();
         canvas.sortingOrder = 999;
@@ -33,6 +34,8 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
         // Fade In นเพฦมü
         yield return StartCoroutine(Fade(1f, 0f));
         canvas.sortingOrder = -1;
+
+        onComplete?.Invoke();
     }
 
     private IEnumerator Fade(float startAlpha, float endAlpha)

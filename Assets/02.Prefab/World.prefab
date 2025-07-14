@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3626446664209110777}
   m_Layer: 0
   m_Name: World
-  m_TagString: Untagged
+  m_TagString: World
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynamicGenerator: {fileID: 3626446664209110777}
-  worldWidth: 15
-  worldDepth: 15
+  worldWidth: 5
+  worldDepth: 5
 --- !u!114 &3626446664209110777
 MonoBehaviour:
   m_ObjectHideFlags: 0

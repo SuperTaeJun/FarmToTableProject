@@ -22,7 +22,16 @@ public class WorldLoadingScene : MonoBehaviour
         WorldManager.Instance.OnLoadingProgress -= UpdateProgress;
         WorldManager.Instance.OnLoadingComplete -= OnLoadingComplete;
     }
+    private async void Start()
+    {
+        if (WorldManager.Instance == null)
+        {
+            Debug.LogError("[WorldLoadingScene] WorldManager.Instance°¡ null!");
+            return;
+        }
 
+        await WorldManager.Instance.LoadWorldFromFirebase();
+    }
     private void UpdateProgress(float progress)
     {
         progressBar.value = progress;

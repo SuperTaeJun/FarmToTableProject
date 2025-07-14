@@ -70,7 +70,11 @@ public class CustomizationUI : MonoBehaviour
     {
         await CustomizationManager.Instance.SaveCustomizationAsync();
 
-        FadeManager.Instance.FadeToScene("WorldLodingScene");
+        //만약에 이미 월드가 있으면 바로 씬이동
+        if (GameObject.FindWithTag("World"))
+            FadeManager.Instance.FadeToScene("MainScene");
+        else
+            FadeManager.Instance.FadeToScene("WorldLodingScene");
     }
     private void OnDanceAnimationButtonClicked()
     {

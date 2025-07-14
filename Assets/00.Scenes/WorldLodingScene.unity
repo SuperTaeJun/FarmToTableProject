@@ -1079,14 +1079,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: World
       objectReference: {fileID: 0}
-    - target: {fileID: 6207933815983931542, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
-      propertyPath: worldDepth
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6207933815983931542, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
-      propertyPath: worldWidth
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 7651412274628663163, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

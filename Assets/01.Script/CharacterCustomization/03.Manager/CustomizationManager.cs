@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor.Rendering.LookDev;
+using Firebase.Firestore;
 
 public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 {
@@ -24,12 +23,6 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
         CurrentCustomization = new CharacterCustomization();
     }
-
-    //로딩씬에서 처리
-    //private async void Start()
-    //{
-    //    await LoadCustomizationAsync(userId);
-    //}
 
     public List<CustomizationPart> GetEssentialParts()
     {
