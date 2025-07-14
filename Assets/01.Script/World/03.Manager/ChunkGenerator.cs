@@ -1,3 +1,5 @@
+using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +30,6 @@ public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
         LoadMeshAndMaterial(grassPrefab, "Grass", blockMeshes, blockMaterials);
         LoadMeshAndMaterial(dirtPrefab, "Dirt", blockMeshes, blockMaterials);
     }
-
     public GameObject GenerateDynamicChunk(ChunkPosition chunkPos, string[,,] chunkData)
     {
         GameObject chunkParent = new GameObject($"DynamicChunk_{chunkPos.X}_{chunkPos.Z}");
@@ -39,7 +40,6 @@ public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
 
         int chunkSize = Chunk.ChunkSize;
 
-        // 청크 로컬 좌표계 사용 (0~15)
         for (int x = 0; x < chunkSize; x++)
         {
             for (int z = 0; z < chunkSize; z++)
@@ -130,10 +130,6 @@ public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
 
         return chunkParent;
     }
-
-    /// <summary>
-    /// Firebase Chunk 데이터를 월드 데이터로 변환 (렌더링용)
-    /// </summary>
     public string[,,] ConvertChunkToWorldData(Chunk chunk)
     {
         int chunkSize = Chunk.ChunkSize;
@@ -157,8 +153,7 @@ public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
         return worldData;
     }
 
-    private void LoadMeshAndMaterial(GameObject prefab, string name,
-        Dictionary<string, Mesh> blockMeshes, Dictionary<string, Material> blockMaterials)
+    private void LoadMeshAndMaterial(GameObject prefab, string name, Dictionary<string, Mesh> blockMeshes, Dictionary<string, Material> blockMaterials)
     {
         if (prefab == null)
         {
@@ -206,19 +201,6 @@ public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
             Debug.LogWarning($"[{name}] 프리팹에서 Mesh/Material을 찾을 수 없습니다.");
         }
     }
-
-    private int GetHeight(int x, int z)
-    {
-        float frequency = 0.02f;
-        float amplitude = worldHeight * 0.4f;
-
-        float noise = Mathf.PerlinNoise(x * frequency, z * frequency);
-
-        int baseHeight = Mathf.FloorToInt(noise * amplitude) + (int)(worldHeight * 0.3f);
-
-        return Mathf.Clamp(baseHeight, 1, worldHeight);
-    }
-
     private bool IsBlockVisible(string[,,] chunkData, int x, int y, int z)
     {
         Vector3Int[] directions = {

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 public class WorldManager : MonoBehaviourSingleton<WorldManager>
 {
     [Header("Dynamic Generation")]
@@ -19,10 +20,8 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
     private WorldRepository repo;
 
-    // 현재 메모리에 로드된 Chunk 데이터
     private Dictionary<ChunkPosition, Chunk> loadedChunks = new Dictionary<ChunkPosition, Chunk>();
 
-    // 씬에 존재하는 청크 GameObject 참조
     private Dictionary<ChunkPosition, GameObject> chunkObjects = new Dictionary<ChunkPosition, GameObject>();
 
     protected override void Awake()
@@ -46,16 +45,13 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if (player == null)
         {
-            Debug.LogWarning("[WorldManager] 'Player' 태그를 가진 오브젝트를 찾을 수 없습니다!");
+            Debug.LogWarning("플레이어 못찾음");
             return;
         }
 
-
-        // 월드 중앙 계산 (청크 단위 → 월드 좌표)
         float worldCenterX = (worldWidth * Chunk.ChunkSize * dynamicGenerator.blockOffset.x) / 2f;
         float worldCenterZ = (worldDepth * Chunk.ChunkSize * dynamicGenerator.blockOffset.z) / 2f;
 
-        // 중앙 위치의 지면 높이 찾기
         int centerChunkX = worldWidth / 2;
         int centerChunkZ = worldDepth / 2;
         int centerLocalX = Chunk.ChunkSize / 2;
@@ -63,10 +59,9 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
         float groundHeight = FindGroundHeight(centerChunkX, centerChunkZ, centerLocalX, centerLocalZ);
 
-        // 플레이어를 지면 위에 배치 (약간의 여유 높이 추가)
         Vector3 playerPosition = new Vector3(
             worldCenterX,
-            groundHeight + 2f, // 지면에서 2유닛 위
+            groundHeight + 1f, // 지면에서 2유닛 위
             worldCenterZ
         );
 
@@ -97,6 +92,31 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         // 블록이 없는 경우 기본 높이
         return dynamicGenerator.blockOffset.y;
     }
+    public float GetGroundHeight(Vector3 worldPos)
+    {
+        float blockOffsetX = dynamicGenerator.blockOffset.x;
+        float blockOffsetZ = dynamicGenerator.blockOffset.z;
+
+        int chunkSizeX = Chunk.ChunkSize;
+        int chunkSizeZ = Chunk.ChunkSize;
+
+        float chunkWorldSizeX = chunkSizeX * blockOffsetX;
+        float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
+
+        int chunkX = Mathf.FloorToInt(worldPos.x / chunkWorldSizeX);
+        int chunkZ = Mathf.FloorToInt(worldPos.z / chunkWorldSizeZ);
+
+        float chunkOriginX = chunkX * chunkWorldSizeX;
+        float chunkOriginZ = chunkZ * chunkWorldSizeZ;
+
+        float localXf = (worldPos.x - chunkOriginX) / blockOffsetX;
+        float localZf = (worldPos.z - chunkOriginZ) / blockOffsetZ;
+
+        int localX = Mathf.Clamp(Mathf.FloorToInt(localXf), 0, chunkSizeX - 1);
+        int localZ = Mathf.Clamp(Mathf.FloorToInt(localZf), 0, chunkSizeZ - 1);
+
+        return FindGroundHeight(chunkX, chunkZ, localX, localZ);
+    }
     public async Task LoadWorldFromFirebase()
     {
         Debug.Log("[WorldManager] Firebase에서 월드 로딩 시작!");
@@ -115,7 +135,10 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
                 loadedChunkCount++;
                 float progress = (float)loadedChunkCount / totalChunks;
-
+                if (loadedChunkCount % 2 == 0) // 2 청크마다 프레임 분산
+                {
+                    await Task.Yield();
+                }
                 // 로딩 진행상황 알림
                 OnLoadingProgress?.Invoke(progress);
 
@@ -153,6 +176,7 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         // 동적으로 씬에 렌더링
         await BuildChunkInScene(pos, firebaseChunk);
     }
+
     private Chunk GenerateDynamicChunk(ChunkPosition pos)
     {
         var chunk = new Chunk(pos);
@@ -244,34 +268,5 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         loadedChunks.Clear();
 
         Debug.Log("[WorldManager] 기존 월드 정리 완료");
-    }
-
-    public async Task SaveWorldToFirebase()
-    {
-        Debug.Log("[WorldManager] Firebase에 월드 저장 시작!");
-
-        foreach (var kvp in loadedChunks)
-        {
-            await repo.SaveChunkAsync(kvp.Value);
-        }
-
-        Debug.Log("[WorldManager] Firebase 월드 저장 완료!");
-    }
-
-    public async Task ReloadWorldFromFirebase()
-    {
-        Debug.Log("[WorldManager] Firebase에서 월드 다시 로딩!");
-        await LoadWorldFromFirebase();
-    }
-
-    public async Task<Chunk> GetOrLoadChunk(ChunkPosition pos)
-    {
-        if (loadedChunks.TryGetValue(pos, out var chunk))
-        {
-            return chunk;
-        }
-
-        await LoadChunkFromFirebase(pos);
-        return loadedChunks.TryGetValue(pos, out chunk) ? chunk : null;
     }
 }

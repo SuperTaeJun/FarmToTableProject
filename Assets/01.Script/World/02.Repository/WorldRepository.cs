@@ -37,7 +37,6 @@ public class WorldRepository : FirebaseRepositoryBase
             return ConvertToDomain(dto);
         }, "LoadChunk");
     }
-
     private string GetDocumentId(ChunkPosition pos)
     {
         return $"{pos.X}_{pos.Y}_{pos.Z}";

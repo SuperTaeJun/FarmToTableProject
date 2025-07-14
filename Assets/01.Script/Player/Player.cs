@@ -11,14 +11,11 @@ public class Player : MonoBehaviour
     public CharacterController Controller => _controller;
     private Animator _animator;
     public Animator Animator => _animator;
-    private PlayerEffectController _effectController;
-    public PlayerEffectController EffectController => _effectController;
 
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
-        _effectController = GetComponent<PlayerEffectController>();
     }
 
     void Start()

@@ -37,8 +37,4 @@ public class PlayerVisualController : MonoBehaviour
 
 
     }
-    void Update()
-    {
-        
-    }
 }
