@@ -793,6 +793,54 @@ RectTransform:
   m_AnchoredPosition: {x: 2.5, y: 0}
   m_SizeDelta: {x: -5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1031270084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1031270086}
+  - component: {fileID: 1031270087}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1031270086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031270084}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1031270087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031270084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4926e922d08e1f045bd7ce0980725b48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldHeight: 16
+  blockOffset: {x: 1, y: 0.5, z: 1}
+  grassPrefab: {fileID: 1979290889500462, guid: ba3d7e754fb684c4fa556fd3a62824cc, type: 3}
+  dirtPrefab: {fileID: 1149535237560096, guid: bfad8e884e4568744b79b92abe4af9fd, type: 3}
 --- !u!1 &1563643408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1127,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: World
       objectReference: {fileID: 0}
+    - target: {fileID: 6207933815983931542, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
+      propertyPath: dynamicGenerator
+      value: 
+      objectReference: {fileID: 1031270087}
     - target: {fileID: 7651412274628663163, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1208,3 +1260,4 @@ SceneRoots:
   - {fileID: 855114954}
   - {fileID: 880165805}
   - {fileID: 2039067606}
+  - {fileID: 1031270086}

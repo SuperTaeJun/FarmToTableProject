@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 using UnityEngine.SceneManagement;
+using System.Collections;
 public class WorldManager : MonoBehaviourSingleton<WorldManager>
 {
     [Header("Dynamic Generation")]
@@ -39,20 +40,16 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
     }
-    private async void Start()
-    {
-        //await LoadWorldFromFirebase();
 
-    }
     private void PositionPlayerAtCenter()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if (player == null)
         {
             Debug.LogWarning("[WorldManager] 'Player' 태그를 가진 오브젝트를 찾을 수 없습니다!");
             return;
         }
+
 
         // 월드 중앙 계산 (청크 단위 → 월드 좌표)
         float worldCenterX = (worldWidth * Chunk.ChunkSize * dynamicGenerator.blockOffset.x) / 2f;
@@ -73,8 +70,7 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
             worldCenterZ
         );
 
-        player.transform.position = playerPosition;
-
+        player.SetPositionForCharacterController(playerPosition);
         Debug.Log($"[WorldManager] 플레이어를 월드 중앙에 배치: {playerPosition}");
     }
     private float FindGroundHeight(int chunkX, int chunkZ, int localX, int localZ)
@@ -101,8 +97,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         // 블록이 없는 경우 기본 높이
         return dynamicGenerator.blockOffset.y;
     }
-    #region Firebase 기반 월드 로딩
-
     public async Task LoadWorldFromFirebase()
     {
         Debug.Log("[WorldManager] Firebase에서 월드 로딩 시작!");
@@ -159,11 +153,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         // 동적으로 씬에 렌더링
         await BuildChunkInScene(pos, firebaseChunk);
     }
-
-    #endregion
-
-    #region 동적 청크 생성
-
     private Chunk GenerateDynamicChunk(ChunkPosition pos)
     {
         var chunk = new Chunk(pos);
@@ -202,10 +191,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         return Mathf.Clamp(baseHeight, 1, dynamicGenerator.worldHeight);
     }
 
-    #endregion
-
-    #region 동적 렌더링
-
     private async Task BuildChunkInScene(ChunkPosition pos, Chunk chunk)
     {
         // Chunk 데이터를 월드 데이터로 변환
@@ -243,9 +228,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         return worldData;
     }
 
-    #endregion
-
-    #region 월드 관리
 
     private void ClearExistingWorld()
     {
@@ -282,31 +264,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         await LoadWorldFromFirebase();
     }
 
-    #endregion
-
-    #region 청크 동적 로딩 (무한 월드용)
-
-    public async Task LoadChunkIfNeeded(ChunkPosition pos)
-    {
-        if (loadedChunks.ContainsKey(pos))
-            return;
-
-        await LoadChunkFromFirebase(pos);
-    }
-
-    public void UnloadChunk(ChunkPosition pos)
-    {
-        if (chunkObjects.TryGetValue(pos, out var chunkObj))
-        {
-            DestroyImmediate(chunkObj);
-            chunkObjects.Remove(pos);
-        }
-
-        loadedChunks.Remove(pos);
-
-        Debug.Log($"[WorldManager] 청크 언로드: {pos.X},{pos.Z}");
-    }
-
     public async Task<Chunk> GetOrLoadChunk(ChunkPosition pos)
     {
         if (loadedChunks.TryGetValue(pos, out var chunk))
@@ -317,112 +274,4 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         await LoadChunkFromFirebase(pos);
         return loadedChunks.TryGetValue(pos, out chunk) ? chunk : null;
     }
-
-    #endregion
-
-    #region 블록 편집
-
-    public async Task SetBlock(int worldX, int worldY, int worldZ, EBlockType blockType)
-    {
-        // 월드 좌표를 청크 좌표로 변환
-        int chunkX = worldX / Chunk.ChunkSize;
-        int chunkZ = worldZ / Chunk.ChunkSize;
-        int localX = worldX % Chunk.ChunkSize;
-        int localZ = worldZ % Chunk.ChunkSize;
-
-        var chunkPos = new ChunkPosition(chunkX, 0, chunkZ);
-        var chunk = await GetOrLoadChunk(chunkPos);
-
-        if (chunk != null)
-        {
-            var blockPos = new BlockPosition(localX, worldY, localZ);
-            var block = new Block(blockType, blockPos);
-
-            chunk.SetBlock(block);
-
-            // Firebase에 저장
-            await repo.SaveChunkAsync(chunk);
-
-            // 씬에서 청크 다시 렌더링
-            await RefreshChunkInScene(chunkPos);
-        }
-    }
-
-    public async Task RemoveBlock(int worldX, int worldY, int worldZ)
-    {
-        int chunkX = worldX / Chunk.ChunkSize;
-        int chunkZ = worldZ / Chunk.ChunkSize;
-        int localX = worldX % Chunk.ChunkSize;
-        int localZ = worldZ % Chunk.ChunkSize;
-
-        var chunkPos = new ChunkPosition(chunkX, 0, chunkZ);
-        var chunk = await GetOrLoadChunk(chunkPos);
-
-        if (chunk != null)
-        {
-            // 블록 제거 (null로 설정)
-            chunk.Blocks[localX, worldY, localZ] = null;
-
-            // Firebase에 저장
-            await repo.SaveChunkAsync(chunk);
-
-            // 씬에서 청크 다시 렌더링
-            await RefreshChunkInScene(chunkPos);
-        }
-    }
-
-    private async Task RefreshChunkInScene(ChunkPosition pos)
-    {
-        // 기존 청크 오브젝트 삭제
-        if (chunkObjects.TryGetValue(pos, out var oldChunkObj))
-        {
-            DestroyImmediate(oldChunkObj);
-        }
-
-        // 새로 렌더링
-        if (loadedChunks.TryGetValue(pos, out var chunk))
-        {
-            await BuildChunkInScene(pos, chunk);
-        }
-    }
-
-    #endregion
-
-    #region 공개 API
-
-    public int GetLoadedChunkCount()
-    {
-        return loadedChunks.Count;
-    }
-
-    public bool IsChunkLoaded(ChunkPosition pos)
-    {
-        return loadedChunks.ContainsKey(pos);
-    }
-
-    public List<ChunkPosition> GetLoadedChunkPositions()
-    {
-        return new List<ChunkPosition>(loadedChunks.Keys);
-    }
-
-    public async Task<EBlockType?> GetBlockType(int worldX, int worldY, int worldZ)
-    {
-        int chunkX = worldX / Chunk.ChunkSize;
-        int chunkZ = worldZ / Chunk.ChunkSize;
-        int localX = worldX % Chunk.ChunkSize;
-        int localZ = worldZ % Chunk.ChunkSize;
-
-        var chunkPos = new ChunkPosition(chunkX, 0, chunkZ);
-        var chunk = await GetOrLoadChunk(chunkPos);
-
-        if (chunk != null)
-        {
-            var block = chunk.GetBlock(localX, worldY, localZ);
-            return block?.Type;
-        }
-
-        return null;
-    }
-
-    #endregion
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChunkGenerator : MonoBehaviour
+public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
 {
     [Header("World Settings")]
     public int worldHeight = 16;
@@ -14,8 +14,9 @@ public class ChunkGenerator : MonoBehaviour
     private Dictionary<string, Mesh> blockMeshes;
     private Dictionary<string, Material> blockMaterials;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         InitializeBlockAssets();
     }
 

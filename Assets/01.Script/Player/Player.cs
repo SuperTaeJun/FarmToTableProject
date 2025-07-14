@@ -44,4 +44,12 @@ public class Player : MonoBehaviour
             FadeManager.Instance.FadeToScene("CharacterSelectScene");
         }
     }
+
+    public void SetPositionForCharacterController(Vector3 newPos)
+    {
+        _controller.gameObject.SetActive(false);
+        transform.position = newPos;
+        _controller.gameObject.SetActive(true);
+    }
+
 }
