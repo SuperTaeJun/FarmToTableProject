@@ -13,6 +13,7 @@ public class PlayerUiController : MonoBehaviour
 
     private void LateUpdate()
     {
+        //빌보드
         transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
     }
     public void DisActiveDialogBox()
@@ -25,7 +26,7 @@ public class PlayerUiController : MonoBehaviour
         switch (type)
         {
             case EPlayerUiType.Chunk:
-                _dialogText.text = "F를 눌러\n땅을 구매할까...";
+                _dialogText.text = "<Color=red>F</Color>를 눌러\n땅을 구매할까...";
                 break;
         }
     }

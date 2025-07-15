@@ -14,7 +14,6 @@ public class PlayerCameraAbility : PlayerAbility
     protected override void Awake()
     {
         base.Awake();
-
     }
     private void Start()
     {

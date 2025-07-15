@@ -29,8 +29,9 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
         canvas.sortingOrder = 999;
         // Fade Out °ËÀº È­¸é
         yield return StartCoroutine(Fade(0f, 1f));
-        midAction?.Invoke();
 
+        midAction?.Invoke();
+        yield return new WaitForSeconds(0.5f);
         // Fade In ¹à¾ÆÁü
         yield return StartCoroutine(Fade(1f, 0f));
         canvas.sortingOrder = -1;

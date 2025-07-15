@@ -39,5 +39,6 @@ public class LoadingScene : MonoBehaviour
     private void MoveNextScene()
     {
         FadeManager.Instance.FadeToScene(NEXT_SCENE_NAME);
+
     }
 }
