@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 public class PlayerInputController : MonoBehaviour
 {
     public DebugEvent<Vector2> OnMoveInput = new DebugEvent<Vector2>();
-    public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>(); 
+    public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>();
+    public DebugEvent OnInteractionInput = new DebugEvent();
     private bool _isCursorLocked = true;
 
     private void Awake()
@@ -19,6 +20,7 @@ public class PlayerInputController : MonoBehaviour
         HandleMoveInput();
         HandleCameraRotateInput();
         HandleMouseCursor();
+        HandleInteractionInput();
     }
 
     private void HandleMouseCursor()
@@ -30,7 +32,11 @@ public class PlayerInputController : MonoBehaviour
     }
     private void HandleMoveInput()
     {
-        if (!_isCursorLocked) return;
+        if (!_isCursorLocked)
+        {
+            OnMoveInput.Invoke(new Vector2(0, 0));
+            return; 
+        }
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -61,5 +67,12 @@ public class PlayerInputController : MonoBehaviour
         }
 
         Debug.Log($"Cursor Lock Toggled: {_isCursorLocked}");
+    }
+    private void HandleInteractionInput()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            OnInteractionInput.Invoke();
+        }
     }
 }

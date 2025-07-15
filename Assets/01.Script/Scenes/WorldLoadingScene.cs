@@ -11,11 +11,8 @@ public class WorldLoadingScene : MonoBehaviour
 
     private void OnEnable()
     {
-        // WorldManager 이벤트 구독
-        WorldManager.Instance.OnLoadingProgress += UpdateProgress;
-        WorldManager.Instance.OnLoadingComplete += OnLoadingComplete;
-    }
 
+    }
     private void OnDisable()
     {
         // 이벤트 구독 해제
@@ -24,6 +21,10 @@ public class WorldLoadingScene : MonoBehaviour
     }
     private async void Start()
     {
+        // WorldManager 이벤트 구독
+        WorldManager.Instance.OnLoadingProgress += UpdateProgress;
+        WorldManager.Instance.OnLoadingComplete += OnLoadingComplete;
+
         if (WorldManager.Instance == null)
         {
             Debug.LogError("[WorldLoadingScene] WorldManager.Instance가 null!");

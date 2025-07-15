@@ -104,5 +104,33 @@ public class WorldRepository : FirebaseRepositoryBase
     }
 
     #endregion
+    public async Task<List<ChunkPosition>> GetAllChunkPositionsFromFirebase()
+    {
+        var chunkPositions = new List<ChunkPosition>();
 
+        var collection = Firestore.Collection("worldChunks");
+        var snapshot = await collection.GetSnapshotAsync();
+
+        foreach (var doc in snapshot.Documents)
+        {
+            string id = doc.Id; // e.g. "2_0_1"
+            var split = id.Split('_');
+            if (split.Length == 3)
+            {
+                int x = int.Parse(split[0]);
+                int y = int.Parse(split[1]);
+                int z = int.Parse(split[2]);
+
+                chunkPositions.Add(new ChunkPosition(x, y, z));
+            }
+            else
+            {
+                Debug.LogWarning($"[WorldManager] 잘못된 청크 ID 형식: {id}");
+            }
+        }
+
+        Debug.Log($"[WorldManager] Firebase에서 {chunkPositions.Count}개의 청크를 발견했습니다.");
+
+        return chunkPositions;
+    }
 }

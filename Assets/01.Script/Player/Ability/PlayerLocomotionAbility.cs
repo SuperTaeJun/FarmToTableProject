@@ -21,10 +21,10 @@ public class PlayerLocomotionAbility : PlayerAbility
         _owner.InputController.OnMoveInput.AddListener(HandleMovement);
 
     }
-    private void Update()
+    private void LateUpdate()
     {
+        //ClampPositionToWorld();
     }
-
     private void HandleMovement(Vector2 input)
     {
 
@@ -71,7 +71,69 @@ public class PlayerLocomotionAbility : PlayerAbility
         velocity.x = moveDirection.x * _currentMoveSpeed;
         velocity.z = moveDirection.z * _currentMoveSpeed;
 
-        _owner.CharacterController.Move(velocity * Time.deltaTime);
-    }
+        Vector3 desiredMove = velocity * Time.deltaTime;
+        Vector3 targetPos = transform.position + desiredMove;
 
+        // targetPos가 어느 청크인지 계산
+        float chunkSizeX = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.x;
+        float chunkSizeZ = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.z;
+
+        int targetChunkX = Mathf.FloorToInt(targetPos.x / chunkSizeX);
+        int targetChunkZ = Mathf.FloorToInt(targetPos.z / chunkSizeZ);
+
+        var targetChunkPos = new ChunkPosition(targetChunkX, 0, targetChunkZ);
+
+        if (WorldManager.Instance.HasChunk(targetChunkPos))
+        {
+            // 이동 허용
+            _owner.CharacterController.Move(desiredMove);
+        }
+        else
+        {
+            // 이동 막기
+            Debug.Log("로드되지 않은 청크라 이동을 막았습니다.");
+
+            PopupManager.Instance.Open(EPopupType.UI_ChunkPopup);
+
+            Vector3 verticalMove = new Vector3(0, desiredMove.y, 0);
+            _owner.CharacterController.Move(verticalMove);
+        }
+    }
+    public void ClampPositionToWorld()
+    {
+        float margin = 2.0f;
+
+        int minChunkX = int.MaxValue;
+        int maxChunkX = int.MinValue;
+        int minChunkZ = int.MaxValue;
+        int maxChunkZ = int.MinValue;
+
+        foreach (var loadedpos in WorldManager.Instance.LoadedChunkPositions)
+        {
+            minChunkX = Mathf.Min(minChunkX, loadedpos.X);
+            maxChunkX = Mathf.Max(maxChunkX, loadedpos.X);
+            minChunkZ = Mathf.Min(minChunkZ, loadedpos.Z);
+            maxChunkZ = Mathf.Max(maxChunkZ, loadedpos.Z);
+        }
+
+        float chunkSizeX = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.x;
+        float chunkSizeZ = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.z;
+
+        float minX = minChunkX * chunkSizeX + margin;
+        float maxX = (maxChunkX + 1) * chunkSizeX - margin;
+
+        float minZ = minChunkZ * chunkSizeZ + margin;
+        float maxZ = (maxChunkZ + 1) * chunkSizeZ - margin;
+
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, minX, maxX);
+        pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
+
+        Vector3 delta = pos - transform.position;
+
+        if (delta.sqrMagnitude > 0.0001f)
+        {
+            _owner.CharacterController.Move(delta);
+        }
+    }
 }

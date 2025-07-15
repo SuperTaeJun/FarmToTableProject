@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerCameraAbility : PlayerAbility
 {
@@ -12,8 +11,12 @@ public class PlayerCameraAbility : PlayerAbility
     // 카메라 회전값
     private float pitch = 0f;
     private float yaw = 0f;
+    protected override void Awake()
+    {
+        base.Awake();
 
-    void Start()
+    }
+    private void Start()
     {
         // 초기 카메라 각도 설정
         yaw = _owner.cameraTarget.eulerAngles.y;

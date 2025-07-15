@@ -29,6 +29,9 @@ public class Player : MonoBehaviour
             gameObject.transform.rotation = PlayerDataHolder.Instance.SavedRot;
             _characterController.gameObject.SetActive(true);
         }
+
+//        InputController.OnInteractionInput.AddListener(TryGenerateChunk);
+
     }
 
     void Update()
@@ -46,5 +49,6 @@ public class Player : MonoBehaviour
         transform.position = newPos;
         _characterController.gameObject.SetActive(true);
     }
+
 
 }

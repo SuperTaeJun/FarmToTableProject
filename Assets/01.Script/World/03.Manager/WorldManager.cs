@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
-public class WorldManager : MonoBehaviourSingleton<WorldManager>
+
+public class WorldManager : MonoBehaviour
 {
+    public static WorldManager Instance { private set; get; }
+
     [Header("Dynamic Generation")]
     public ChunkGenerator dynamicGenerator;
 
@@ -18,16 +20,25 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
     public event Action<float> OnLoadingProgress;
     public event Action OnLoadingComplete;
 
-    private WorldRepository repo;
+    private WorldRepository _repo;
 
     private Dictionary<ChunkPosition, Chunk> loadedChunks = new Dictionary<ChunkPosition, Chunk>();
 
     private Dictionary<ChunkPosition, GameObject> chunkObjects = new Dictionary<ChunkPosition, GameObject>();
-
-    protected override void Awake()
+    public IEnumerable<ChunkPosition> LoadedChunkPositions => loadedChunks.Keys;
+    private void Awake()
     {
-        base.Awake();
-        repo = new WorldRepository();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        _repo = new WorldRepository();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -123,39 +134,49 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
         ClearExistingWorld();
 
-        int totalChunks = worldWidth * worldDepth;
+        var chunkPositions = await _repo.GetAllChunkPositionsFromFirebase();
+
+        if (chunkPositions.Count == 0)
+        {
+            Debug.Log("[WorldManager] DB에 청크 없음. 기본 월드 생성.");
+
+            for (int cx = 0; cx < worldWidth; cx++)
+            {
+                for (int cz = 0; cz < worldDepth; cz++)
+                {
+                    chunkPositions.Add(new ChunkPosition(cx, 0, cz));
+                }
+            }
+        }
+
+        int totalChunks = chunkPositions.Count;
         int loadedChunkCount = 0;
 
-        for (int cx = 0; cx < worldWidth; cx++)
+        foreach (var pos in chunkPositions)
         {
-            for (int cz = 0; cz < worldDepth; cz++)
+            await LoadChunkFromFirebase(pos);
+
+            loadedChunkCount++;
+            float progress = (float)loadedChunkCount / totalChunks;
+
+            if (loadedChunkCount % 2 == 0)
             {
-                var pos = new ChunkPosition(cx, 0, cz);
-                await LoadChunkFromFirebase(pos);
-
-                loadedChunkCount++;
-                float progress = (float)loadedChunkCount / totalChunks;
-                if (loadedChunkCount % 2 == 0) // 2 청크마다 프레임 분산
-                {
-                    await Task.Yield();
-                }
-                // 로딩 진행상황 알림
-                OnLoadingProgress?.Invoke(progress);
-
                 await Task.Yield();
             }
+            OnLoadingProgress?.Invoke(progress);
+
+            await Task.Yield();
         }
 
         Debug.Log("[WorldManager] Firebase 월드 로딩 완료!");
 
-        // 로딩 완료 알림
         OnLoadingComplete?.Invoke();
     }
 
     private async Task LoadChunkFromFirebase(ChunkPosition pos)
     {
         // Firebase에서 청크 데이터 로드
-        Chunk firebaseChunk = await repo.LoadChunkAsync(pos);
+        Chunk firebaseChunk = await _repo.LoadChunkAsync(pos);
 
         if (firebaseChunk == null)
         {
@@ -163,7 +184,7 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
             firebaseChunk = GenerateDynamicChunk(pos);
 
             // 새로 생성한 청크를 Firebase에 저장
-            await repo.SaveChunkAsync(firebaseChunk);
+            await _repo.SaveChunkAsync(firebaseChunk);
         }
         else
         {
@@ -251,8 +272,6 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
 
         return worldData;
     }
-
-
     private void ClearExistingWorld()
     {
         // 기존 청크 오브젝트들 삭제
@@ -268,5 +287,78 @@ public class WorldManager : MonoBehaviourSingleton<WorldManager>
         loadedChunks.Clear();
 
         Debug.Log("[WorldManager] 기존 월드 정리 완료");
+    }
+    public bool HasChunk(ChunkPosition pos)
+    {
+        return loadedChunks.ContainsKey(pos);
+    }
+    public async void GenerateAndBuildChunk(ChunkPosition pos)
+    {
+        var newChunk = GenerateDynamicChunk(pos);
+        loadedChunks[pos] = newChunk;
+
+        await BuildChunkInScene(pos, newChunk);
+        await _repo.SaveChunkAsync(loadedChunks[pos]);
+        await ForageManager.Instance.GenerateForagesInChunk(pos);
+    }
+    public void TryGenerateChunk()
+    {
+        Vector3 pos = GameObject.FindGameObjectWithTag("Player").transform.position;
+
+        float chunkSizeX = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.x;
+        float chunkSizeZ = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.z;
+
+        int chunkX = Mathf.FloorToInt(pos.x / chunkSizeX);
+        int chunkZ = Mathf.FloorToInt(pos.z / chunkSizeZ);
+
+        float chunkOriginX = chunkX * chunkSizeX;
+        float chunkOriginZ = chunkZ * chunkSizeZ;
+
+        float localX = pos.x - chunkOriginX;
+        float localZ = pos.z - chunkOriginZ;
+
+        float distLeft = localX;
+        float distRight = chunkSizeX - localX;
+        float distBack = localZ;
+        float distForward = chunkSizeZ - localZ;
+
+        float minDist = Mathf.Min(distLeft, distRight, distBack, distForward);
+        if (minDist > 3.0f)
+        {
+            Debug.Log("아직 경계까지 멀어서 청크를 생성하지 않음.");
+            return;
+        }
+        int moveX = 0;
+        int moveZ = 0;
+
+        if (minDist == distLeft)
+            moveX = -1;
+        else if (minDist == distRight)
+            moveX = +1;
+        else if (minDist == distBack)
+            moveZ = -1;
+        else if (minDist == distForward)
+            moveZ = +1;
+
+        if (moveX == 0 && moveZ == 0)
+        {
+            Debug.Log("방향 판정 실패");
+            return;
+        }
+
+        int targetChunkX = chunkX + moveX;
+        int targetChunkZ = chunkZ + moveZ;
+
+        var targetPos = new ChunkPosition(targetChunkX, 0, targetChunkZ);
+
+        if (!WorldManager.Instance.HasChunk(targetPos))
+        {
+            Debug.Log($"새 청크 생성: {targetPos.X}, {targetPos.Z}");
+            WorldManager.Instance.GenerateAndBuildChunk(targetPos);
+        }
+        else
+        {
+            Debug.Log("해당 청크 이미 존재!");
+        }
     }
 }

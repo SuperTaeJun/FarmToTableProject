@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
+public class ChunkGenerator : MonoBehaviour
 {
+    public static ChunkGenerator Instance { private set; get; }
+
     [Header("World Settings")]
     public int worldHeight = 16;
     public Vector3 blockOffset = new Vector3(1, 0.5f, 1);
@@ -16,9 +18,17 @@ public class ChunkGenerator : MonoBehaviourSingleton<ChunkGenerator>
     private Dictionary<string, Mesh> blockMeshes;
     private Dictionary<string, Material> blockMaterials;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         InitializeBlockAssets();
     }
 

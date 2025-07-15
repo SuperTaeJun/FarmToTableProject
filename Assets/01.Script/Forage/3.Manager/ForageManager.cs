@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
-public class ForageManager : MonoBehaviourSingleton<ForageManager>
+using Unity.VisualScripting;
+public class ForageManager : MonoBehaviour
 {
+    public static ForageManager Instance { private set; get; }
+
     private ForageRepository _repo;
     private List<ForageObject> _forages;
     public List<ForageObject> Forages => _forages;
@@ -16,12 +19,21 @@ public class ForageManager : MonoBehaviourSingleton<ForageManager>
 
     private Dictionary<string, List<Forage>> _chunkForages = new Dictionary<string, List<Forage>>();
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         _repo = new ForageRepository();
         _forages = new List<ForageObject>();
+
     }
 
     private async void Start()
@@ -49,17 +61,14 @@ public class ForageManager : MonoBehaviourSingleton<ForageManager>
     }
     public async Task LoadAllForages()
     {
-        int worldWidth = WorldManager.Instance.worldWidth;
-        int worldDepth = WorldManager.Instance.worldDepth;
+        var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
 
-        for (int cx = 0; cx < worldWidth; cx++)
+        foreach (var chunkPos in loadedChunks)
         {
-            for (int cz = 0; cz < worldDepth; cz++)
-            {
-                string chunkId = $"{cx}_0_{cz}";
-                await LoadOrCreateForages(chunkId);
-            }
+            string chunkId = $"{chunkPos.X}_{chunkPos.Y}_{chunkPos.Z}";
+            await LoadOrCreateForages(chunkId);
         }
+
     }
     public async Task LoadOrCreateForages(string chunkId)
     {
@@ -89,10 +98,24 @@ public class ForageManager : MonoBehaviourSingleton<ForageManager>
                 continue;
             }
 
-            var obj = Instantiate(prefab);
+            var obj = Instantiate(prefab,transform);
             obj.Init(forage);
             _forages.Add(obj);
         }
+    }
+    public async Task GenerateForagesInChunk(ChunkPosition pos)
+    {
+        string chunkId = $"{pos.X}_{pos.Y}_{pos.Z}";
+
+        var randomForages = GenerateRandomForages(chunkId);
+
+        _chunkForages[chunkId] = randomForages;
+
+        InstantiateForages(randomForages);
+
+        await _repo.SaveForages(chunkId, randomForages);
+
+        Debug.Log($"[ForageManager] Generated and saved forages in chunk {chunkId}");
     }
     private List<Forage> GenerateRandomForages(string chunkId)
     {
