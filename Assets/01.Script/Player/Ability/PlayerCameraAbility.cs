@@ -16,24 +16,19 @@ public class PlayerCameraAbility : PlayerAbility
     void Start()
     {
         // 초기 카메라 각도 설정
-
         yaw = _owner.cameraTarget.eulerAngles.y;
         pitch = _owner.cameraTarget.eulerAngles.x;
-    }
-    private void Update()
-    {
-        HandleMouseLook();
 
+        _owner.InputController.OnCameraRotateInput.AddListener(HandleMouseLook);
     }
     private void LateUpdate()
     {
         UpdateCameraTarget();
     }
-    void HandleMouseLook()
+    void HandleMouseLook(Vector2 input)
     {
-        // 마우스 입력 받기
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        float mouseX = input.x * mouseSensitivity;
+        float mouseY = input.y * mouseSensitivity;
 
         // 카메라 회전값 업데이트
         yaw += mouseX;

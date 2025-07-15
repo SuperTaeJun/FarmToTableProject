@@ -3,33 +3,31 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Transform cameraTarget; // 카메라가 따라다닐 빈 오브젝트
-    [SerializeField]private SO_PlayerData _data;
+    [SerializeField] private SO_PlayerData _data;
     public SO_PlayerData Data => _data;
 
 
-    private CharacterController _controller;
-    public CharacterController Controller => _controller;
+    private CharacterController _characterController;
+    public CharacterController CharacterController => _characterController;
     private Animator _animator;
     public Animator Animator => _animator;
-
+    private PlayerInputController _inputController;
+    public PlayerInputController InputController => _inputController;
     private void Awake()
     {
-        _controller = GetComponent<CharacterController>();
+        _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        _inputController = GetComponent<PlayerInputController>();
     }
 
     void Start()
     {
-        // 마우스 커서 설정
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        if(PlayerDataHolder.Instance.IsSavedData())
+        if (PlayerDataHolder.Instance.IsSavedData())
         {
-            _controller.gameObject.SetActive(false);
+            _characterController.gameObject.SetActive(false);
             gameObject.transform.position = PlayerDataHolder.Instance.SavedPos;
             gameObject.transform.rotation = PlayerDataHolder.Instance.SavedRot;
-            _controller.gameObject.SetActive(true);
+            _characterController.gameObject.SetActive(true);
         }
     }
 
@@ -44,9 +42,9 @@ public class Player : MonoBehaviour
 
     public void SetPositionForCharacterController(Vector3 newPos)
     {
-        _controller.gameObject.SetActive(false);
+        _characterController.gameObject.SetActive(false);
         transform.position = newPos;
-        _controller.gameObject.SetActive(true);
+        _characterController.gameObject.SetActive(true);
     }
 
 }

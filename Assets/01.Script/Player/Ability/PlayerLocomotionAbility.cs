@@ -18,21 +18,17 @@ public class PlayerLocomotionAbility : PlayerAbility
     private void Start()
     {
         _currentMoveSpeed = _owner.Data.WalkSpeed;
+        _owner.InputController.OnMoveInput.AddListener(HandleMovement);
 
     }
     private void Update()
     {
-        HandleMovement();
-
-
     }
 
-    void HandleMovement()
+    private void HandleMovement(Vector2 input)
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
 
-        Vector3 inputDirection = new Vector3(horizontal, 0f, vertical);
+        Vector3 inputDirection = new Vector3(input.x, 0f, input.y);
 
         Vector3 moveDirection = Vector3.zero;
 
@@ -46,7 +42,7 @@ public class PlayerLocomotionAbility : PlayerAbility
             cameraForward.Normalize();
             cameraRight.Normalize();
 
-            moveDirection = (cameraForward * vertical + cameraRight * horizontal).normalized;
+            moveDirection = (cameraForward * inputDirection.z + cameraRight * inputDirection.x).normalized;
 
             if (moveDirection != Vector3.zero)
             {
@@ -61,7 +57,7 @@ public class PlayerLocomotionAbility : PlayerAbility
         }
 
         // 중력 처리
-        if (_owner.Controller.isGrounded)
+        if (_owner.CharacterController.isGrounded)
         {
             if (velocity.y < 0f)
                 velocity.y = -2f;
@@ -75,7 +71,7 @@ public class PlayerLocomotionAbility : PlayerAbility
         velocity.x = moveDirection.x * _currentMoveSpeed;
         velocity.z = moveDirection.z * _currentMoveSpeed;
 
-        _owner.Controller.Move(velocity * Time.deltaTime);
+        _owner.CharacterController.Move(velocity * Time.deltaTime);
     }
 
 }
