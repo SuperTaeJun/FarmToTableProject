@@ -5,7 +5,7 @@ public class PlayerInputController : MonoBehaviour
 {
     public DebugEvent<Vector2> OnMoveInput = new DebugEvent<Vector2>();
     public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>();
-    public DebugEvent OnInteractionInput = new DebugEvent();
+    public DebugEvent OnChunkPurchaseInput = new DebugEvent();
     private bool _isCursorLocked = true;
 
     private void Awake()
@@ -20,7 +20,7 @@ public class PlayerInputController : MonoBehaviour
         HandleMoveInput();
         HandleCameraRotateInput();
         HandleMouseCursor();
-        HandleInteractionInput();
+        HandleChunkPurchaseInput();
     }
 
     private void HandleMouseCursor()
@@ -68,11 +68,12 @@ public class PlayerInputController : MonoBehaviour
 
         Debug.Log($"Cursor Lock Toggled: {_isCursorLocked}");
     }
-    private void HandleInteractionInput()
+    private void HandleChunkPurchaseInput()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            OnInteractionInput.Invoke();
+            FadeManager.Instance.FadeScreenWithEvent(OnChunkPurchaseInput.Invoke);
+            //OnInteractionInput.Invoke();
         }
     }
 }

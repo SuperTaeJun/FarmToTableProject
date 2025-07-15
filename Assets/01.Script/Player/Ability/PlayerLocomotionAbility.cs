@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerLocomotionAbility : PlayerAbility
 {
@@ -87,11 +88,13 @@ public class PlayerLocomotionAbility : PlayerAbility
         {
             // 이동 허용
             _owner.CharacterController.Move(desiredMove);
+            _owner.UiController.DisActiveDialogBox();
         }
         else
         {
             // 이동 막기
             Debug.Log("로드되지 않은 청크라 이동을 막았습니다.");
+            _owner.UiController.ActiveDialogBox(EPlayerUiType.Chunk);
 
             PopupManager.Instance.Open(EPopupType.UI_ChunkPopup);
 
