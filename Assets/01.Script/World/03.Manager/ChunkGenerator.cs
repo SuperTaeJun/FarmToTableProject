@@ -1,5 +1,4 @@
 using System.Collections;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +38,154 @@ public class ChunkGenerator : MonoBehaviour
 
         LoadMeshAndMaterial(grassPrefab, "Grass", blockMeshes, blockMaterials);
         LoadMeshAndMaterial(dirtPrefab, "Dirt", blockMeshes, blockMaterials);
+
+    }
+    public IEnumerator GenerateDynamicChunkCoroutine(ChunkPosition chunkPos, string[,,] chunkData, Transform parentTransform, System.Action<GameObject> onComplete)
+    {
+        GameObject chunkParent = new GameObject($"DynamicChunk_{chunkPos.X}_{chunkPos.Z}");
+        chunkParent.transform.SetParent(parentTransform);
+
+        Dictionary<string, List<CombineInstance>> blockCombineInstances = new Dictionary<string, List<CombineInstance>>();
+        int chunkSize = Chunk.ChunkSize;
+
+        System.Diagnostics.Stopwatch frameTimer = new System.Diagnostics.Stopwatch();
+
+        // 1단계: 블록 데이터 처리 (서브 청크 단위로)
+        const int subChunkSize = 2; // subChunkSize x subChunkSize 크기로 청크를 처리
+
+        for (int subX = 0; subX < chunkSize; subX += subChunkSize)
+        {
+            for (int subZ = 0; subZ < chunkSize; subZ += subChunkSize)
+            {
+                frameTimer.Restart();
+
+                // 4x4 서브 청크 처리
+                int endX = Mathf.Min(subX + subChunkSize, chunkSize);
+                int endZ = Mathf.Min(subZ + subChunkSize, chunkSize);
+
+                for (int x = subX; x < endX; x++)
+                {
+                    for (int z = subZ; z < endZ; z++)
+                    {
+                        if (x >= chunkData.GetLength(0) || z >= chunkData.GetLength(2))
+                            continue;
+
+                        bool topBlockFound = false;
+                        for (int y = worldHeight - 1; y >= 0; y--)
+                        {
+                            string blockName = chunkData[x, y, z];
+                            if (blockName == null)
+                                continue;
+
+                            bool shouldDraw = false;
+                            if (!topBlockFound)
+                            {
+                                shouldDraw = true;
+                                topBlockFound = true;
+                            }
+                            else
+                            {
+                                if (IsBlockVisible(chunkData, x, y, z))
+                                    shouldDraw = true;
+                            }
+
+                            if (shouldDraw)
+                            {
+                                Vector3 pos = new Vector3(
+                                    (chunkPos.X * chunkSize + x) * blockOffset.x,
+                                    y * blockOffset.y,
+                                    (chunkPos.Z * chunkSize + z) * blockOffset.z
+                                );
+
+                                if (!blockMeshes.ContainsKey(blockName))
+                                    continue;
+
+                                Mesh blockMesh = blockMeshes[blockName];
+                                CombineInstance ci = new CombineInstance
+                                {
+                                    mesh = blockMesh,
+                                    transform = Matrix4x4.TRS(pos, Quaternion.identity, blockOffset)
+                                };
+
+                                if (!blockCombineInstances.ContainsKey(blockName))
+                                    blockCombineInstances[blockName] = new List<CombineInstance>();
+                                blockCombineInstances[blockName].Add(ci);
+                            }
+                        }
+                    }
+                }
+
+                // 서브 청크마다 yield
+                yield return null;
+            }
+        }
+
+        // 2단계: 메시 결합 (더 작은 단위로)
+        List<GameObject> createdChunkObjects = new List<GameObject>();
+        const int maxCombinePerFrame = 150; // 더 작게 설정
+
+        foreach (var kvp in blockCombineInstances)
+        {
+            string blockName = kvp.Key;
+            var combineList = kvp.Value;
+
+            if (combineList.Count == 0)
+                continue;
+
+            // 메시를 작은 단위로 분할해서 처리
+            for (int i = 0; i < combineList.Count; i += maxCombinePerFrame)
+            {
+                frameTimer.Restart();
+
+                int count = Mathf.Min(maxCombinePerFrame, combineList.Count - i);
+                var subList = combineList.GetRange(i, count);
+
+                Mesh subMesh = new Mesh();
+                subMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+                subMesh.CombineMeshes(subList.ToArray(), true, true);
+
+                GameObject chunkObj = new GameObject($"Chunk_{chunkPos.X}_{chunkPos.Z}_{blockName}_{i / maxCombinePerFrame}");
+                chunkObj.transform.parent = chunkParent.transform;
+
+                var mf = chunkObj.AddComponent<MeshFilter>();
+                mf.mesh = subMesh;
+
+                var mr = chunkObj.AddComponent<MeshRenderer>();
+                mr.material = blockMaterials[blockName];
+
+                createdChunkObjects.Add(chunkObj);
+
+                // 메시 결합 후 무조건 yield
+                yield return null;
+            }
+        }
+
+        // 3단계: 콜라이더 추가 (배치로 처리)
+        const int collidersPerFrame = 3; // 프레임당 콜라이더 생성 수
+
+        for (int i = 0; i < createdChunkObjects.Count; i += collidersPerFrame)
+        {
+            frameTimer.Restart();
+
+            int endIndex = Mathf.Min(i + collidersPerFrame, createdChunkObjects.Count);
+            for (int j = i; j < endIndex; j++)
+            {
+                var chunkObj = createdChunkObjects[j];
+                var meshFilter = chunkObj.GetComponent<MeshFilter>();
+                if (meshFilter != null)
+                {
+                    var mc = chunkObj.AddComponent<MeshCollider>();
+                    mc.sharedMesh = meshFilter.mesh;
+                    mc.convex = false;
+                }
+            }
+
+            // 콜라이더 배치 생성 후 yield
+            yield return null;
+        }
+
+        Debug.Log($"[ChunkGenerator] 청크 {chunkPos.X},{chunkPos.Z} 렌더링 완료 - {blockCombineInstances.Count}개 타입");
+        onComplete?.Invoke(chunkParent);
     }
     public GameObject GenerateDynamicChunk(ChunkPosition chunkPos, string[,,] chunkData)
     {

@@ -240,14 +240,27 @@ public class WorldManager : MonoBehaviour
     {
         // Chunk 데이터를 월드 데이터로 변환
         string[,,] chunkWorldData = ConvertChunkToWorldData(chunk);
+        var tcs = new TaskCompletionSource<bool>();
 
-        // DynamicChunkGenerator로 동적 렌더링
-        GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(pos, chunkWorldData);
+        //최적화 버전
+        StartCoroutine(dynamicGenerator.GenerateDynamicChunkCoroutine
+(
+    pos,
+    chunkWorldData,
+    this.transform,
+    chunkObject => { chunkObjects[pos] = chunkObject; tcs.SetResult(true); }
+));
 
-        // 청크 오브젝트 등록
-        chunkObjects[pos] = chunkObject;
+        ////최적화 전 버전
+        //// DynamicChunkGenerator로 동적 렌더링
+        //GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(pos, chunkWorldData);
 
-        await Task.Yield(); // 프레임 분산
+
+        //// 청크 오브젝트 등록
+        //chunkObjects[pos] = chunkObject;
+
+        await tcs.Task;
+        //await Task.Yield(); // 프레임 분산
     }
 
     private string[,,] ConvertChunkToWorldData(Chunk chunk)
@@ -301,5 +314,5 @@ public class WorldManager : MonoBehaviour
         await _repo.SaveChunkAsync(loadedChunks[pos]);
         await ForageManager.Instance.GenerateForagesInChunk(pos);
     }
-   
+
 }

@@ -1,6 +1,8 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static SRMath;
 public class WorldLoadingScene : MonoBehaviour
 {
     [Header("Loading UI")]
@@ -8,6 +10,11 @@ public class WorldLoadingScene : MonoBehaviour
 
     [Header("Scene")]
     public string mainSceneName = "MainScene";
+
+    [Header("Animation Settings")]
+    [SerializeField] private float progressSpeed = 2f;
+    private float targetProgress = 0f;
+    private Tween progressTween;
 
     private void OnEnable()
     {
@@ -35,7 +42,19 @@ public class WorldLoadingScene : MonoBehaviour
     }
     private void UpdateProgress(float progress)
     {
-        progressBar.value = progress;
+        //progressBar.value = progress;
+        targetProgress = Mathf.Clamp01(progress);
+
+        // 기존 트윈이 있다면 중단
+        progressTween?.Kill();
+
+        // 현재 값에서 목표 값까지 부드럽게 보간
+        progressTween = DOTween.To(
+            () => progressBar.value,           // 현재 값
+            value => progressBar.value = value, // 값 설정
+            targetProgress,                    // 목표 값
+            progressSpeed                      // 지속 시간
+        ).SetEase(DG.Tweening.Ease.OutQuart);
     }
 
     private void OnLoadingComplete()
