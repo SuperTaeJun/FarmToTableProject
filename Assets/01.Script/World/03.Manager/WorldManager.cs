@@ -23,9 +23,17 @@ public class WorldManager : MonoBehaviour
     private WorldRepository _repo;
 
     private Dictionary<ChunkPosition, Chunk> loadedChunks = new Dictionary<ChunkPosition, Chunk>();
+    public Dictionary<ChunkPosition, Chunk> LoadedChunks => loadedChunks;
 
     private Dictionary<ChunkPosition, GameObject> chunkObjects = new Dictionary<ChunkPosition, GameObject>();
     public IEnumerable<ChunkPosition> LoadedChunkPositions => loadedChunks.Keys;
+
+    public static string GetChunkId(Vector3 worldPosition)
+    {
+        Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPosition);
+        return $"{chunk.Position.X}_{chunk.Position.Y}_{chunk.Position.Z}";
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -314,5 +322,86 @@ public class WorldManager : MonoBehaviour
         await _repo.SaveChunkAsync(loadedChunks[pos]);
         await ForageManager.Instance.GenerateForagesInChunk(pos);
     }
+    public Chunk GetChunkAtWorldPosition(Vector3 worldPosition)
+    {
+        float blockOffsetX = dynamicGenerator.blockOffset.x;
+        float blockOffsetZ = dynamicGenerator.blockOffset.z;
 
+        int chunkSizeX = Chunk.ChunkSize;
+        int chunkSizeZ = Chunk.ChunkSize;
+
+        float chunkWorldSizeX = chunkSizeX * blockOffsetX;
+        float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
+
+        int chunkX = Mathf.FloorToInt(worldPosition.x / chunkWorldSizeX);
+        int chunkZ = Mathf.FloorToInt(worldPosition.z / chunkWorldSizeZ);
+
+        var chunkPos = new ChunkPosition(chunkX, 0, chunkZ);
+
+        if (loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
+        {
+            return chunk;
+        }
+
+        return null;
+    }
+    public Vector3 GetWorldPositionFromChunkLocal(ChunkPosition chunkPos, Vector3 localPosition)
+    {
+        float blockOffsetX = dynamicGenerator.blockOffset.x;
+        float blockOffsetZ = dynamicGenerator.blockOffset.z;
+        int chunkSizeX = Chunk.ChunkSize;
+        int chunkSizeZ = Chunk.ChunkSize;
+
+        float chunkWorldSizeX = chunkSizeX * blockOffsetX;
+        float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
+
+        // 청크의 월드 시작 좌표
+        float chunkWorldStartX = chunkPos.X * chunkWorldSizeX;
+        float chunkWorldStartZ = chunkPos.Z * chunkWorldSizeZ;
+
+        // 로컬 좌표를 월드 좌표로 변환
+        float worldX = chunkWorldStartX + (localPosition.x * blockOffsetX);
+        float worldY = localPosition.y; // Y는 변환 불필요
+        float worldZ = chunkWorldStartZ + (localPosition.z * blockOffsetZ);
+
+        return new Vector3(worldX, worldY, worldZ);
+    }
+    // 청크 id로도 가능하게 오버라이드
+    public Vector3 GetWorldPositionFromChunkLocal(string chunkId, Vector3 localPosition)
+    {
+        string[] parts = chunkId.Split('_');
+        if (parts.Length != 3)
+        {
+            Debug.LogError($"Invalid chunkId format: {chunkId}");
+            return Vector3.zero;
+        }
+
+        int chunkX = int.Parse(parts[0]);
+        int chunkY = int.Parse(parts[1]);
+        int chunkZ = int.Parse(parts[2]);
+
+        var chunkPos = new ChunkPosition(chunkX, chunkY, chunkZ);
+        return GetWorldPositionFromChunkLocal(chunkPos, localPosition);
+    }
+    public Vector3 GetLocalPositionInChunk(Vector3 worldPosition, ChunkPosition chunkPos)
+    {
+        float blockOffsetX = dynamicGenerator.blockOffset.x;
+        float blockOffsetZ = dynamicGenerator.blockOffset.z;
+        int chunkSizeX = Chunk.ChunkSize;
+        int chunkSizeZ = Chunk.ChunkSize;
+
+        float chunkWorldSizeX = chunkSizeX * blockOffsetX;
+        float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
+
+        // 청크의 월드 시작 좌표
+        float chunkWorldStartX = chunkPos.X * chunkWorldSizeX;
+        float chunkWorldStartZ = chunkPos.Z * chunkWorldSizeZ;
+
+        // 월드 좌표에서 청크 로컬 좌표로 변환
+        float localX = (worldPosition.x - chunkWorldStartX) / blockOffsetX;
+        float localY = worldPosition.y;
+        float localZ = (worldPosition.z - chunkWorldStartZ) / blockOffsetZ;
+
+        return new Vector3(localX, localY, localZ);
+    }
 }

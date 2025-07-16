@@ -68,7 +68,6 @@ public class ForageManager : MonoBehaviour
             string chunkId = $"{chunkPos.X}_{chunkPos.Y}_{chunkPos.Z}";
             await LoadOrCreateForages(chunkId);
         }
-
     }
     public async Task LoadOrCreateForages(string chunkId)
     {

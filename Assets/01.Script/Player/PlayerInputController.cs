@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerInputController : MonoBehaviour
 {
     public DebugEvent<Vector2> OnMoveInput = new DebugEvent<Vector2>();
     public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>();
     public DebugEvent OnChunkPurchaseInput = new DebugEvent();
+    public DebugEvent OnFarmingInput = new DebugEvent();
     private bool _isCursorLocked = true;
 
     private void Awake()
@@ -21,8 +23,16 @@ public class PlayerInputController : MonoBehaviour
         HandleCameraRotateInput();
         HandleMouseCursor();
         HandleChunkPurchaseInput();
+        HandleFarmingInput();
     }
 
+    private void HandleFarmingInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnFarmingInput.Invoke();
+        }
+    }
     private void HandleMouseCursor()
     {
         if (Input.GetKeyDown(KeyCode.LeftAlt))

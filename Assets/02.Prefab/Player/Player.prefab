@@ -14917,6 +14917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTarget: {fileID: 8290847747194805925}
   _data: {fileID: 11400000, guid: 3249cb5aafe695940b91449e2a8ca52f, type: 2}
+  CurrentSelectedPos: {x: 0, y: 0, z: 0}
 --- !u!143 &2571527854542904666
 CharacterController:
   m_ObjectHideFlags: 0
@@ -34978,6 +34979,8 @@ GameObject:
   - component: {fileID: 3285852175599805504}
   - component: {fileID: 5294448519612977570}
   - component: {fileID: 9038517419998529661}
+  - component: {fileID: 2100187070747767698}
+  - component: {fileID: 4477425539551277010}
   m_Layer: 0
   m_Name: Ability
   m_TagString: Untagged
@@ -35027,6 +35030,40 @@ MonoBehaviour:
   mouseSensitivity: 2
   pitchMin: -30
   pitchMax: 60
+--- !u!114 &2100187070747767698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874816458260195903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b060f2fd04c4746811c5f5e22829e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cellSize: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  snapToGrid: 1
+  lineMaterial: {fileID: 2100000, guid: 98ffd33de564b114c9c10d0017e0e053, type: 2}
+  lineColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  lineWidth: 0.05
+  maxSelectDistance: 3
+--- !u!114 &4477425539551277010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874816458260195903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 540af635d3835ee4fa935161ebdd24a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8898918429081247116
 GameObject:
   m_ObjectHideFlags: 0

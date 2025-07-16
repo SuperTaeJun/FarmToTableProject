@@ -5,15 +5,19 @@ using UnityEngine;
 public enum ECropType
 {
     Carrot,
+    Beet,
+    Bean,
+    Broccoli,
+    Chilli,
+    Cucumber,
     Pumkin,
 }
 public enum ECropGrowthStage
 {
-    Seed,
-    Sprout,
-    Growing,
-    Mature,
-    Harvest
+    Seed,          
+    Vegetative,    
+    Mature,   
+    Harvest        
 }
 public class Crop
 {
@@ -25,7 +29,6 @@ public class Crop
     public DateTime LastWateredTime { get; private set; }
     public bool IsWatered { get; private set; }
     public float GrowthProgress { get; private set; }
-
     public Crop(ECropType type, string chunkId, Vector3 position)
     {
         Type = type;
@@ -66,12 +69,10 @@ public class Crop
     {
         if (GrowthProgress >= 1.0f)
             GrowthStage = ECropGrowthStage.Harvest;
-        else if (GrowthProgress >= 0.75f)
-            GrowthStage = ECropGrowthStage.Mature;
         else if (GrowthProgress >= 0.5f)
-            GrowthStage = ECropGrowthStage.Growing;
-        else if (GrowthProgress >= 0.1f)
-            GrowthStage = ECropGrowthStage.Sprout;
+            GrowthStage = ECropGrowthStage.Mature;
+        else if (GrowthProgress >= 0.2f)
+            GrowthStage = ECropGrowthStage.Vegetative;
         else
             GrowthStage = ECropGrowthStage.Seed;
     }

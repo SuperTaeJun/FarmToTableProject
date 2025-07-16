@@ -18,8 +18,6 @@ public class ForageObject : MonoBehaviour
         float distance = Vector3.Distance(transform.position, _player.position);
         if (distance < detectRadius)
         {
-            Debug.Log($"[ForageObject] Player reached forage {Type}, destroying.");
-
             // 매니저에 알려서 리스트에서 제거
             ForageManager.Instance.RemoveForage(this);
         }
