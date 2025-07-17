@@ -14,12 +14,16 @@ public class CropsManager : MonoBehaviour
     public Dictionary<string, Crop> Crops => _crops;
 
     [Header("Growth Settings")]
-    [SerializeField] private float _baseGrowthRate = 0.1f; // 기본 성장률 (시간당)
+    [SerializeField] private float _baseGrowthRate = 360f; // 기본 성장률 (시간당)
 
     public DebugEvent<Crop> OnCropPlanted = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropHarvested = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropWatered = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropGrowthUpdated = new DebugEvent<Crop>();
+    // 새로운 이벤트들
+    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // 물이 필요할 때
+    public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>(); // 성장 중단
+    public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>(); // 수확 준비됨
 
     private void Awake()
     {
@@ -107,25 +111,6 @@ public class CropsManager : MonoBehaviour
         OnCropHarvested.Invoke(crop);
     }
 
-    public async Task WaterCrop(string chunkId, Vector3 position)
-    {
-        string cropKey = GetCropKey(chunkId, position);
-
-        if (!_crops.TryGetValue(cropKey, out Crop crop))
-        {
-            return;
-        }
-
-        if (!crop.NeedsWater())
-        {
-            return;
-        }
-
-        crop.Water();
-        await _repo.WaterCrop(chunkId, position);
-        OnCropWatered.Invoke(crop);
-    }
-
     public Crop GetCrop(string chunkId, Vector3 position)
     {
         string cropKey = GetCropKey(chunkId, position);
@@ -151,9 +136,8 @@ public class CropsManager : MonoBehaviour
 
     private void StartGrowthUpdate()
     {
-        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 60f); // 1분마다 성장 업데이트
+        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 1f); // 1분마다 성장 업데이트
     }
-
     private async void UpdateCropGrowth()
     {
         var cropsToUpdate = new List<Crop>();
@@ -163,16 +147,35 @@ public class CropsManager : MonoBehaviour
             if (crop.GrowthStage == ECropGrowthStage.Harvest)
                 continue;
 
-            float growthRate = _baseGrowthRate;
-            //if (crop.IsWatered)
-            //    growthRate *= _wateredGrowthMultiplier;
-
-            if (crop.IsWatered && (DateTime.Now - crop.LastWateredTime).TotalHours > 24)
+            // 씨앗 단계는 항상 성장 가능, 다른 단계는 물이 필요
+            if (crop.GrowthStage != ECropGrowthStage.Seed && !crop.IsWateredForCurrentStage())
             {
+                OnCropGrowthStopped.Invoke(crop); // 성장 중단 이벤트
+                OnCropNeedsWater.Invoke(crop); // 물 필요 이벤트
+                continue; // 성장 업데이트 건너뛰기
             }
 
-            crop.UpdateGrowth(growthRate / 60f); // 분 단위로 계산
+            var previousStage = crop.GrowthStage;
+            crop.UpdateGrowth(_baseGrowthRate / 3600f); // 초 단위로 계산 (1시간 = 3600초)
             cropsToUpdate.Add(crop);
+
+            // 성장 단계가 변경되었으면 이벤트 발생
+            if (previousStage != crop.GrowthStage)
+            {
+                OnCropGrowthUpdated.Invoke(crop);
+
+                if (crop.GrowthStage == ECropGrowthStage.Harvest)
+                {
+                    // 수확 가능 상태
+                    OnCropReadyToHarvest.Invoke(crop);
+                }
+                else if (crop.GrowthStage == ECropGrowthStage.Vegetative ||
+                         crop.GrowthStage == ECropGrowthStage.Mature)
+                {
+                    // Vegetative나 Mature 단계에 도달하면 물이 필요
+                    OnCropNeedsWater.Invoke(crop);
+                }
+            }
         }
 
         // 성장이 업데이트된 작물들을 DB에 저장
@@ -181,7 +184,6 @@ public class CropsManager : MonoBehaviour
         {
             await _repo.UpdateCropGrowth(crop.ChunkId, crop.Position, crop.GrowthProgress);
             updatedChunks.Add(crop.ChunkId);
-            OnCropGrowthUpdated.Invoke(crop);
         }
 
         if (cropsToUpdate.Count > 0)
@@ -189,10 +191,37 @@ public class CropsManager : MonoBehaviour
             Debug.Log($"Updated growth for {cropsToUpdate.Count} crops across {updatedChunks.Count} chunks");
         }
     }
-
-    private string GetCropKey(string chunkId, Vector3 position)
+    public async Task WaterCrop(string chunkId, Vector3 localPosition)
     {
-        return $"{chunkId}_{position.x:F1}_{position.y:F1}_{position.z:F1}";
+        string cropKey = GetCropKey(chunkId, localPosition);
+
+        if (!_crops.TryGetValue(cropKey, out Crop crop))
+        {
+            return;
+        }
+
+        // 씨앗 단계나 수확 단계에서는 물을 줄 수 없음
+        if (crop.GrowthStage == ECropGrowthStage.Seed ||
+            crop.GrowthStage == ECropGrowthStage.Harvest)
+        {
+            Debug.Log("이 단계에서는 물을 줄 수 없습니다.");
+            return;
+        }
+
+        // 이미 물을 주었는지 확인
+        if (crop.IsWateredForCurrentStage())
+        {
+            Debug.Log("이미 이 단계에서 물을 주었습니다.");
+            return;
+        }
+
+        crop.WaterCurrentStage(); // 현재 단계에 물 주기
+        await _repo.WaterCrop(chunkId, localPosition);
+        OnCropWatered.Invoke(crop);
+    }
+    private string GetCropKey(string chunkId, Vector3 localPosition)
+    {
+        return $"{chunkId}_{localPosition.x:F1}_{localPosition.y:F1}_{localPosition.z:F1}";
     }
 
     public void UnloadChunk(string chunkId)

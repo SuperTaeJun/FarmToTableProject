@@ -7,6 +7,7 @@ public class PlayerFarmingAbility : PlayerAbility
     private void Start()
     {
         _owner.InputController.OnFarmingInput.AddListener(HandleFarmingInput);
+        _owner.InputController.OnWateringInput.AddListener(OnWaterCrop);
     }
 
     private void HandleFarmingInput()
@@ -43,7 +44,9 @@ public class PlayerFarmingAbility : PlayerAbility
 
         if (CropsManager.Instance != null)
         {
-            _ = CropsManager.Instance.WaterCrop(chunkId, _owner.CurrentSelectedPos);
+            Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(_owner.CurrentSelectedPos);
+            Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(_owner.CurrentSelectedPos, chunk.Position);
+            _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
             Debug.Log($"물을 주었습니다: {_owner.CurrentSelectedPos}");
         }
     }

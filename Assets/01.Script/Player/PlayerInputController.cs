@@ -8,6 +8,7 @@ public class PlayerInputController : MonoBehaviour
     public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>();
     public DebugEvent OnChunkPurchaseInput = new DebugEvent();
     public DebugEvent OnFarmingInput = new DebugEvent();
+    public DebugEvent OnWateringInput = new DebugEvent();
     private bool _isCursorLocked = true;
 
     private void Awake()
@@ -22,13 +23,13 @@ public class PlayerInputController : MonoBehaviour
         HandleMoveInput();
         HandleCameraRotateInput();
         HandleMouseCursor();
-        HandleChunkPurchaseInput();
+        HandleInteractionInput();
         HandleFarmingInput();
     }
 
     private void HandleFarmingInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             OnFarmingInput.Invoke();
         }
@@ -45,7 +46,7 @@ public class PlayerInputController : MonoBehaviour
         if (!_isCursorLocked)
         {
             OnMoveInput.Invoke(new Vector2(0, 0));
-            return; 
+            return;
         }
 
         float horizontal = Input.GetAxis("Horizontal");
@@ -78,12 +79,12 @@ public class PlayerInputController : MonoBehaviour
 
         Debug.Log($"Cursor Lock Toggled: {_isCursorLocked}");
     }
-    private void HandleChunkPurchaseInput()
+    private void HandleInteractionInput()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            FadeManager.Instance.FadeScreenWithEvent(OnChunkPurchaseInput.Invoke);
-            //OnInteractionInput.Invoke();
+            OnChunkPurchaseInput.Invoke();
+            OnWateringInput.Invoke();
         }
     }
 }

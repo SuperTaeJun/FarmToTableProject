@@ -5672,11 +5672,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cropPrefabs:
-  - type: 3
+  - type: 0
     Prefab: {fileID: 6266096142649144497, guid: 82975e9fec1437f47b111f84e7755682, type: 3}
   - type: 1
     Prefab: {fileID: 6266096142649144497, guid: cf2f893fce1868147b21c7470d12e94b, type: 3}
-  _baseGrowthRate: 0.1
+  _baseGrowthRate: 360
 --- !u!4 &1858222633
 Transform:
   m_ObjectHideFlags: 0

@@ -15,10 +15,10 @@ public class PlayerSelectAbility : PlayerAbility
 
     [Header("선택 범위")]
     public float maxSelectDistance = 3f; // 캐릭터로부터 최대 선택 거리
+    public float forwardDistance = 1f; // 캐릭터 앞쪽 거리
 
     private LineRenderer currentLineRenderer;
     private Vector3 lastGridPosition = Vector3.zero;
-    //private Vector3 currentGroundPosition = Vector3.zero;
     private bool isValidPosition = false;
 
     void Start()
@@ -28,14 +28,13 @@ public class PlayerSelectAbility : PlayerAbility
 
     void Update()
     {
-        UpdateGroundPosition();
+        UpdateForwardBlockPosition();
     }
 
     void CreateLineRenderer()
     {
         GameObject lineObject = new GameObject("GroundGridLineRenderer");
         lineObject.transform.SetParent(transform);
-
         currentLineRenderer = lineObject.AddComponent<LineRenderer>();
 
         // LineRenderer 설정
@@ -52,22 +51,34 @@ public class PlayerSelectAbility : PlayerAbility
         currentLineRenderer.enabled = false;
     }
 
-    void UpdateGroundPosition()
+    void UpdateForwardBlockPosition()
     {
-        // 캐릭터 발 아래로 레이캐스트
-        Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
-        RaycastHit hit;
+        // 캐릭터의 앞쪽 방향 계산
+        Vector3 forwardDirection = transform.forward;
+        Vector3 startPosition = transform.position + Vector3.up * 0.5f; // 캐릭터 가슴 높이
+        Vector3 forwardPosition = startPosition + forwardDirection * forwardDistance;
 
-        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 5f, groundLayer))
+        // 앞쪽 지점에서 아래로 레이캐스트
+        RaycastHit hit;
+        if (Physics.Raycast(forwardPosition, Vector3.down, out hit, 10f, groundLayer))
         {
             Vector3 gridPosition = WorldToGrid(hit.point);
 
-            if (gridPosition != lastGridPosition)
+            // 캐릭터로부터의 거리 체크
+            float distanceFromPlayer = Vector3.Distance(transform.position, gridPosition);
+            if (distanceFromPlayer <= maxSelectDistance)
             {
-                UpdateGridLines(gridPosition);
-                lastGridPosition = gridPosition;
-                _owner.CurrentSelectedPos = gridPosition;
-                isValidPosition = true;
+                if (gridPosition != lastGridPosition)
+                {
+                    UpdateGridLines(gridPosition);
+                    lastGridPosition = gridPosition;
+                    _owner.CurrentSelectedPos = gridPosition;
+                    isValidPosition = true;
+                }
+            }
+            else
+            {
+                HideGridLines();
             }
         }
         else
@@ -83,7 +94,6 @@ public class PlayerSelectAbility : PlayerAbility
         // 바닥 그리드는 Y축은 그대로 두고 X, Z축만 스냅
         float snappedX = Mathf.Round(worldPosition.x / cellSize) * cellSize;
         float snappedZ = Mathf.Round(worldPosition.z / cellSize) * cellSize;
-
         return new Vector3(snappedX, worldPosition.y, snappedZ);
     }
 
@@ -91,11 +101,15 @@ public class PlayerSelectAbility : PlayerAbility
     {
         if (currentLineRenderer == null) return;
 
+        // 선택 가능한 위치면 초록색, 아니면 기본 색상
+        Color currentColor = isValidPosition ? selectedColor : lineColor;
+        currentLineRenderer.startColor = currentColor;
+        currentLineRenderer.endColor = currentColor;
+
         currentLineRenderer.enabled = true;
 
         float halfSize = cellSize * 0.5f;
         float offset = 0.02f; // 바닥에서 살짝 떨어뜨리기
-
         Vector3 offsetPos = centerPosition + Vector3.up * offset;
 
         Vector3[] corners = new Vector3[5];
@@ -112,12 +126,32 @@ public class PlayerSelectAbility : PlayerAbility
     {
         if (currentLineRenderer != null)
             currentLineRenderer.enabled = false;
-
         lastGridPosition = Vector3.zero;
         isValidPosition = false;
     }
 
     public bool HasValidSelection => isValidPosition;
 
+    // 디버그용 기즈모
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
 
+        // 캐릭터 앞쪽 방향 표시
+        Gizmos.color = Color.blue;
+        Vector3 startPos = transform.position + Vector3.up * 0.5f;
+        Vector3 forwardPos = startPos + transform.forward * forwardDistance;
+        Gizmos.DrawLine(startPos, forwardPos);
+
+        // 선택 범위 표시
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, maxSelectDistance);
+
+        // 현재 선택된 위치 표시
+        if (isValidPosition)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(lastGridPosition, Vector3.one * cellSize);
+        }
+    }
 }

@@ -133,7 +133,8 @@ public class Player : MonoBehaviour
         if (!WorldManager.Instance.HasChunk(targetPos))
         {
             Debug.Log($"货 没农 积己: {targetPos.X}, {targetPos.Z}");
-            WorldManager.Instance.GenerateAndBuildChunk(targetPos);
+
+            FadeManager.Instance.FadeScreenWithEvent(() => WorldManager.Instance.GenerateAndBuildChunk(targetPos));
         }
         else
         {
