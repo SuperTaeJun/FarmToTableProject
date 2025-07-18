@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0915fb34c3feb834e8eb5ed0590205c8, type: 3}
   m_Name: SO_Carrot
   m_EditorClassIdentifier: 
-  Type: 3
+  Type: 0
   Cost: 100
   GrowthTimeTotal: 1

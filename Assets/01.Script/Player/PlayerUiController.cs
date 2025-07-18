@@ -11,11 +11,6 @@ public class PlayerUiController : MonoBehaviour
     [SerializeField] private GameObject _dialogBox;
     [SerializeField] private TextMeshProUGUI _dialogText;
 
-    private void LateUpdate()
-    {
-        //ºôº¸µå
-        transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
-    }
     public void DisActiveDialogBox()
     {
         _dialogBox.SetActive(false);

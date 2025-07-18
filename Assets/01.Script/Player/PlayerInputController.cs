@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerInputController : MonoBehaviour
 {
@@ -11,17 +9,24 @@ public class PlayerInputController : MonoBehaviour
     public DebugEvent OnWateringInput = new DebugEvent();
     private bool _isCursorLocked = true;
 
+    private bool _playerMoveInputLock = false;
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-
+    public void SetPlayerMoveInput(bool able)
+    {
+        _playerMoveInputLock = able;
+    }
     private void Update()
     {
-        HandleMoveInput();
-        HandleCameraRotateInput();
+        if (!_playerMoveInputLock)
+        {
+            HandleMoveInput();
+            HandleCameraRotateInput();
+        }
         HandleMouseCursor();
         HandleInteractionInput();
         HandleFarmingInput();

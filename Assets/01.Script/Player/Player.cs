@@ -59,8 +59,6 @@ public class Player : MonoBehaviour
             return ability as T;
         }
 
-        // 게으른 초기화/로딩 -> 처음에 곧바로 초기화/로딩을 하는게 아니라
-        //                    필요할때만 하는.. 뒤로 미루는 기법
         ability = GetComponentInChildren<T>();
 
         if (ability != null)
@@ -134,7 +132,7 @@ public class Player : MonoBehaviour
         {
             Debug.Log($"새 청크 생성: {targetPos.X}, {targetPos.Z}");
 
-            FadeManager.Instance.FadeScreenWithEvent(() => WorldManager.Instance.GenerateAndBuildChunk(targetPos));
+            FadeManager.Instance.FadeScreenWithEvent(()=>WorldManager.Instance.GenerateAndBuildChunk(targetPos));
         }
         else
         {

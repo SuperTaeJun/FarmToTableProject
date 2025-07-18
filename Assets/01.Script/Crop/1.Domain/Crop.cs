@@ -10,7 +10,13 @@ public enum ECropType
     Broccoli,
     Chilli,
     Cucumber,
+    Eggplaint,
     Pumkin,
+    Corn,
+    Watermelon,
+    Onion,
+    Pepper,
+    Asparagus
 }
 public enum ECropGrowthStage
 {

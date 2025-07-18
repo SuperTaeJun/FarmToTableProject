@@ -16,13 +16,17 @@ public class CropsManager : MonoBehaviour
     [Header("Growth Settings")]
     [SerializeField] private float _baseGrowthRate = 360f; // 기본 성장률 (시간당)
 
+    //플레이어가 호출하면 발동s
     public DebugEvent<Crop> OnCropPlanted = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropHarvested = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropWatered = new DebugEvent<Crop>();
+
+    //일정시간마다 성장 업데이트 , 물없으면 성장 스탑
     public DebugEvent<Crop> OnCropGrowthUpdated = new DebugEvent<Crop>();
-    // 새로운 이벤트들
-    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // 물이 필요할 때
     public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>(); // 성장 중단
+    
+    // 농작물한테 보내는 이벤트 이벤트에따라 인디케이터 온오프
+    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // 물이 필요할 때
     public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>(); // 수확 준비됨
 
     private void Awake()
@@ -65,7 +69,7 @@ public class CropsManager : MonoBehaviour
             _crops[cropKey] = crop;
             Vector3 worldPos = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkId, crop.Position);
 
-            GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == crop.Type).Prefab);
+            GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == crop.Type).Prefab,gameObject.transform);
             cropObject.transform.position = worldPos;
         }
     }
@@ -86,8 +90,8 @@ public class CropsManager : MonoBehaviour
 
         var newCrop = new Crop(cropType, chunkId, localPos);
         _crops[cropKey] = newCrop;
-        GameObject crop = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == cropType).Prefab);
-        crop.transform.position = worldPos;
+        GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == cropType).Prefab, gameObject.transform);
+        cropObject.transform.position = worldPos;
         await _repo.SaveSingleCrop(newCrop);
         OnCropPlanted.Invoke(newCrop);
     }
@@ -136,7 +140,7 @@ public class CropsManager : MonoBehaviour
 
     private void StartGrowthUpdate()
     {
-        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 1f); // 1분마다 성장 업데이트
+        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f); // 1분마다 성장 업데이트
     }
     private async void UpdateCropGrowth()
     {

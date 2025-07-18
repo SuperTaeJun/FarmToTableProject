@@ -7,7 +7,7 @@ public class PlayerFarmingAbility : PlayerAbility
     private void Start()
     {
         _owner.InputController.OnFarmingInput.AddListener(HandleFarmingInput);
-        _owner.InputController.OnWateringInput.AddListener(OnWaterCrop);
+        //_owner.InputController.OnWateringInput.AddListener(OnWaterCrop);
     }
 
     private void HandleFarmingInput()
@@ -38,7 +38,7 @@ public class PlayerFarmingAbility : PlayerAbility
         }
     }
 
-    private void OnWaterCrop()
+    public void OnWaterCrop()
     {
         string chunkId = WorldManager.GetChunkId(_owner.CurrentSelectedPos);
 

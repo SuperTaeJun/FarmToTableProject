@@ -31,13 +31,14 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
         yield return StartCoroutine(Fade(0f, 1f));
 
         midAction?.Invoke();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
+
         // Fade In นเพฦมü
         yield return StartCoroutine(Fade(1f, 0f));
         canvas.sortingOrder = -1;
 
     }
-    private IEnumerator FadeRoutine(string sceneName,Action onComplete = null)
+    private IEnumerator FadeRoutine(string sceneName, Action onComplete = null)
     {
         Canvas canvas = fadeImage.GetComponentInParent<Canvas>();
         canvas.sortingOrder = 999;

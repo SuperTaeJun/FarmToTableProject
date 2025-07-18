@@ -132,26 +132,4 @@ public class PlayerSelectAbility : PlayerAbility
 
     public bool HasValidSelection => isValidPosition;
 
-    // 디버그용 기즈모
-    void OnDrawGizmos()
-    {
-        if (!Application.isPlaying) return;
-
-        // 캐릭터 앞쪽 방향 표시
-        Gizmos.color = Color.blue;
-        Vector3 startPos = transform.position + Vector3.up * 0.5f;
-        Vector3 forwardPos = startPos + transform.forward * forwardDistance;
-        Gizmos.DrawLine(startPos, forwardPos);
-
-        // 선택 범위 표시
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, maxSelectDistance);
-
-        // 현재 선택된 위치 표시
-        if (isValidPosition)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(lastGridPosition, Vector3.one * cellSize);
-        }
-    }
 }

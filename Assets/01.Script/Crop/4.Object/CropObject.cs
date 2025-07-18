@@ -10,7 +10,8 @@ public class CropObject : MonoBehaviour
     private Vector3 _localPosition;
     private ECropGrowthStage _currentStage;
 
-    [SerializeField] GameObject _indicator;
+    [SerializeField] GameObject _wateringIndicator;
+    [SerializeField] GameObject _harvestIndicator;
     void Start()
     {
         InitializeCrop();
@@ -31,6 +32,8 @@ public class CropObject : MonoBehaviour
         {
             _currentStage = _crop.GrowthStage;
             SetGrowthMesh(_currentStage);
+
+            if (_currentStage == ECropGrowthStage.Harvest) ShowReadyToHarvestIndicator();
         }
         else
         {
@@ -134,12 +137,12 @@ public class CropObject : MonoBehaviour
 
     private void ShowNeedsWaterIndicator()
     {
-        _indicator.SetActive(true);
+        _wateringIndicator.SetActive(true);
     }
 
     private void HideNeedsWaterIndicator()
     {
-        _indicator.SetActive(false);
+        _wateringIndicator.SetActive(false);
     }
 
     private void ShowWateredEffect()
@@ -149,7 +152,7 @@ public class CropObject : MonoBehaviour
 
     private void ShowReadyToHarvestIndicator()
     {
-        // 수확 준비 인디케이터 표시
+        _harvestIndicator.SetActive(true);
     }
 
     private void OnDestroy()
