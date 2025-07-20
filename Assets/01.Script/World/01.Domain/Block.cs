@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum EBlockType
 {
+    Air,
     Dirt,
     Grass
 }

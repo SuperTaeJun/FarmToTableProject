@@ -6,7 +6,7 @@ public class PlayerFarmingAbility : PlayerAbility
 
     private void Start()
     {
-        _owner.InputController.OnFarmingInput.AddListener(HandleFarmingInput);
+        //_owner.InputController.OnFarmingInput.AddListener(HandleFarmingInput);
         //_owner.InputController.OnWateringInput.AddListener(OnWaterCrop);
     }
 

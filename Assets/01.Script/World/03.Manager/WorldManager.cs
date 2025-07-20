@@ -97,18 +97,18 @@ public class WorldManager : MonoBehaviour
             return dynamicGenerator.worldHeight * 0.5f * dynamicGenerator.blockOffset.y;
         }
 
-        // 위에서부터 아래로 탐색하여 첫 번째 블록 찾기
+        // 위에서부터 아래로 탐색하여 첫 번째 실제 블록 찾기
         for (int y = dynamicGenerator.worldHeight - 1; y >= 0; y--)
         {
             var block = chunk.GetBlock(localX, y, localZ);
-            if (block != null)
+            if (block != null && block.Type != EBlockType.Air)
             {
-                // 블록의 상단 위치 반환
+                // 실제 블록의 상단 위치 반환
                 return (y + 1) * dynamicGenerator.blockOffset.y;
             }
         }
 
-        // 블록이 없는 경우 기본 높이
+        // 실제 블록이 없는 경우 기본 높이
         return dynamicGenerator.blockOffset.y;
     }
     public float GetGroundHeight(Vector3 worldPos)
@@ -219,10 +219,22 @@ public class WorldManager : MonoBehaviour
 
                 int height = GetDynamicHeight(worldX, worldZ);
 
-                for (int y = 0; y < Mathf.Clamp(height, 1, Chunk.ChunkSize); y++)
+                // 전체 높이에 대해 블럭 생성
+                for (int y = 0; y < dynamicGenerator.worldHeight; y++)
                 {
                     var blockPos = new BlockPosition(x, y, z);
-                    var blockType = (y == height - 1) ? EBlockType.Grass : EBlockType.Dirt;
+                    EBlockType blockType;
+
+                    if (y < height)
+                    {
+                        // 지형 높이 이하는 실제 블럭
+                        blockType = (y == height - 1) ? EBlockType.Grass : EBlockType.Dirt;
+                    }
+                    else
+                    {
+                        // 지형 높이 이상은 Air 블럭
+                        blockType = EBlockType.Air;
+                    }
 
                     var block = new Block(blockType, blockPos);
                     chunk.SetBlock(block);
@@ -285,7 +297,11 @@ public class WorldManager : MonoBehaviour
                     var block = chunk.GetBlock(x, y, z);
                     if (block != null)
                     {
-                        worldData[x, y, z] = block.Type == EBlockType.Grass ? "Grass" : "Dirt";
+                        // Air 블럭은 렌더링하지 않음 (null로 두기)
+                        if (block.Type != EBlockType.Air)
+                        {
+                            worldData[x, y, z] = block.Type == EBlockType.Grass ? "Grass" : "Dirt";
+                        }
                     }
                 }
             }
@@ -403,5 +419,70 @@ public class WorldManager : MonoBehaviour
         float localZ = (worldPosition.z - chunkWorldStartZ) / blockOffsetZ;
 
         return new Vector3(localX, localY, localZ);
+    }
+
+    public bool SetBlock(Vector3 worldPosition, EBlockType blockType)
+    {
+        // 월드 좌표에서 청크 찾기
+        var chunk = GetChunkAtWorldPosition(worldPosition);
+        if (chunk == null)
+        {
+            Debug.LogWarning($"월드 위치 {worldPosition}에서 청크를 찾을 수 없습니다.");
+            return false;
+        }
+        // 청크 내 로컬 블럭 좌표 계산
+        var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
+        int blockX = Mathf.FloorToInt(localPos.x);
+        int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
+        int blockZ = Mathf.FloorToInt(localPos.z);
+        var localBlockPos = new BlockPosition(blockX, blockY, blockZ);
+        if (!IsValidBlockPosition(localBlockPos))
+        {
+            Debug.LogWarning($"잘못된 블럭 위치: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
+            return false;
+        }
+        var newBlock = new Block(blockType, localBlockPos);
+        chunk.SetBlock(newBlock);
+        // 청크 다시 빌드
+        RebuildChunk(chunk.Position);
+        return true;
+    }
+    public EBlockType GetBlockType(Vector3 worldPosition)
+    {
+        // 월드 좌표에서 청크 찾기
+        var chunk = GetChunkAtWorldPosition(worldPosition);
+
+        // 청크 내 로컬 블럭 좌표 계산
+        var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
+        int blockX = Mathf.FloorToInt(localPos.x);
+        int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
+        int blockZ = Mathf.FloorToInt(localPos.z);
+
+        var localBlockPos = new BlockPosition(blockX, blockY, blockZ);
+
+        var block = chunk.GetBlock(localBlockPos.X, localBlockPos.Y, localBlockPos.Z);
+        return block.Type;
+    }
+    private bool IsValidBlockPosition(BlockPosition pos)
+    {
+        return pos.X >= 0 && pos.X < Chunk.ChunkSize &&
+               pos.Y >= 0 && pos.Y < dynamicGenerator.worldHeight &&
+               pos.Z >= 0 && pos.Z < Chunk.ChunkSize;
+    }
+
+    private void RebuildChunk(ChunkPosition chunkPos)
+    {
+        if (!loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
+            return;
+        // 기존 청크 오브젝트 삭제
+        if (chunkObjects.TryGetValue(chunkPos, out GameObject oldChunkObject))
+        {
+            DestroyImmediate(oldChunkObject);
+            chunkObjects.Remove(chunkPos);
+        }
+        // 새로 빌드 (동기적으로)
+        string[,,] chunkWorldData = ConvertChunkToWorldData(chunk);
+        GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(chunkPos, chunkWorldData);
+        chunkObjects[chunkPos] = chunkObject;
     }
 }

@@ -14,8 +14,8 @@ public class PlayerSelectAbility : PlayerAbility
     public float lineWidth = 0.05f;
 
     [Header("선택 범위")]
-    public float maxSelectDistance = 3f; // 캐릭터로부터 최대 선택 거리
-    public float forwardDistance = 1f; // 캐릭터 앞쪽 거리
+    public float maxSelectDistance = 1f; // 캐릭터로부터 최대 선택 거리
+    public float forwardDistance = 0.5f; // 캐릭터 앞쪽 거리
 
     private LineRenderer currentLineRenderer;
     private Vector3 lastGridPosition = Vector3.zero;
@@ -55,7 +55,7 @@ public class PlayerSelectAbility : PlayerAbility
     {
         // 캐릭터의 앞쪽 방향 계산
         Vector3 forwardDirection = transform.forward;
-        Vector3 startPosition = transform.position + Vector3.up * 0.5f; // 캐릭터 가슴 높이
+        Vector3 startPosition = transform.position + Vector3.up * 5f; // 캐릭터 가슴 높이
         Vector3 forwardPosition = startPosition + forwardDirection * forwardDistance;
 
         // 앞쪽 지점에서 아래로 레이캐스트

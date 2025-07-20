@@ -7,6 +7,8 @@ public class PlayerInputController : MonoBehaviour
     public DebugEvent OnChunkPurchaseInput = new DebugEvent();
     public DebugEvent OnFarmingInput = new DebugEvent();
     public DebugEvent OnWateringInput = new DebugEvent();
+    public DebugEvent<EPlayerMode> OnModeChangeInput = new DebugEvent<EPlayerMode>();
+
     private bool _isCursorLocked = true;
 
     private bool _playerMoveInputLock = false;
@@ -30,8 +32,23 @@ public class PlayerInputController : MonoBehaviour
         HandleMouseCursor();
         HandleInteractionInput();
         HandleFarmingInput();
+        HandleModeChangeInput(); // 모드 변경 입력 추가
     }
-
+    private void HandleModeChangeInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            OnModeChangeInput.Invoke(EPlayerMode.BlockEdit);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            OnModeChangeInput.Invoke(EPlayerMode.Farming);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            OnModeChangeInput.Invoke(EPlayerMode.Construction);
+        }
+    }
     private void HandleFarmingInput()
     {
         if (Input.GetMouseButtonDown(1))
@@ -89,7 +106,6 @@ public class PlayerInputController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             OnChunkPurchaseInput.Invoke();
-            OnWateringInput.Invoke();
         }
     }
 }

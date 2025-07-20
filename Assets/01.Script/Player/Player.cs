@@ -18,10 +18,14 @@ public class Player : MonoBehaviour
     public PlayerInputController InputController => _inputController;
     private PlayerUiController _uiController;
     public PlayerUiController UiController => _uiController;
+    private PlayerModeController _modeController;
+    public PlayerModeController ModeController => _modeController;
+
 
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private void Awake()
     {
+        _modeController = GetComponent<PlayerModeController>();
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _inputController = GetComponent<PlayerInputController>();
