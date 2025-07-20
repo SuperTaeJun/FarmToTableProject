@@ -228,25 +228,54 @@ public class CropsManager : MonoBehaviour
         return $"{chunkId}_{localPosition.x:F1}_{localPosition.y:F1}_{localPosition.z:F1}";
     }
 
-    public void UnloadChunk(string chunkId)
-    {
-        var keysToRemove = new List<string>();
-        foreach (var kvp in _crops)
-        {
-            if (kvp.Value.ChunkId == chunkId)
-                keysToRemove.Add(kvp.Key);
-        }
-
-        foreach (var key in keysToRemove)
-        {
-            _crops.Remove(key);
-        }
-
-    }
-
     private void OnDestroy()
     {
         CancelInvoke(nameof(UpdateCropGrowth));
+    }
+
+    //외부 공개 메서드
+    public Crop GetCropAtWorldPosition(Vector3 worldPosition)
+    {
+        // 월드 포지션을 청크 ID와 로컬 포지션으로 변환
+        string chunkId = WorldManager.GetChunkId(worldPosition);
+        Chunk currentChunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPosition);
+        Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, currentChunk.Position);
+
+        // 기존 GetCrop 메서드 사용
+        return GetCrop(chunkId, localPos);
+    }
+
+    // 추가로 작물 상태를 확인하는 유틸리티 메서드들도 만들면 좋을 것 같아요
+    public bool CanPlantAtWorldPosition(Vector3 worldPosition)
+    {
+        // 해당 위치에 이미 작물이 있는지 확인
+        var existingCrop = GetCropAtWorldPosition(worldPosition);
+        if (existingCrop != null) return false;
+
+        // 블럭 타입 확인 (흙이나 잔디인지)
+        EBlockType blockType = WorldManager.Instance.GetBlockType(worldPosition);
+        return blockType == EBlockType.Dirt || blockType == EBlockType.Grass;
+    }
+
+    public bool CanWaterAtWorldPosition(Vector3 worldPosition)
+    {
+        var crop = GetCropAtWorldPosition(worldPosition);
+        if (crop == null) return false;
+
+        return crop.GrowthStage != ECropGrowthStage.Seed &&
+               crop.GrowthStage != ECropGrowthStage.Harvest &&
+               !crop.IsWateredForCurrentStage();
+    }
+
+    public bool CanHarvestAtWorldPosition(Vector3 worldPosition)
+    {
+        var crop = GetCropAtWorldPosition(worldPosition);
+        return crop != null && crop.CanHarvest();
+    }
+    public ECropGrowthStage? GetCropGrowthStageAtWorldPosition(Vector3 worldPosition)
+    {
+        var crop = GetCropAtWorldPosition(worldPosition);
+        return crop?.GrowthStage;
     }
 
 }

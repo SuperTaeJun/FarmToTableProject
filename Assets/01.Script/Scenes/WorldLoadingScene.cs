@@ -1,8 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static SRMath;
+
 public class WorldLoadingScene : MonoBehaviour
 {
     [Header("Loading UI")]

@@ -50,6 +50,7 @@ public class CropObject : MonoBehaviour
             CropsManager.Instance.OnCropNeedsWater.AddListener(OnCropNeedsWater);
             CropsManager.Instance.OnCropReadyToHarvest.AddListener(OnCropReadyToHarvest);
             CropsManager.Instance.OnCropWatered.AddListener(OnCropWatered);
+            CropsManager.Instance.OnCropHarvested.AddListener(OnCropHarvested);
         }
     }
 
@@ -78,7 +79,13 @@ public class CropObject : MonoBehaviour
             Debug.LogWarning($"성장 단계 {stage}에 해당하는 오브젝트가 없습니다.");
         }
     }
-
+    private void OnCropHarvested(Crop harvestedCrop)
+    {
+        if (IsThisCrop(harvestedCrop))
+        {
+            Destroy(gameObject);
+        }
+    }
     private void OnCropGrowthUpdated(Crop updatedCrop)
     {
         if (IsThisCrop(updatedCrop))

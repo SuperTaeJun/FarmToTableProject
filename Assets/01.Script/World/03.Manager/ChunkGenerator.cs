@@ -85,7 +85,7 @@ public class ChunkGenerator : MonoBehaviour
                             }
                             else
                             {
-                                if (IsBlockVisible(chunkData, x, y, z))
+                                if (IsBlockVisible(chunkData, x, y, z, chunkPos))
                                     shouldDraw = true;
                             }
 
@@ -223,7 +223,7 @@ public class ChunkGenerator : MonoBehaviour
                     }
                     else
                     {
-                        if (IsBlockVisible(chunkData, x, y, z))
+                        if (IsBlockVisible(chunkData, x, y, z, chunkPos))
                             shouldDraw = true;
                     }
 
@@ -358,16 +358,20 @@ public class ChunkGenerator : MonoBehaviour
             Debug.LogWarning($"[{name}] 프리팹에서 Mesh/Material을 찾을 수 없습니다.");
         }
     }
-    private bool IsBlockVisible(string[,,] chunkData, int x, int y, int z)
+
+    private bool IsBlockVisible(string[,,] chunkData, int x, int y, int z, ChunkPosition currentChunkPos)
     {
         Vector3Int[] directions = {
-            Vector3Int.left,   // -X
-            Vector3Int.right,  // +X
-            Vector3Int.down,   // -Y
-            Vector3Int.up,     // +Y
-            Vector3Int.back,   // -Z
-            Vector3Int.forward // +Z
-        };
+        Vector3Int.left,    // -X
+        Vector3Int.right,   // +X
+        Vector3Int.up,      // +Y
+        Vector3Int.back,    // -Z
+        Vector3Int.forward  // +Z
+    };
+
+        int chunkSizeX = chunkData.GetLength(0);
+        int chunkSizeY = chunkData.GetLength(1);
+        int chunkSizeZ = chunkData.GetLength(2);
 
         foreach (var dir in directions)
         {
@@ -375,20 +379,114 @@ public class ChunkGenerator : MonoBehaviour
             int ny = y + dir.y;
             int nz = z + dir.z;
 
-            // 청크 경계 체크
-            if (nx < 0 || nx >= chunkData.GetLength(0) ||
-                ny < 0 || ny >= chunkData.GetLength(1) ||
-                nz < 0 || nz >= chunkData.GetLength(2))
+            // 현재 청크 내부인 경우
+            if (nx >= 0 && nx < chunkSizeX &&
+                ny >= 0 && ny < chunkSizeY &&
+                nz >= 0 && nz < chunkSizeZ)
             {
-                // 청크 경계 밖은 비어있다고 가정 (visible)
-                return true;
+                // 인접한 위치에 블록이 없으면 현재 블록이 보임
+                if (chunkData[nx, ny, nz] == null)
+                {
+                    return true;
+                }
             }
-
-            // 인접 블록이 없으면 visible
-            if (chunkData[nx, ny, nz] == null)
-                return true;
+            else
+            {
+                // 청크 경계를 벗어나는 경우 인접 청크 확인
+                if (IsAdjacentBlockEmpty(currentChunkPos, x, y, z, dir))
+                {
+                    return true;
+                }
+            }
         }
 
         return false;
     }
+
+    private bool IsAdjacentBlockEmpty(ChunkPosition currentChunkPos, int x, int y, int z, Vector3Int direction)
+    {
+        // 인접 청크의 위치 계산
+        ChunkPosition adjacentChunkPos = currentChunkPos;
+        int adjacentX = x + direction.x;
+        int adjacentY = y + direction.y;
+        int adjacentZ = z + direction.z;
+
+        // 청크 경계를 넘어가는 경우 청크 좌표 조정
+        if (adjacentX < 0)
+        {
+            adjacentChunkPos.X -= 1;
+            adjacentX = Chunk.ChunkSize - 1;
+        }
+        else if (adjacentX >= Chunk.ChunkSize)
+        {
+            adjacentChunkPos.X += 1;
+            adjacentX = 0;
+        }
+
+        if (adjacentY < 0)
+        {
+            adjacentChunkPos.Y -= 1;
+            adjacentY = Chunk.ChunkSize - 1;
+        }
+        else if (adjacentY >= Chunk.ChunkSize)
+        {
+            adjacentChunkPos.Y += 1;
+            adjacentY = 0;
+        }
+
+        if (adjacentZ < 0)
+        {
+            adjacentChunkPos.Z -= 1;
+            adjacentZ = Chunk.ChunkSize - 1;
+        }
+        else if (adjacentZ >= Chunk.ChunkSize)
+        {
+            adjacentChunkPos.Z += 1;
+            adjacentZ = 0;
+        }
+
+        // WorldManager를 통해 인접 청크의 블록 정보 확인
+        // 인접 청크가 없거나 해당 위치에 블록이 없으면 true 반환
+        return !WorldManager.Instance.HasBlockAt(adjacentChunkPos, adjacentX, adjacentY, adjacentZ);
+    }
+    //private bool IsBlockVisible(string[,,] chunkData, int x, int y, int z)
+    //{
+    //    Vector3Int[] directions = {
+    //    Vector3Int.left,    // -X
+    //    Vector3Int.right,   // +X
+    //    Vector3Int.up,      // +Y
+    //    Vector3Int.back,    // -Z
+    //    Vector3Int.forward  // +Z
+    //    // Vector3Int.down 제외 (밑면은 안 그림)
+    //};
+
+    //    int chunkSizeX = chunkData.GetLength(0);
+    //    int chunkSizeY = chunkData.GetLength(1);
+    //    int chunkSizeZ = chunkData.GetLength(2);
+
+    //    foreach (var dir in directions)
+    //    {
+    //        int nx = x + dir.x;
+    //        int ny = y + dir.y;
+    //        int nz = z + dir.z;
+
+    //        // 청크 범위를 벗어나는 경우
+    //        if (nx < 0 || nx >= chunkSizeX ||
+    //            ny < 0 || ny >= chunkSizeY ||
+    //            nz < 0 || nz >= chunkSizeZ)
+    //        {
+    //            // 청크 경계 밖은 비어있다고 가정하여 visible
+    //            continue;
+    //        }
+
+    //        // 인접한 위치에 블록이 없으면 현재 블록이 보임
+    //        if (chunkData[nx, ny, nz] == null)
+    //        {
+    //            return true;
+    //        }
+    //    }
+
+    //    // 모든 면이 막혀있으면 보이지 않음
+    //    return false;
+    //}
 }

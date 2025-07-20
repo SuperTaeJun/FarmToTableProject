@@ -5,20 +5,20 @@ public class PlayerInputController : MonoBehaviour
     public DebugEvent<Vector2> OnMoveInput = new DebugEvent<Vector2>();
     public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>();
     public DebugEvent OnChunkPurchaseInput = new DebugEvent();
-    public DebugEvent OnFarmingInput = new DebugEvent();
+    public DebugEvent<EPlayerMode> OnLeftMouseInput = new DebugEvent<EPlayerMode>();
     public DebugEvent OnWateringInput = new DebugEvent();
     public DebugEvent<EPlayerMode> OnModeChangeInput = new DebugEvent<EPlayerMode>();
 
     private bool _isCursorLocked = true;
-
     private bool _playerMoveInputLock = false;
+    private EPlayerMode _currentMode;
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    public void SetPlayerMoveInput(bool able)
+    public void SetPlayerMoveInputLock(bool able)
     {
         _playerMoveInputLock = able;
     }
@@ -29,9 +29,9 @@ public class PlayerInputController : MonoBehaviour
             HandleMoveInput();
             HandleCameraRotateInput();
         }
+        HandleLeftMouseInput();
         HandleMouseCursor();
         HandleInteractionInput();
-        HandleFarmingInput();
         HandleModeChangeInput(); // 모드 변경 입력 추가
     }
     private void HandleModeChangeInput()
@@ -39,21 +39,24 @@ public class PlayerInputController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             OnModeChangeInput.Invoke(EPlayerMode.BlockEdit);
+            _currentMode = EPlayerMode.BlockEdit;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             OnModeChangeInput.Invoke(EPlayerMode.Farming);
+            _currentMode= EPlayerMode.Farming;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             OnModeChangeInput.Invoke(EPlayerMode.Construction);
+            _currentMode= EPlayerMode.Construction;
         }
     }
-    private void HandleFarmingInput()
+    private void HandleLeftMouseInput()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            OnFarmingInput.Invoke();
+            OnLeftMouseInput.Invoke(_currentMode);
         }
     }
     private void HandleMouseCursor()

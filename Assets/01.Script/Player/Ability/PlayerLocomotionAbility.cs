@@ -152,41 +152,4 @@ public class PlayerLocomotionAbility : PlayerAbility
             _owner.CharacterController.Move(verticalMove);
         }
     }
-    public void ClampPositionToWorld()
-    {
-        float margin = 2.0f;
-
-        int minChunkX = int.MaxValue;
-        int maxChunkX = int.MinValue;
-        int minChunkZ = int.MaxValue;
-        int maxChunkZ = int.MinValue;
-
-        foreach (var loadedpos in WorldManager.Instance.LoadedChunkPositions)
-        {
-            minChunkX = Mathf.Min(minChunkX, loadedpos.X);
-            maxChunkX = Mathf.Max(maxChunkX, loadedpos.X);
-            minChunkZ = Mathf.Min(minChunkZ, loadedpos.Z);
-            maxChunkZ = Mathf.Max(maxChunkZ, loadedpos.Z);
-        }
-
-        float chunkSizeX = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.x;
-        float chunkSizeZ = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.z;
-
-        float minX = minChunkX * chunkSizeX + margin;
-        float maxX = (maxChunkX + 1) * chunkSizeX - margin;
-
-        float minZ = minChunkZ * chunkSizeZ + margin;
-        float maxZ = (maxChunkZ + 1) * chunkSizeZ - margin;
-
-        Vector3 pos = transform.position;
-        pos.x = Mathf.Clamp(pos.x, minX, maxX);
-        pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
-
-        Vector3 delta = pos - transform.position;
-
-        if (delta.sqrMagnitude > 0.0001f)
-        {
-            _owner.CharacterController.Move(delta);
-        }
-    }
 }

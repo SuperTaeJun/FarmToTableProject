@@ -12,8 +12,6 @@ public class PlayerBlockAbility : PlayerAbility
     {
         // 모드 변경 이벤트 구독
         _owner.ModeController.OnModeChanged.AddListener(OnModeChanged);
-        // 블럭 편집 입력 이벤트 구독
-        _owner.InputController.OnFarmingInput.AddListener(OnBlockEditInput);
         // 초기 모드 확인
         OnModeChanged(_owner.ModeController.CurrentMode);
     }
@@ -36,7 +34,7 @@ public class PlayerBlockAbility : PlayerAbility
         }
     }
 
-    private void OnBlockEditInput()
+    public void OnBlockEditInput()
     {
         if (!enabled) return;
 
