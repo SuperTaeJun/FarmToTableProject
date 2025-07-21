@@ -138,9 +138,6 @@ public class PlayerLocomotionAbility : PlayerAbility
             }
             else
             {
-                // 이동 막기
-                Debug.Log("로드되지 않은 청크라 이동을 막았습니다.");
-                PopupManager.Instance.Open(EPopupType.UI_ChunkPopup);
                 Vector3 verticalMove = new Vector3(0, desiredMove.y, 0);
                 _owner.CharacterController.Move(verticalMove);
             }

@@ -11,8 +11,9 @@ public class ChunkGenerator : MonoBehaviour
     public Vector3 blockOffset = new Vector3(1, 0.5f, 1);
 
     [Header("Block Prefabs")]
-    public GameObject grassPrefab;
-    public GameObject dirtPrefab;
+    [SerializeField] private GameObject _grassPrefab;
+    [SerializeField] private GameObject _dirtPrefab;
+    [SerializeField] private GameObject _farmlandPrefab;
 
     private Dictionary<string, Mesh> blockMeshes;
     private Dictionary<string, Material> blockMaterials;
@@ -36,9 +37,9 @@ public class ChunkGenerator : MonoBehaviour
         blockMeshes = new Dictionary<string, Mesh>();
         blockMaterials = new Dictionary<string, Material>();
 
-        LoadMeshAndMaterial(grassPrefab, "Grass", blockMeshes, blockMaterials);
-        LoadMeshAndMaterial(dirtPrefab, "Dirt", blockMeshes, blockMaterials);
-
+        LoadMeshAndMaterial(_grassPrefab, "Grass", blockMeshes, blockMaterials);
+        LoadMeshAndMaterial(_dirtPrefab, "Dirt", blockMeshes, blockMaterials);
+        LoadMeshAndMaterial(_farmlandPrefab, "Farmland", blockMeshes, blockMaterials);
     }
     public IEnumerator GenerateDynamicChunkCoroutine(ChunkPosition chunkPos, string[,,] chunkData, Transform parentTransform, System.Action<GameObject> onComplete)
     {

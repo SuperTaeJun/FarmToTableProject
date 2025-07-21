@@ -82,8 +82,10 @@ public class PlayerBlockAbility : PlayerAbility
 
         if (success)
         {
-            Debug.Log($"[PlayerBlockAbility] 블럭 파괴: {_lastDestroyedBlockType}");
-            // 다음에는 설치 모드로 전환
+
+            if (ObjectPoolManager.Instance)
+                ObjectPoolManager.Instance.Get(PoolType.Smoke, worldPosition);
+
             _isDestroyMode = false;
         }
     }
@@ -92,6 +94,7 @@ public class PlayerBlockAbility : PlayerAbility
     {
         if (_lastDestroyedBlockType == EBlockType.Air)
         {
+
             Debug.Log("[PlayerBlockAbility] 설치할 블럭 타입이 없습니다.");
             return;
         }
@@ -101,15 +104,13 @@ public class PlayerBlockAbility : PlayerAbility
 
         if (success)
         {
-            Debug.Log($"[PlayerBlockAbility] 블럭 설치: {_lastDestroyedBlockType}");
-            // 다음에는 파괴 모드로 전환
+            if (ObjectPoolManager.Instance)
+                ObjectPoolManager.Instance.Get(PoolType.Smoke, worldPosition);
             _isDestroyMode = true;
-            // 설치 완료 후 블럭 타입 초기화 (선택사항)
-            // _lastDestroyedBlockType = EBlockType.Air;
         }
     }
 
-    // 현재 모드 확인용 (디버그나 UI 표시용)
+
     public bool IsDestroyMode => _isDestroyMode;
     public EBlockType GetStoredBlockType => _lastDestroyedBlockType;
 }

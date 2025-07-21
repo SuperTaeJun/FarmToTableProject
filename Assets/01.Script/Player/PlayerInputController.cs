@@ -12,12 +12,21 @@ public class PlayerInputController : MonoBehaviour
     private bool _isCursorLocked = true;
     private bool _playerMoveInputLock = false;
     private EPlayerMode _currentMode;
+    private bool _isPopupOpen = false;
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
+    private void Start() // 또는 적절한 초기화 위치
+    {
+        PopupManager.Instance.OnPopupStateChanged += OnPopupStateChanged;
+    }
+    private void OnDestroy()
+    {
+        PopupManager.Instance.OnPopupStateChanged -= OnPopupStateChanged;
+    }
     public void SetPlayerMoveInputLock(bool able)
     {
         _playerMoveInputLock = able;
@@ -33,6 +42,34 @@ public class PlayerInputController : MonoBehaviour
         HandleMouseCursor();
         HandleInteractionInput();
         HandleModeChangeInput(); // 모드 변경 입력 추가
+        HandleOptionPopupInput();
+    }
+
+    private void OnPopupStateChanged(bool isOpen)
+    {
+        _isPopupOpen = isOpen;
+
+        if (isOpen)
+        {
+            _isCursorLocked = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            _isCursorLocked = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+
+    private void HandleOptionPopupInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_OptionPopup);
+        }
     }
     private void HandleModeChangeInput()
     {
@@ -44,12 +81,12 @@ public class PlayerInputController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             OnModeChangeInput.Invoke(EPlayerMode.Farming);
-            _currentMode= EPlayerMode.Farming;
+            _currentMode = EPlayerMode.Farming;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             OnModeChangeInput.Invoke(EPlayerMode.Construction);
-            _currentMode= EPlayerMode.Construction;
+            _currentMode = EPlayerMode.Construction;
         }
     }
     private void HandleLeftMouseInput()
@@ -61,9 +98,20 @@ public class PlayerInputController : MonoBehaviour
     }
     private void HandleMouseCursor()
     {
+        if (_isPopupOpen) return;
+
+        // 팝업이 없을 때만 실제 커서 제어
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            ToggleCursorLock();
+            _isCursorLocked = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            _isCursorLocked = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
     private void HandleMoveInput()
@@ -86,23 +134,6 @@ public class PlayerInputController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
         OnCameraRotateInput.Invoke(new Vector2(mouseX, mouseY));
 
-    }
-    private void ToggleCursorLock()
-    {
-        _isCursorLocked = !_isCursorLocked;
-
-        if (_isCursorLocked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-
-        Debug.Log($"Cursor Lock Toggled: {_isCursorLocked}");
     }
     private void HandleInteractionInput()
     {

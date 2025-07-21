@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 public enum EPopupType
 {
-    UI_ChunkPopup,
-    UI_SeedSelectPopup
+    UI_SeedSelectPopup,
+    UI_OptionPopup
 }
 public class PopupManager : MonoBehaviour
 {
     public static PopupManager Instance;
     public List<UI_Popup> Popups;
     private Stack<UI_Popup> _openPopups = new Stack<UI_Popup>();
+    public Stack<UI_Popup> OpenPopups => _openPopups;
+
+    public event System.Action<bool> OnPopupStateChanged;
     private void Awake()
     {
         if (Instance == null)
@@ -39,6 +42,7 @@ public class PopupManager : MonoBehaviour
     public void Open(EPopupType popupType, Action callBack = null)
     {
         PopUpOpen(popupType.ToString(), callBack);
+        OnPopupStateChanged?.Invoke(true);
     }
 
     public void PopUpOpen(string popupName, Action closeCallback)
@@ -57,5 +61,6 @@ public class PopupManager : MonoBehaviour
     public void PopUpClose(Action callBack = null)
     {
         _openPopups.Pop();
+        OnPopupStateChanged?.Invoke(_openPopups.Count > 0); // 팝업 상태 알림
     }
 }

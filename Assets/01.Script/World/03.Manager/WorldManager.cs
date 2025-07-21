@@ -60,6 +60,15 @@ public class WorldManager : MonoBehaviour
         ProcessMeshUpdates();
     }
 
+    public async void SaveWorld()
+    {
+        foreach (var chunk in LoadedChunks.Values)
+        {
+            await _repo.SaveChunkAsync(chunk);
+        }
+    }
+
+
     private void ProcessMeshUpdates()
     {
         if (chunksNeedingMeshUpdate.Count > 0 && !isUpdatingMeshes)
@@ -384,7 +393,7 @@ public class WorldManager : MonoBehaviour
                         // 이 블록이 렌더링되어야 하는지 확인
                         if (IsBlockVisibleWithNeighbors(chunk.Position, x, y, z))
                         {
-                            worldData[x, y, z] = block.Type == EBlockType.Grass ? "Grass" : "Dirt";
+                            worldData[x, y, z] = block.Type.ToString();
                         }
                     }
                 }
@@ -635,6 +644,7 @@ public class WorldManager : MonoBehaviour
             Debug.LogWarning($"잘못된 블럭 위치: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
             return false;
         }
+
         var newBlock = new Block(blockType, localBlockPos);
         chunk.SetBlock(newBlock);
         // 청크 다시 빌드

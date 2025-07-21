@@ -29,6 +29,7 @@ public class PlayerModeController : MonoBehaviour
             EPlayerMode oldMode = _currentMode;
             _currentMode = newMode;
 
+            MainHudManager.Instance.RefreshPlayerModeIcon(_currentMode);
             OnModeChanged.Invoke(_currentMode);
         }
     }

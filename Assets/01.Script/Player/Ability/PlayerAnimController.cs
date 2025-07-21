@@ -38,22 +38,17 @@ public class PlayerAnimController : MonoBehaviour
     {
         Vector3 selectedPos = _owner.CurrentSelectedPos;
         var growthStage = CropsManager.Instance?.GetCropGrowthStageAtWorldPosition(selectedPos);
-        Debug.Log(growthStage);
-
         switch (growthStage)
         {
             case null: // 작물이 없음 - 심기
-                _owner.Animator.SetTrigger("Plant");
-                //if (CanPlantAt(selectedPos))
-                //{
-                //    _owner.Animator.SetTrigger("Plant");
-                //}
-                //else
-                //{
-                //    Debug.Log("여기에는 심을 수 없습니다.");
-                //    _owner.InputController.SetPlayerMoveInputLock(false);
-                //    return;
-                //}
+                if (CanPlantAt(selectedPos))
+                {
+                    _owner.Animator.SetTrigger("Plant");
+                }
+                else
+                {
+                    _owner.Animator.SetTrigger("Cultivate");
+                }
                 break;
             case ECropGrowthStage.Seed:
                 Debug.Log("씨앗 단계에서는 물을 줄 수 없습니다.");
@@ -76,6 +71,43 @@ public class PlayerAnimController : MonoBehaviour
 
 
     // 애니메이션 이벤트들
+    private void OnFootStepVfx()
+    {
+        Vector3 effectPosition = transform.position;
+        GameObject effect = ObjectPoolManager.Instance.Get(PoolType.FootStep, effectPosition);
+
+        if (effect != null)
+        {
+            // 기존 회전값 가져오기
+            Vector3 currentEuler = effect.transform.eulerAngles;
+            float yRotation = currentEuler.y; // 기본값
+
+            // _owner(플레이어)의 이동방향 가져오기
+            Vector3 playerMoveDirection = _owner.gameObject.transform.forward; // 또는 적절한 메서드명
+
+            if (playerMoveDirection.magnitude > 0.1f)
+            {
+                // 이동방향의 반대
+                Vector3 oppositeDirection = -playerMoveDirection;
+                oppositeDirection.y = 0; // 수평 방향만
+
+                // Y축 회전값 계산
+                yRotation = Mathf.Atan2(oppositeDirection.x, oppositeDirection.z) * Mathf.Rad2Deg;
+            }
+
+            // X, Z축은 기존값 유지하고 Y축만 변경
+            effect.transform.rotation = Quaternion.Euler(currentEuler.x, yRotation, currentEuler.z);
+            //Vector3 effectPosition = transform.position;
+
+            //GameObject effect =ObjectPoolManager.Instance.Get(PoolType.FootStep, effectPosition);
+
+        }
+    }
+    private void OnCultivateAnim()
+    {
+        _owner.GetAbility<PlayerFarmingAbility>().OnCultivate();
+
+    }
     private void OnCompleteBlockAnim()
     {
         _owner.GetAbility<PlayerBlockAbility>().OnBlockEditInput();
@@ -113,6 +145,6 @@ public class PlayerAnimController : MonoBehaviour
     private bool CanPlantAt(Vector3 position)
     {
         EBlockType blockType = WorldManager.Instance.GetBlockType(position);
-        return blockType == EBlockType.Dirt || blockType == EBlockType.Grass;
+        return blockType == EBlockType.Farmland;
     }
 }

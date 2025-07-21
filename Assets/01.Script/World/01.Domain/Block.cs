@@ -6,7 +6,8 @@ public enum EBlockType
 {
     Air,
     Dirt,
-    Grass
+    Grass,
+    Farmland
 }
 public struct BlockPosition
 {
