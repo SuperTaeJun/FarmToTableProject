@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CharacterCustomization
 {
+
     public Dictionary<CustomizationPart, int> PartIndexMap { get; private set; }
     public List<CustomizationPart> EssentialParts { get; private set; }
     public CharacterCustomization()

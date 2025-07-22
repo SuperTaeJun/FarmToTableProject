@@ -9,6 +9,7 @@ public class ChunkGenerator : MonoBehaviour
     [Header("World Settings")]
     public int worldHeight = 16;
     public Vector3 blockOffset = new Vector3(1, 0.5f, 1);
+    public LayerMask GroundLayer;
 
     [Header("Block Prefabs")]
     [SerializeField] private GameObject _grassPrefab;
@@ -184,6 +185,14 @@ public class ChunkGenerator : MonoBehaviour
             // 콜라이더 배치 생성 후 yield
             yield return null;
         }
+        int groundLayer = Mathf.RoundToInt(Mathf.Log(GroundLayer.value, 2));
+
+        // 자기 자신 포함 모든 하위 오브젝트
+        Transform[] allChildren = chunkParent.GetComponentsInChildren<Transform>();
+        foreach (Transform child in allChildren)
+        {
+            child.gameObject.layer = groundLayer;
+        }
 
         Debug.Log($"[ChunkGenerator] 청크 {chunkPos.X},{chunkPos.Z} 렌더링 완료 - {blockCombineInstances.Count}개 타입");
         onComplete?.Invoke(chunkParent);
@@ -193,8 +202,7 @@ public class ChunkGenerator : MonoBehaviour
         GameObject chunkParent = new GameObject($"DynamicChunk_{chunkPos.X}_{chunkPos.Z}");
         chunkParent.transform.SetParent(this.transform);
 
-        Dictionary<string, List<CombineInstance>> blockCombineInstances =
-            new Dictionary<string, List<CombineInstance>>();
+        Dictionary<string, List<CombineInstance>> blockCombineInstances = new Dictionary<string, List<CombineInstance>>();
 
         int chunkSize = Chunk.ChunkSize;
 
@@ -282,6 +290,14 @@ public class ChunkGenerator : MonoBehaviour
             var mc = chunkObj.AddComponent<MeshCollider>();
             mc.sharedMesh = combinedMesh;
             mc.convex = false;
+        }
+
+        int groundLayer = Mathf.RoundToInt(Mathf.Log(GroundLayer.value, 2));
+        // 자기 자신 포함 모든 하위 오브젝트
+        Transform[] allChildren = chunkParent.GetComponentsInChildren<Transform>();
+        foreach (Transform child in allChildren)
+        {
+            child.gameObject.layer = groundLayer;
         }
 
         Debug.Log($"[ChunkGenerator] 청크 {chunkPos.X},{chunkPos.Z} 렌더링 완료 - {blockCombineInstances.Count}개 타입");

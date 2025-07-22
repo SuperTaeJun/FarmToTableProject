@@ -840,6 +840,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldHeight: 16
   blockOffset: {x: 1, y: 0.5, z: 1}
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   _grassPrefab: {fileID: 1979290889500462, guid: ba3d7e754fb684c4fa556fd3a62824cc, type: 3}
   _dirtPrefab: {fileID: 1149535237560096, guid: bfad8e884e4568744b79b92abe4af9fd, type: 3}
   _farmlandPrefab: {fileID: 1380870292490712, guid: ef765d72f61f40649a64994f9d792005, type: 3}

@@ -38,6 +38,7 @@ public class CustomizeSceneCharacter : MonoBehaviour
         {
             ChangePart(info.Key, info.Value);
         }
+
     }
     private void ChangePart(CustomizationPart part, int index)
     {

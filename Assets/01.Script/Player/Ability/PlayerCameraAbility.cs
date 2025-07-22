@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerCameraAbility : PlayerAbility
 {
     [Header("카메라 설정")]
-
     public float mouseSensitivity = 2f;
     public float pitchMin = -30f;
     public float pitchMax = 60f;

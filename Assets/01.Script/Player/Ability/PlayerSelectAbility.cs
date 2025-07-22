@@ -4,7 +4,7 @@ public class PlayerSelectAbility : PlayerAbility
 {
     [Header("그리드 설정")]
     public float cellSize = 1f;
-    public LayerMask groundLayer = 1; // Ground 레이어
+    public LayerMask groundLayer; // Ground 레이어
     public bool snapToGrid = true;
 
     [Header("라인 설정")]

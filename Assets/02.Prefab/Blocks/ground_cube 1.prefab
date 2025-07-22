@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4353891889955884}
   - component: {fileID: 33370989861454668}
   - component: {fileID: 23382293086226770}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ground1_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4959206988071946}
   - component: {fileID: 205207107979444248}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ground_cube 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 4419106273008388}
   - component: {fileID: 33702037979030178}
   - component: {fileID: 23383655038881756}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ground1_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 4966356951619778}
   - component: {fileID: 33636531084291400}
   - component: {fileID: 23819396155717748}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ground1_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

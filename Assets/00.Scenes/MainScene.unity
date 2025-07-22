@@ -9124,6 +9124,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2100187070747767698, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
+      propertyPath: lineMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: a54bed6c21b720a4d826c435b512234f, type: 2}
+    - target: {fileID: 2100187070747767698, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 2435167836018546615, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0

@@ -45044,11 +45044,11 @@ MonoBehaviour:
   cellSize: 1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
   snapToGrid: 1
-  lineMaterial: {fileID: 2100000, guid: 98ffd33de564b114c9c10d0017e0e053, type: 2}
+  lineMaterial: {fileID: 2100000, guid: a54bed6c21b720a4d826c435b512234f, type: 2}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  selectedColor: {r: 1, g: 1, b: 1, a: 1}
   lineWidth: 0.05
   maxSelectDistance: 3
   forwardDistance: 1

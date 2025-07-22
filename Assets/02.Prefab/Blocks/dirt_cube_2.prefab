@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4391811639279932}
   - component: {fileID: 33293805258887958}
   - component: {fileID: 23943434258912988}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: block_dirt1_2_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4630171780701522}
   - component: {fileID: 205174739348729274}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: dirt_cube_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 4607915937060534}
   - component: {fileID: 33899559474671262}
   - component: {fileID: 23457146916277990}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: block_dirt1_2_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 4789831737909536}
   - component: {fileID: 33021583190684364}
   - component: {fileID: 23525311740747300}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: block_dirt1_2_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
