@@ -20,7 +20,8 @@ public class Player : MonoBehaviour
     public PlayerUiController UiController => _uiController;
     private PlayerModeController _modeController;
     public PlayerModeController ModeController => _modeController;
-
+    private PlayerVisualController _visualController;
+    public PlayerVisualController VisualController => _visualController;
 
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private void Awake()
@@ -30,6 +31,7 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _inputController = GetComponent<PlayerInputController>();
         _uiController = GetComponentInChildren<PlayerUiController>();
+        _visualController = GetComponentInChildren<PlayerVisualController>();
     }
 
     void Start()

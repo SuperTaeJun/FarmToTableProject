@@ -11,6 +11,7 @@ public class FirebaseCollectionDeleter : EditorWindow
     private string statusMessage = "";
     private Vector2 scrollPosition;
 
+
     [MenuItem("Tools/Firebase/Collection Deleter")]
     public static void ShowWindow()
     {

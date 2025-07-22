@@ -21,6 +21,7 @@ public class PlayerAnimController : MonoBehaviour
         {
             case EPlayerMode.BlockEdit:
                 _owner.Animator.SetTrigger("Dig");
+                _owner.VisualController.SetActiveVisualPart(EVisualPart.Shovel);
                 _owner.InputController.SetPlayerMoveInputLock(true);
                 break;
 
@@ -48,6 +49,7 @@ public class PlayerAnimController : MonoBehaviour
                 else
                 {
                     _owner.Animator.SetTrigger("Cultivate");
+                    _owner.VisualController.SetActiveVisualPart(EVisualPart.Rake);
                 }
                 break;
             case ECropGrowthStage.Seed:
@@ -60,6 +62,7 @@ public class PlayerAnimController : MonoBehaviour
                 {
                     Debug.Log("물을주는중");
                     _owner.Animator.SetTrigger("Watering");
+                    _owner.VisualController.SetActiveVisualPart(EVisualPart.WateringCan);
                 }
                 break;
 
@@ -127,10 +130,10 @@ public class PlayerAnimController : MonoBehaviour
     {
         _owner.GetAbility<PlayerFarmingAbility>().OnHarvestCrop();
     }
-
     private void OnFinisAnim()
     {
         _owner.InputController.SetPlayerMoveInputLock(false);
+        _owner.VisualController.SetDisActiveVisualAllPart();
     }
 
     private bool CanWaterAtPosition(Vector3 position)

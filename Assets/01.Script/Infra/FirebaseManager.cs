@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class FirebaseManager : MonoBehaviourSingleton<FirebaseManager>
 {
+
     public FirebaseApp App { get; private set; }
     public FirebaseAuth Auth { get; private set; }
     public FirebaseFirestore Firestore { get; private set; }
