@@ -17,14 +17,10 @@ public class UI_Building : UI_Popup
             button.Button.onClick.AddListener(() => { OnClikedButton(type); Close(); });
         }
     }
-
     private void OnClikedButton(BuildingType buildingType)
     {
         //todo 각버튼별 상호작용 -> 프리뷰 객체 뛰워야함
     }
-
-
-
 }
 
 [Serializable]
