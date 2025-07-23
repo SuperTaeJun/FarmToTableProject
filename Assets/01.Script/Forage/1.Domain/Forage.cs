@@ -1,10 +1,4 @@
-using System;
 using UnityEngine;
-public enum EForageType
-{
-    Tree,
-    Stone
-}
 public class Forage
 {
     public EForageType Type { get; set; }
@@ -19,21 +13,5 @@ public class Forage
         ChunkId = chunkId;
         Position = position;
         Rotation = rotation;
-    }
-}
-[Serializable]
-public class ForageData
-{
-    public string Type;
-    public Vector3 Position;
-    public Vector3 Rotation;
-
-    public ForageData() { }
-
-    public ForageData(Forage forage)
-    {
-        Type = forage.Type.ToString();
-        Position = forage.Position;
-        Rotation = forage.Rotation;
     }
 }

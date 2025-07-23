@@ -4,9 +4,9 @@ public class PlayerFarmingAbility : PlayerAbility
 {
     private ECropType _currentSeed = ECropType.Carrot;
 
-    public void SetCurrentSeed(int type)
+    public void SetCurrentSeed(ECropType type)
     {
-        _currentSeed = (ECropType)type;
+        _currentSeed = type;
     }
 
     public void OnPlantCrop()

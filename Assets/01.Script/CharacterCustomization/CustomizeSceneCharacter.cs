@@ -1,7 +1,5 @@
-using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 public enum ECustomizeCharacterAnimType
 {
@@ -40,7 +38,7 @@ public class CustomizeSceneCharacter : MonoBehaviour
         }
 
     }
-    private void ChangePart(CustomizationPart part, int index)
+    private void ChangePart(ECustomizationPartType part, int index)
     {
         var partObject = _partsList.Find(p => p.Part == part);
         if (partObject == null) return;
@@ -99,6 +97,6 @@ public class CustomizeSceneCharacter : MonoBehaviour
 [System.Serializable]
 public class PartObjectList
 {
-    public CustomizationPart Part;
+    public ECustomizationPartType Part;
     public List<GameObject> Objects;
 }

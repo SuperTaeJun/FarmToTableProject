@@ -1,20 +1,3 @@
-using UnityEngine;
-using System.Collections.Generic;
-using System;
-using Firebase.Firestore;
-public struct ChunkPosition
-{
-    public int X;
-    public int Y;
-    public int Z;
-
-    public ChunkPosition(int x, int y, int z)
-    {
-        X = x;
-        Y = y;
-        Z = z;
-    }
-}
 public class Chunk
 {
     public const int ChunkSize = 16;
@@ -55,18 +38,3 @@ public class Chunk
 
 }
 
-[FirestoreData]
-public class WorldDocumentDto
-{
-    [FirestoreProperty]
-    public int ChunkX { get; set; }
-
-    [FirestoreProperty]
-    public int ChunkY { get; set; }
-
-    [FirestoreProperty]
-    public int ChunkZ { get; set; }
-
-    [FirestoreProperty]
-    public List<BlockDto> Blocks { get; set; }
-}

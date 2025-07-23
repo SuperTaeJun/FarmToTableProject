@@ -9,7 +9,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
     public CharacterCustomization CurrentCustomization { get; private set; }
     [SerializeField] private List<PartsMaxIndex> _partsMaxIndexMap;
 
-    public event Action<CustomizationPart, int> OnPartChanged;
+    public event Action<ECustomizationPartType, int> OnPartChanged;
     public event Action<ECustomizeCharacterAnimType> OnPlayAnim;
     private CharacterCustomizationRepository _repo;
 
@@ -24,11 +24,11 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
         CurrentCustomization = new CharacterCustomization();
     }
 
-    public List<CustomizationPart> GetEssentialParts()
+    public List<ECustomizationPartType> GetEssentialParts()
     {
         return CurrentCustomization.EssentialParts;
     }
-    public void ChangePart(CustomizationPart part, int newIndex)
+    public void ChangePart(ECustomizationPartType part, int newIndex)
     {
         if (CurrentCustomization == null)
         {
@@ -41,7 +41,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
     }
     public void GenerateRandomPart()
     {
-        var keys = new List<CustomizationPart>(CurrentCustomization.PartIndexMap.Keys);
+        var keys = new List<ECustomizationPartType>(CurrentCustomization.PartIndexMap.Keys);
 
         foreach (var key in keys)
         {
@@ -113,7 +113,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
     private void ApplyDefaultCustomization()
     {
-        List<CustomizationPart> essentialParts = GetEssentialParts();
+        List<ECustomizationPartType> essentialParts = GetEssentialParts();
 
         foreach (var parts in essentialParts)
         {
@@ -121,11 +121,11 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
         }
     }
 
-    public int GetPartCurrentIndex(CustomizationPart part)
+    public int GetPartCurrentIndex(ECustomizationPartType part)
     {
         return CurrentCustomization.GetIndex(part);
     }
-    public int GetPartMaxIndex(CustomizationPart part)
+    public int GetPartMaxIndex(ECustomizationPartType part)
     {
         foreach (var partMaxIndex in _partsMaxIndexMap)
         {
@@ -139,7 +139,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
     {
         OnPlayAnim?.Invoke(type);
     }
-    public void CyclePart(CustomizationPart part, bool isNext)
+    public void CyclePart(ECustomizationPartType part, bool isNext)
     {
         int currentIndex = GetPartCurrentIndex(part);
         int maxIndex = GetPartMaxIndex(part);
@@ -165,6 +165,6 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 [System.Serializable]
 public class PartsMaxIndex
 {
-    public CustomizationPart Part;
+    public ECustomizationPartType Part;
     public int MaxIndex;
 }

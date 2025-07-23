@@ -19,7 +19,7 @@ public class CustomizationUI : MonoBehaviour
         // 이벤트 구독
         foreach (var partButtonInfo in PartButtons)
         {
-            CustomizationPart part = partButtonInfo.Part;
+            ECustomizationPartType part = partButtonInfo.Part;
 
             partButtonInfo.PrevButton.onClick.AddListener(() => {
                 CustomizationManager.Instance.CyclePart(part, false);
@@ -55,7 +55,7 @@ public class CustomizationUI : MonoBehaviour
             }
         }
     }
-    private void ChangePartText(CustomizationPart part, int newindex)
+    private void ChangePartText(ECustomizationPartType part, int newindex)
     {
         int maxIndex = CustomizationManager.Instance.GetPartMaxIndex(part);
 
@@ -93,7 +93,7 @@ public class CustomizationUI : MonoBehaviour
 [System.Serializable]
 public class PartButtonInfo
 {
-    public CustomizationPart Part;
+    public ECustomizationPartType Part;
     public Button PrevButton;
     public Button NextButton;
     public TextMeshProUGUI CountText;

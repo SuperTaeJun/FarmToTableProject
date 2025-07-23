@@ -1,24 +1,19 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-
-
-
 public class CharacterCustomization
 {
-
-    public Dictionary<CustomizationPart, int> PartIndexMap { get; private set; }
-    public List<CustomizationPart> EssentialParts { get; private set; }
+    public Dictionary<ECustomizationPartType, int> PartIndexMap { get; private set; }
+    public List<ECustomizationPartType> EssentialParts { get; private set; }
     public CharacterCustomization()
     {
-        PartIndexMap = new Dictionary<CustomizationPart, int>();
-        EssentialParts = new List<CustomizationPart>
+        PartIndexMap = new Dictionary<ECustomizationPartType, int>();
+        EssentialParts = new List<ECustomizationPartType>
         {
-            CustomizationPart.Hair,
-            CustomizationPart.Face,
-            CustomizationPart.Top,
-            CustomizationPart.Bottom,
-            CustomizationPart.Shoes
+            ECustomizationPartType.Hair,
+            ECustomizationPartType.Face,
+            ECustomizationPartType.Top,
+            ECustomizationPartType.Bottom,
+            ECustomizationPartType.Shoes
         };
 
         InitializeAllParts();
@@ -26,15 +21,15 @@ public class CharacterCustomization
 
     private void InitializeAllParts()
     {
-        foreach (CustomizationPart part in Enum.GetValues(typeof(CustomizationPart)))
+        foreach (ECustomizationPartType part in Enum.GetValues(typeof(ECustomizationPartType)))
         {
             PartIndexMap[part] = 0;
         }
     }
 
-    public void ChangePart(CustomizationPart part, int newIndex)
+    public void ChangePart(ECustomizationPartType part, int newIndex)
     {
-        if (!Enum.IsDefined(typeof(CustomizationPart), part))
+        if (!Enum.IsDefined(typeof(ECustomizationPartType), part))
         {
             throw new ArgumentException($"정의되지 않은 커스터마이징 파츠입니다: {part}", nameof(part));
         }
@@ -52,9 +47,9 @@ public class CharacterCustomization
         PartIndexMap[part] = newIndex;
     }
 
-    public int GetIndex(CustomizationPart part)
+    public int GetIndex(ECustomizationPartType part)
     {
-        if (!Enum.IsDefined(typeof(CustomizationPart), part))
+        if (!Enum.IsDefined(typeof(ECustomizationPartType), part))
         {
             throw new ArgumentException($"정의되지 않은 커스터마이징 파츠입니다: {part}", nameof(part));
         }
@@ -79,16 +74,3 @@ public class CharacterCustomization
         return result;
     }
 }
-public enum CustomizationPart
-{
-    Hair,
-    Face,
-    Hat,
-    Top,
-    Glove,
-    Bottom,
-    Shoes,
-    Bag,
-    EyeDeco
-}
-

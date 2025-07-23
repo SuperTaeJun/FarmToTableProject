@@ -34,7 +34,7 @@ public class CharacterCustomizationRepository : FirebaseRepositoryBase
 
                 foreach (var kvp in data)
                 {
-                    if (Enum.TryParse(kvp.Key, out CustomizationPart part))
+                    if (Enum.TryParse(kvp.Key, out ECustomizationPartType part))
                     {
                         int index = Convert.ToInt32(kvp.Value);
                         customization.ChangePart(part, index);
