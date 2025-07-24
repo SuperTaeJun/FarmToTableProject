@@ -27,13 +27,13 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
     {
         Canvas canvas = fadeImage.GetComponentInParent<Canvas>();
         canvas.sortingOrder = 999;
-        // Fade Out °ËÀº È­¸é
+        // Fade Out ì‹œìž‘ í™”ë©´
         yield return StartCoroutine(Fade(0f, 1f));
 
         midAction?.Invoke();
         yield return new WaitForSeconds(1.5f);
 
-        // Fade In ¹à¾ÆÁü
+        // Fade In ì‹œìž‘
         yield return StartCoroutine(Fade(1f, 0f));
         canvas.sortingOrder = -1;
 
@@ -42,13 +42,13 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
     {
         Canvas canvas = fadeImage.GetComponentInParent<Canvas>();
         canvas.sortingOrder = 999;
-        // Fade Out °ËÀº È­¸é
+        // Fade Out ì‹œìž‘ í™”ë©´
         yield return StartCoroutine(Fade(0f, 1f));
 
-        // ¾À ·Îµå
+        // ì”¬ ë¡œë“œ
         yield return SceneManager.LoadSceneAsync(sceneName);
 
-        // Fade In ¹à¾ÆÁü
+        // Fade In ì‹œìž‘
         yield return StartCoroutine(Fade(1f, 0f));
         canvas.sortingOrder = -1;
 

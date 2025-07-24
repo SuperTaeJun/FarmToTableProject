@@ -20,12 +20,12 @@ public class CropObject : MonoBehaviour
 
     private void InitializeCrop()
     {
-        // Ã»Å© Á¤º¸ °è»ê
+        // ì²­í¬ ì •ë³´ ì„¤ì •
         ChunkPosition chunkPosition = WorldManager.Instance.GetChunkAtWorldPosition(transform.position).Position;
         _localPosition = WorldManager.Instance.GetLocalPositionInChunk(transform.position, chunkPosition);
         _chunkId = $"{chunkPosition.X}_{chunkPosition.Y}_{chunkPosition.Z}";
 
-        // ÀÛ¹° µ¥ÀÌÅÍ °¡Á®¿À±â
+        // ï¿½Û¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         _crop = CropsManager.Instance.GetCrop(_chunkId, _localPosition);
 
         if (_crop != null)
@@ -37,7 +37,7 @@ public class CropObject : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"ÀÛ¹° µ¥ÀÌÅÍ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {_chunkId}, {_localPosition}");
+            Debug.LogWarning($"ï¿½Û¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½: {_chunkId}, {_localPosition}");
         }
     }
 
@@ -58,7 +58,7 @@ public class CropObject : MonoBehaviour
     {
         if (_growthStageObjects == null || _growthStageObjects.Length == 0)
         {
-            Debug.LogWarning("¼ºÀå ´Ü°è ¿ÀºêÁ§Æ®°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
@@ -71,12 +71,12 @@ public class CropObject : MonoBehaviour
         int stageIndex = (int)stage;
         if (stageIndex < _growthStageObjects.Length && _growthStageObjects[stageIndex] != null)
         {
-            Debug.Log($"¼ºÀå ´Ü°è {stage}¿¡ µµ´ŞÇß½À´Ï´Ù.");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ {stage}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
             _growthStageObjects[stageIndex].SetActive(true);
         }
         else
         {
-            Debug.LogWarning($"¼ºÀå ´Ü°è {stage}¿¡ ÇØ´çÇÏ´Â ¿ÀºêÁ§Æ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ {stage}ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
     }
     private void OnCropHarvested(Crop harvestedCrop)
@@ -95,8 +95,8 @@ public class CropObject : MonoBehaviour
                 _currentStage = updatedCrop.GrowthStage;
                 SetGrowthMesh(_currentStage);
 
-                // ´Ü°èº° ·Î±×
-                Debug.Log($"ÀÛ¹° ¼ºÀå: {_currentStage}");
+                // ï¿½Ü°èº° ï¿½Î±ï¿½
+                Debug.Log($"ï¿½Û¹ï¿½ ï¿½ï¿½ï¿½ï¿½: {_currentStage}");
             }
         }
     }
@@ -105,7 +105,7 @@ public class CropObject : MonoBehaviour
     {
         if (IsThisCrop(crop))
         {
-            Debug.Log($"ÀÛ¹° ¼ºÀå Áß´Ü - ¹°ÀÌ ÇÊ¿äÇÕ´Ï´Ù: {crop.GrowthStage}");
+            Debug.Log($"ï¿½Û¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½: {crop.GrowthStage}");
         }
     }
 
@@ -114,7 +114,7 @@ public class CropObject : MonoBehaviour
         if (IsThisCrop(crop))
         {
             ShowNeedsWaterIndicator();
-            Debug.Log($"¹°ÀÌ ÇÊ¿äÇÕ´Ï´Ù - ÇöÀç ´Ü°è: {crop.GrowthStage}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½: {crop.GrowthStage}");
         }
     }
 
@@ -123,7 +123,7 @@ public class CropObject : MonoBehaviour
         if (IsThisCrop(crop))
         {
             ShowReadyToHarvestIndicator();
-            Debug.Log($"¼öÈ® ÁØºñ ¿Ï·á!");
+            Debug.Log($"ï¿½ï¿½È® ï¿½Øºï¿½ ï¿½Ï·ï¿½!");
         }
     }
 
@@ -133,7 +133,7 @@ public class CropObject : MonoBehaviour
         {
             ShowWateredEffect();
             HideNeedsWaterIndicator();
-            Debug.Log($"¹°À» ÁÖ¾ú½À´Ï´Ù - ´Ü°è: {crop.GrowthStage}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ - ï¿½Ü°ï¿½: {crop.GrowthStage}");
         }
     }
 
@@ -154,7 +154,7 @@ public class CropObject : MonoBehaviour
 
     private void ShowWateredEffect()
     {
-        // ¹° ÁØ È¿°ú (ÆÄÆ¼Å¬, »ç¿îµå µî)
+        // ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ (ï¿½ï¿½Æ¼Å¬, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
     }
 
     private void ShowReadyToHarvestIndicator()

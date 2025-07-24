@@ -2,24 +2,29 @@ using UnityEngine;
 
 public class PlayerSelectAbility : PlayerAbility
 {
-    [Header("±×¸®µå ¼³Á¤")]
+    [Header("ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public float cellSize = 1f;
-    public LayerMask groundLayer; // Ground ·¹ÀÌ¾î
+    public LayerMask groundLayer; // Ground ï¿½ï¿½ï¿½Ì¾ï¿½
     public bool snapToGrid = true;
 
-    [Header("¶óÀÎ ¼³Á¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public Material lineMaterial;
     public Color lineColor = Color.white;
     public Color selectedColor = Color.green;
     public float lineWidth = 0.05f;
 
-    [Header("¼±ÅÃ ¹üÀ§")]
-    public float maxSelectDistance = 1f; // Ä³¸¯ÅÍ·ÎºÎÅÍ ÃÖ´ë ¼±ÅÃ °Å¸®
-    public float forwardDistance = 0.5f; // Ä³¸¯ÅÍ ¾ÕÂÊ °Å¸®
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+    public float maxSelectDistance = 1f; // Ä³ï¿½ï¿½ï¿½Í·Îºï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½
+    public float forwardDistance = 0.5f; // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½
 
     private LineRenderer currentLineRenderer;
     private Vector3 lastGridPosition = Vector3.zero;
     private bool isValidPosition = false;
+    
+    // ë™ì  ê·¸ë¦¬ë“œ í¬ê¸° ì‹œìŠ¤í…œ
+    private Vector2Int currentGridSize = Vector2Int.one;
+    private bool isDynamicSizeMode = false;
+    private Vector3 buildingCenterPosition = Vector3.zero;
 
     void Start()
     {
@@ -37,39 +42,42 @@ public class PlayerSelectAbility : PlayerAbility
         lineObject.transform.SetParent(transform);
         currentLineRenderer = lineObject.AddComponent<LineRenderer>();
 
-        // LineRenderer ¼³Á¤
+        // LineRenderer ï¿½ï¿½ï¿½ï¿½
         currentLineRenderer.material = lineMaterial;
         currentLineRenderer.startColor = lineColor;
         currentLineRenderer.endColor = lineColor;
         currentLineRenderer.startWidth = lineWidth;
         currentLineRenderer.endWidth = lineWidth;
-        currentLineRenderer.positionCount = 5; // »ç°¢Çü (½ÃÀÛÁ¡ = ³¡Á¡)
+        UpdatePositionCount(); // ë™ì ìœ¼ë¡œ ìœ„ì¹˜ ê°œìˆ˜ ì„¤ì •
         currentLineRenderer.useWorldSpace = true;
         currentLineRenderer.loop = false;
 
-        // Ã³À½¿¡´Â ºñÈ°¼ºÈ­
+        // Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         currentLineRenderer.enabled = false;
     }
 
     void UpdateForwardBlockPosition()
     {
-        // Ä³¸¯ÅÍÀÇ ¾ÕÂÊ ¹æÇâ °è»ê
+        // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         Vector3 forwardDirection = transform.forward;
-        Vector3 startPosition = transform.position + Vector3.up * 5f; // Ä³¸¯ÅÍ °¡½¿ ³ôÀÌ
+        Vector3 startPosition = transform.position + Vector3.up * 5f; // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector3 forwardPosition = startPosition + forwardDirection * forwardDistance;
 
-        // ¾ÕÂÊ ÁöÁ¡¿¡¼­ ¾Æ·¡·Î ·¹ÀÌÄ³½ºÆ®
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½Æ®
         RaycastHit hit;
         if (Physics.Raycast(forwardPosition, Vector3.down, out hit, 10f, groundLayer))
         {
             Vector3 gridPosition = WorldToGrid(hit.point);
 
-            // Ä³¸¯ÅÍ·ÎºÎÅÍÀÇ °Å¸® Ã¼Å©
+            // Ä³ï¿½ï¿½ï¿½Í·Îºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ Ã¼Å©
             float distanceFromPlayer = Vector3.Distance(transform.position, gridPosition);
             if (distanceFromPlayer <= maxSelectDistance)
             {
                 if (gridPosition != lastGridPosition)
                 {
+                    // ê±´ì„¤ëª¨ë“œê°€ ì•„ë‹ ë•Œ í•´ë‹¹ ìœ„ì¹˜ì˜ ê±´ë¬¼ í¬ê¸° ì²´í¬
+                    CheckAndSetBuildingSize(gridPosition);
+                    
                     UpdateGridLines(gridPosition);
                     lastGridPosition = gridPosition;
                     _owner.CurrentSelectedPos = gridPosition;
@@ -91,7 +99,7 @@ public class PlayerSelectAbility : PlayerAbility
     {
         if (!snapToGrid) return worldPosition;
 
-        // ¹Ù´Ú ±×¸®µå´Â YÃàÀº ±×´ë·Î µÎ°í X, ZÃà¸¸ ½º³À
+        // ï¿½Ù´ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ Yï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ ï¿½Î°ï¿½ X, Zï¿½à¸¸ ï¿½ï¿½ï¿½ï¿½
         float snappedX = Mathf.Round(worldPosition.x / cellSize) * cellSize;
         float snappedZ = Mathf.Round(worldPosition.z / cellSize) * cellSize;
         return new Vector3(snappedX, worldPosition.y, snappedZ);
@@ -101,15 +109,27 @@ public class PlayerSelectAbility : PlayerAbility
     {
         if (currentLineRenderer == null) return;
 
-        // ¼±ÅÃ °¡´ÉÇÑ À§Ä¡¸é ÃÊ·Ï»ö, ¾Æ´Ï¸é ±âº» »ö»ó
+        // ìœ íš¨ ìœ„ì¹˜ì— ìˆì„ë•ŒëŠ” ì´ˆë¡ìƒ‰, ì•„ë‹ˆë©´ ê¸°ë³¸ ìƒ‰ìƒ
         Color currentColor = isValidPosition ? selectedColor : lineColor;
         currentLineRenderer.startColor = currentColor;
         currentLineRenderer.endColor = currentColor;
 
         currentLineRenderer.enabled = true;
 
+        if (isDynamicSizeMode)
+        {
+            DrawMultiCellGrid(centerPosition);
+        }
+        else
+        {
+            DrawSingleCellGrid(centerPosition);
+        }
+    }
+
+    void DrawSingleCellGrid(Vector3 centerPosition)
+    {
         float halfSize = cellSize * 0.5f;
-        float offset = 0.02f; // ¹Ù´Ú¿¡¼­ »ìÂ¦ ¶³¾î¶ß¸®±â
+        float offset = 0.02f; // ë°”ë‹¥ì—ì„œ ì‚´ì§ ìœ„ë¡œì˜¬ë¦¼
         Vector3 offsetPos = centerPosition + Vector3.up * offset;
 
         Vector3[] corners = new Vector3[5];
@@ -117,7 +137,32 @@ public class PlayerSelectAbility : PlayerAbility
         corners[1] = offsetPos + new Vector3(halfSize, 0, -halfSize);
         corners[2] = offsetPos + new Vector3(halfSize, 0, halfSize);
         corners[3] = offsetPos + new Vector3(-halfSize, 0, halfSize);
-        corners[4] = corners[0]; // »ç°¢Çü ¿Ï¼º
+        corners[4] = corners[0]; // ì‚¬ê°í˜• ì™„ì„±
+
+        currentLineRenderer.SetPositions(corners);
+    }
+
+    void DrawMultiCellGrid(Vector3 centerPosition)
+    {
+        float offset = 0.02f;
+        
+        // ê±´ë¬¼ì´ ìˆì„ ë•ŒëŠ” ê±´ë¬¼ì˜ ì¤‘ì‹¬ì ì„ ì‚¬ìš©, ì—†ì„ ë•ŒëŠ” ì„ íƒëœ ìœ„ì¹˜ ì‚¬ìš©
+        Vector3 gridCenter = (buildingCenterPosition != Vector3.zero) ? buildingCenterPosition : centerPosition;
+        Vector3 offsetPos = gridCenter + Vector3.up * offset;
+        
+        // ê·¸ë¦¬ë“œ í¬ê¸°ì— ë”°ë¥¸ ì „ì²´ í¬ê¸° ê³„ì‚°
+        float totalWidth = currentGridSize.x * cellSize;
+        float totalHeight = currentGridSize.y * cellSize;
+        float halfWidth = totalWidth * 0.5f;
+        float halfHeight = totalHeight * 0.5f;
+
+        // ì™¸ê³½ í…Œë‘ë¦¬ë§Œ ê·¸ë¦¬ê¸° (ì„±ëŠ¥ ìµœì í™”)
+        Vector3[] corners = new Vector3[5];
+        corners[0] = offsetPos + new Vector3(-halfWidth, 0, -halfHeight);
+        corners[1] = offsetPos + new Vector3(halfWidth, 0, -halfHeight);
+        corners[2] = offsetPos + new Vector3(halfWidth, 0, halfHeight);
+        corners[3] = offsetPos + new Vector3(-halfWidth, 0, halfHeight);
+        corners[4] = corners[0]; // ì‚¬ê°í˜• ì™„ì„±
 
         currentLineRenderer.SetPositions(corners);
     }
@@ -128,8 +173,85 @@ public class PlayerSelectAbility : PlayerAbility
             currentLineRenderer.enabled = false;
         lastGridPosition = Vector3.zero;
         isValidPosition = false;
+        buildingCenterPosition = Vector3.zero; // ê±´ë¬¼ ì¤‘ì‹¬ì  ë¦¬ì…‹
     }
 
     public bool HasValidSelection => isValidPosition;
+
+    // ë™ì  ê·¸ë¦¬ë“œ í¬ê¸° ì œì–´ ë©”ì„œë“œë“¤
+    public void SetGridSize(Vector2Int size)
+    {
+        currentGridSize = size;
+        isDynamicSizeMode = size != Vector2Int.one;
+        UpdatePositionCount();
+    }
+
+    public void ResetToSingleCell()
+    {
+        currentGridSize = Vector2Int.one;
+        isDynamicSizeMode = false;
+        buildingCenterPosition = Vector3.zero; // ê±´ë¬¼ ì¤‘ì‹¬ì  ë¦¬ì…‹
+        UpdatePositionCount();
+    }
+
+    public void RotateGridSize()
+    {
+        if (isDynamicSizeMode)
+        {
+            // Xì™€ Y ê°’ì„ ì„œë¡œ ë°”ê¿”ì„œ íšŒì „ íš¨ê³¼
+            currentGridSize = new Vector2Int(currentGridSize.y, currentGridSize.x);
+            UpdatePositionCount();
+        }
+    }
+
+    private void UpdatePositionCount()
+    {
+        if (currentLineRenderer != null)
+        {
+            currentLineRenderer.positionCount = 5; // ì™¸ê³½ í…Œë‘ë¦¬ë§Œ ê·¸ë¦¬ë¯€ë¡œ í•­ìƒ 5ê°œ
+        }
+    }
+
+    // í˜„ì¬ ê·¸ë¦¬ë“œ í¬ê¸° ì •ë³´
+    public Vector2Int CurrentGridSize => currentGridSize;
+    public bool IsDynamicSizeMode => isDynamicSizeMode;
+
+    // ê±´ë¬¼ í¬ê¸° ì²´í¬ ë° ì„¤ì •
+    private void CheckAndSetBuildingSize(Vector3 position)
+    {
+        // ê±´ì„¤ëª¨ë“œê°€ ì•„ë‹ ë•Œë§Œ ì‹¤í–‰
+        PlayerModeController modeController = _owner.GetComponent<PlayerModeController>();
+        if (modeController != null && modeController.CurrentMode == EPlayerMode.Construction)
+        {
+            return;
+        }
+
+        // BuildingManagerë¥¼ í†µí•´ í•´ë‹¹ ìœ„ì¹˜ì˜ ê±´ë¬¼ í¬ê¸° ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+        if (BuildingManager.Instance != null)
+        {
+            Vector2Int? buildingSize = BuildingManager.Instance.GetBuildingSizeAtPosition(position, cellSize * 0.5f);
+            
+            if (buildingSize.HasValue)
+            {
+                // ê±´ë¬¼ì´ ìˆëŠ” ê²½ìš°
+                // ê±´ë¬¼ì˜ ì¤‘ì‹¬ì ì€ positionì„ ê·¸ë¦¬ë“œì— ë§ì¶°ì„œ ì‚¬ìš©
+                buildingCenterPosition = WorldToGrid(position);
+                
+                // í˜„ì¬ ê·¸ë¦¬ë“œ í¬ê¸°ì™€ ë‹¤ë¥´ë©´ ì—…ë°ì´íŠ¸
+                if (currentGridSize != buildingSize.Value)
+                {
+                    SetGridSize(buildingSize.Value);
+                }
+                
+                return;
+            }
+        }
+        
+        // ê±´ë¬¼ì´ ì—†ìœ¼ë©´ 1x1ë¡œ ë¦¬ì…‹
+        if (currentGridSize != Vector2Int.one || buildingCenterPosition != Vector3.zero)
+        {
+            ResetToSingleCell();
+        }
+    }
 
 }

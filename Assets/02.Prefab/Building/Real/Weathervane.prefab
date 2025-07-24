@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 8439954874446863434}
   - component: {fileID: 4102167912448455280}
   - component: {fileID: 2224629593267973705}
+  - component: {fileID: 7822825563484759540}
   m_Layer: 0
   m_Name: Weathervane
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,6 +111,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43667443561848184, guid: 7f38b7519eb79ef45ab0f453d4be8833, type: 2}
+--- !u!114 &7822825563484759540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3600634933081915650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  gridSize: {x: 1, y: 1}
 --- !u!1 &4695940805672555119
 GameObject:
   m_ObjectHideFlags: 0

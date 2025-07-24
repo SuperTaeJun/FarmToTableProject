@@ -15,5 +15,5 @@ MonoBehaviour:
   Type: 2
   Prefab: {fileID: 6890349823637956261, guid: 8aa41ad24b1f38f478c371164b8de9d5, type: 3}
   PreviewPrefab: {fileID: 6890349823637956261, guid: 1d19c82cb376493439099b951932bc73, type: 3}
-  Size: {x: 3, y: 2}
+  Size: {x: 2, y: 3}
   Cost: 0

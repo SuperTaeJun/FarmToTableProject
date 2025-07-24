@@ -2,9 +2,9 @@ using UnityEngine;
 
 public enum EPlayerMode
 {
-    BlockEdit,    // ÁöÇüÆíÁı
-    Farming,        // ³ó»ç¸ğµå
-    Construction    // °Ç¼³¸ğµå
+    BlockEdit,    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    Farming,        // ï¿½ï¿½ï¿½ï¿½ï¿½
+    Construction    // ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½
 }
 public class PlayerModeController : MonoBehaviour
 {
@@ -28,6 +28,16 @@ public class PlayerModeController : MonoBehaviour
         {
             EPlayerMode oldMode = _currentMode;
             _currentMode = newMode;
+
+            // ê±´ì¶• ëª¨ë“œê°€ ì•„ë‹ ë•Œ PlayerSelectAbilityì˜ ê·¸ë¦¬ë“œ í¬ê¸°ë¥¼ 1x1ë¡œ ë¦¬ì…‹
+            if (_currentMode != EPlayerMode.Construction)
+            {
+                PlayerSelectAbility selectAbility = _owner.GetAbility<PlayerSelectAbility>();
+                if (selectAbility != null)
+                {
+                    selectAbility.ResetToSingleCell();
+                }
+            }
 
             MainHudManager.Instance.RefreshPlayerModeIcon(_currentMode);
             OnModeChanged.Invoke(_currentMode);

@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4386622756784299014}
   - component: {fileID: 4001024451452793274}
   - component: {fileID: 8210091810498206932}
+  - component: {fileID: -3562992132321948432}
   m_Layer: 0
   m_Name: Stop_Sign
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,3 +110,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43744481403206682, guid: aa503db1ce6479d4eb4048504aee37ab, type: 2}
+--- !u!114 &-3562992132321948432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876648132956095992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  gridSize: {x: 1, y: 1}

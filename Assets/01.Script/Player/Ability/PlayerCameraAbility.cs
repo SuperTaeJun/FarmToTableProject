@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlayerCameraAbility : PlayerAbility
 {
-    [Header("Ä«¸Þ¶ó ¼³Á¤")]
+    [Header("Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public float mouseSensitivity = 2f;
     public float pitchMin = -30f;
     public float pitchMax = 60f;
 
-    // Ä«¸Þ¶ó È¸Àü°ª
+    // Ä«ï¿½Þ¶ï¿½ È¸ï¿½ï¿½ï¿½ï¿½
     private float pitch = 0f;
     private float yaw = 0f;
     protected override void Awake()
@@ -16,7 +16,7 @@ public class PlayerCameraAbility : PlayerAbility
     }
     private void Start()
     {
-        // ÃÊ±â Ä«¸Þ¶ó °¢µµ ¼³Á¤
+        // ï¿½Ê±ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         yaw = _owner.cameraTarget.eulerAngles.y;
         pitch = _owner.cameraTarget.eulerAngles.x;
 
@@ -31,17 +31,17 @@ public class PlayerCameraAbility : PlayerAbility
         float mouseX = input.x * mouseSensitivity;
         float mouseY = input.y * mouseSensitivity;
 
-        // Ä«¸Þ¶ó È¸Àü°ª ¾÷µ¥ÀÌÆ®
+        // Ä«ï¿½Þ¶ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
     }
     void UpdateCameraTarget()
     {
-        // Ä«¸Þ¶ó Å¸°Ù À§Ä¡¸¦ ÇÃ·¹ÀÌ¾î À§Ä¡·Î ¾÷µ¥ÀÌÆ®
-        _owner.cameraTarget.position = transform.position + Vector3.up * 1.7f; // ¸Ó¸® ³ôÀÌ
+        // Ä«ï¿½Þ¶ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+        _owner.cameraTarget.position = transform.position + Vector3.up * 1.7f; // ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        // Ä«¸Þ¶ó Å¸°Ù È¸Àü (¸¶¿ì½º ÀÔ·Â ±âÁØ)
+        // Ä«ï¿½Þ¶ï¿½ Å¸ï¿½ï¿½ È¸ï¿½ï¿½ (ï¿½ï¿½ï¿½ì½º ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½)
         _owner.cameraTarget.rotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 }

@@ -43,6 +43,26 @@ public class PlayerBuildAbility : PlayerAbility
         if (_selectedType != EBuildingType.None)
         {
             RefreshPreviewInstance();
+            
+            // PlayerSelectAbilityì˜ ê·¸ë¦¬ë“œ í¬ê¸°ë¥¼ ê±´ì¶•ë¬¼ í¬ê¸°ë¡œ ë™ê¸°í™”
+            SO_Building buildingInfo = BuildingManager.Instance.GetBuildingInfo(_selectedType);
+            if (buildingInfo != null)
+            {
+                PlayerSelectAbility selectAbility = _owner.GetAbility<PlayerSelectAbility>();
+                if (selectAbility != null)
+                {
+                    selectAbility.SetGridSize(buildingInfo.Size);
+                }
+            }
+        }
+        else
+        {
+            // ê±´ì¶•ë¬¼ ì„ íƒ í•´ì œ ì‹œ ê·¸ë¦¬ë“œ í¬ê¸°ë¥¼ ê¸°ë³¸ê°’ìœ¼ë¡œ ë¦¬ì…‹
+            PlayerSelectAbility selectAbility = _owner.GetAbility<PlayerSelectAbility>();
+            if (selectAbility != null)
+            {
+                selectAbility.ResetToSingleCell();
+            }
         }
     }
 
@@ -51,7 +71,7 @@ public class PlayerBuildAbility : PlayerAbility
         if (_owner.ModeController.CurrentMode != EPlayerMode.Construction || _selectedType == EBuildingType.None) return;
         if (!_canPlace) return;
 
-        // ½º³ÀµÈ À§Ä¡·Î °Ç¹° ¹èÄ¡
+        // ìŠ¤ëƒ…ëœ ìœ„ì¹˜ì— ê±´ë¬¼ ë°°ì¹˜
         SO_Building buildingInfo = BuildingManager.Instance.GetBuildingInfo(_selectedType);
         Vector3 snappedPos = BuildingManager.Instance.SnapToGrid(_owner.CurrentSelectedPos, buildingInfo.Size);
 
@@ -61,11 +81,11 @@ public class PlayerBuildAbility : PlayerAbility
 
         if (success)
         {
-            Debug.Log("°Ç¹° ¹èÄ¡ ¼º°ø!");
+            Debug.Log("ê±´ë¬¼ ë°°ì¹˜ ì„±ê³µ!");
         }
         else
         {
-            Debug.LogWarning("°Ç¹° ¹èÄ¡¿¡ ½ÇÆĞ Çß½À´Ï´Ù.");
+            Debug.LogWarning("ê±´ë¬¼ ë°°ì¹˜ì— ì‹¤íŒ¨ í–ˆìŠµë‹ˆë‹¤.");
         }
     }
 
@@ -105,19 +125,19 @@ public class PlayerBuildAbility : PlayerAbility
 
         SO_Building buildingInfo = BuildingManager.Instance.GetBuildingInfo(_selectedType);
 
-        // ½º³ÀµÈ À§Ä¡ °è»ê
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
         Vector3 snappedPos = BuildingManager.Instance.SnapToGrid(_owner.CurrentSelectedPos, buildingInfo.Size);
 
         _previewInstance.transform.position = snappedPos;
         _previewInstance.transform.rotation = _currentRotation;
         _previewInstance.SetActive(true);
 
-        // ¹èÄ¡ °¡´É ¿©ºÎ È®ÀÎ - ½º³ÀµÈ À§Ä¡ »ç¿ë
+        // ë°°ì¹˜ ê°€ëŠ¥ ì—¬ë¶€ í™•ì¸
         Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(snappedPos);
         string chunkID = chunk.Position.ToChunkId();
         _canPlace = BuildingManager.Instance.CanPlaceBuilding(chunkID, snappedPos, buildingInfo.Size);
 
-        // ¸ÓÆ¼¸®¾ó »ö»ó º¯°æ
+        // í”„ë¦¬ë·° ìƒ‰ìƒ ì„¤ì •
         if (_previewMaterial != null)
         {
             Color previewColor = _canPlace ? Color.green : Color.red;
@@ -126,13 +146,20 @@ public class PlayerBuildAbility : PlayerAbility
         }
     }
 
-    // È¸Àü ±â´É (RÅ° µîÀ¸·Î È£Ãâ)
+    // íšŒì „ ê¸°ëŠ¥ (Rí‚¤ ì…ë ¥ì‹œ í˜¸ì¶œ)
     public void RotatePreview()
     {
         _currentRotation *= Quaternion.Euler(0, 90f, 0);
         if (_previewInstance != null)
         {
             _previewInstance.transform.rotation = _currentRotation;
+        }
+
+        // PlayerSelectAbilityì˜ ê·¸ë¦¬ë“œ í¬ê¸°ë„ í•¨ê»˜ íšŒì „
+        PlayerSelectAbility selectAbility = _owner.GetAbility<PlayerSelectAbility>();
+        if (selectAbility != null)
+        {
+            selectAbility.RotateGridSize();
         }
     }
 

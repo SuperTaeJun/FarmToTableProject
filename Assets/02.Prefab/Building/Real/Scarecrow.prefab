@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 7743102913884785690}
   - component: {fileID: 1031451028506743733}
   - component: {fileID: 2221922313516417166}
+  - component: {fileID: -2043079295056374207}
   m_Layer: 0
   m_Name: Scarecrow
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,3 +133,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43491822011668820, guid: 5e27f52f8ef79d54fb8dbc22529e8cfd, type: 2}
+--- !u!114 &-2043079295056374207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632603846373476485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  gridSize: {x: 1, y: 1}

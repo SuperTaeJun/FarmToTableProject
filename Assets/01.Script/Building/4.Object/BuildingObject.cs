@@ -2,15 +2,6 @@ using UnityEngine;
 
 public class BuildingObject : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // 향후 확장을 위한 최소한의 구조만 유지
+    // 건물별 개별 동작이나 상호작용이 필요할 때 여기에 추가
 }
