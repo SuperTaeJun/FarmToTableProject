@@ -10,22 +10,21 @@ public class UI_Building : UI_Popup
 
     private void Start()
     {
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        PlayerBuildAbility ability = player.GetAbility<PlayerBuildAbility>();
+
         //각 버튼들 이벤트 등록
         foreach (var button in Buttons)
         {
-            BuildingType type = button.Type;
-            button.Button.onClick.AddListener(() => { OnClikedButton(type); Close(); });
+            EBuildingType type = button.Type;
+            button.Button.onClick.AddListener(() => { ability.SetSelectedType(type); Close(); });
         }
-    }
-    private void OnClikedButton(BuildingType buildingType)
-    {
-        //todo 각버튼별 상호작용 -> 프리뷰 객체 뛰워야함
     }
 }
 
 [Serializable]
 public class ButtonInfo
 {
-    public BuildingType Type;
+    public EBuildingType Type;
     public Button Button;
 }

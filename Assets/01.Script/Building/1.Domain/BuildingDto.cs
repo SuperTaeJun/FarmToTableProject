@@ -8,21 +8,49 @@ public class BuildingDto
     public string Type { get; set; }
 
     [FirestoreProperty]
-    public Vector3 Position { get; set; }
+    public float PositionX { get; set; }
+    [FirestoreProperty]
+    public float PositionY { get; set; }
+    [FirestoreProperty]
+    public float PositionZ { get; set; }
 
     [FirestoreProperty]
-    public Vector3 Rotation { get; set; }
+    public float RotationX { get; set; }
+    [FirestoreProperty]
+    public float RotationY { get; set; }
+    [FirestoreProperty]
+    public float RotationZ { get; set; }
 
     [FirestoreProperty]
-    public Vector3Int Size { get; set; }
+    public int SizeX { get; set; }
+    [FirestoreProperty]
+    public int SizeY { get; set; }
 
     public BuildingDto() { }
 
     public BuildingDto(Building building)
     {
         Type = building.Type.ToString();
-        Position = building.Position;
-        Rotation = building.Rotation;
-        Size = building.Size;
+
+        PositionX = building.Position.x;
+        PositionY = building.Position.y;
+        PositionZ = building.Position.z;
+
+        RotationX = building.Rotation.x;
+        RotationY = building.Rotation.y;
+        RotationZ = building.Rotation.z;
+
+        SizeX = building.Size.x;
+        SizeY = building.Size.y;
+    }
+
+    public Building ToBuilding()
+    {
+        var building = new Building();
+        building.Type = System.Enum.Parse<EBuildingType>(Type);
+        building.Position = new Vector3(PositionX, PositionY, PositionZ);
+        building.Rotation = new Vector3(RotationX, RotationY, RotationZ);
+        building.Size = new Vector2Int(SizeX, SizeY);
+        return building;
     }
 }

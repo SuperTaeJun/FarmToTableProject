@@ -10,4 +10,8 @@ public struct ChunkPosition
         Y = y;
         Z = z;
     }
+    public string ToChunkId()
+    {
+        return $"{X}_{Y}_{Z}";
+    }
 }

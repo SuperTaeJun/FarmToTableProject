@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public enum EPopupType
 {
     UI_SeedSelectPopup,
-    UI_OptionPopup
+    UI_OptionPopup,
+    UI_BuildingPopup
 }
 public class PopupManager : MonoBehaviour
 {
