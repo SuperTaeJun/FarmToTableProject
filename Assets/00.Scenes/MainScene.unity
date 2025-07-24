@@ -12453,6 +12453,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3895801814691742375, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
+      propertyPath: _previewMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 91fac834e7e17b748baa0db3dfdb3436, type: 2}
+    - target: {fileID: 3895801814691742375, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
+      propertyPath: groundLayerMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

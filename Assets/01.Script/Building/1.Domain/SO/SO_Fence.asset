@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SO_Fence
   m_EditorClassIdentifier: 
   Type: 0
-  Prefab: {fileID: 3690630612563961944, guid: 457059ddfee38ae4bafb8ade83fcf13a, type: 3}
-  Size: {x: 4, y: 1}
+  Prefab: {fileID: 2139351033768652737, guid: ceb3c2f7244a192438059f43598e0ab4, type: 3}
+  PreviewPrefab: {fileID: 2139351033768652737, guid: 06174f00d0b49574dae3b0596d385b98, type: 3}
+  Size: {x: 1, y: 1}
   Cost: 0

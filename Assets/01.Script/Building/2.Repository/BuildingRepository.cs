@@ -28,12 +28,20 @@ public class BuildingRepository : FirebaseRepositoryBase
             var docRef = Firestore.Collection(COLLECTION_NAME).Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
             var result = new List<Building>();
+
             if (snapshot.Exists && snapshot.ContainsField(COLLECTION_NAME))
             {
                 var buildingDtos = snapshot.ConvertTo<Dictionary<string, List<BuildingDto>>>()[COLLECTION_NAME];
-                foreach (var buildingDto in buildingDtos)
+
+                if (buildingDtos != null)
                 {
-                    result.Add(buildingDto.ToBuilding());
+                    foreach (var buildingDto in buildingDtos)
+                    {
+                        if (buildingDto != null)
+                        {
+                            result.Add(buildingDto.ToBuilding(chunkId)); // chunkId РќДо
+                        }
+                    }
                 }
             }
             return result;

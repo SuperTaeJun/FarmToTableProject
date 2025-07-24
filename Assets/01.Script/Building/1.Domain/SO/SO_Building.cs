@@ -5,6 +5,7 @@ public class SO_Building : ScriptableObject
 {
     public EBuildingType Type;
     public GameObject Prefab;
+    public GameObject PreviewPrefab;
     public Vector2Int Size = Vector2Int.one;
     public float Cost;
 }

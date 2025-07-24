@@ -4,5 +4,6 @@ public enum EBuildingType
 {
     Fence,
     LetterBox,
-    Table
+    Table,
+    None
 }

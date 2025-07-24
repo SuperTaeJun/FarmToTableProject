@@ -44,13 +44,16 @@ public class BuildingDto
         SizeY = building.Size.y;
     }
 
-    public Building ToBuilding()
+    public Building ToBuilding(string chunkId = null)
     {
         var building = new Building();
         building.Type = System.Enum.Parse<EBuildingType>(Type);
         building.Position = new Vector3(PositionX, PositionY, PositionZ);
         building.Rotation = new Vector3(RotationX, RotationY, RotationZ);
         building.Size = new Vector2Int(SizeX, SizeY);
+
+        building.ChunkId = chunkId;
+
         return building;
     }
 }

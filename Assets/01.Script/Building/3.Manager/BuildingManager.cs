@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -29,6 +30,38 @@ public class BuildingManager : MonoBehaviour
         _buildingRepository = new BuildingRepository();
     }
 
+    private async void Start()
+    {
+        await LoadAllBuilding();
+    }
+
+    public async Task LoadAllBuilding()
+    {
+        var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
+        Debug.Log($"로드된 청크 수: {loadedChunks?.Count() ?? 0}");
+
+        if (loadedChunks == null || !loadedChunks.Any())
+        {
+            Debug.Log("로드된 청크가 없습니다.");
+            return;
+        }
+
+        foreach (var chunkPos in loadedChunks)
+        {
+            string chunkId = chunkPos.ToChunkId();
+            Debug.Log($"청크 로드 시도: {chunkId}");
+
+            try
+            {
+                var buildings = await LoadBuildingsForChunk(chunkId);
+                Debug.Log($"청크 {chunkId}에서 {buildings.Count}개 건물 로드됨");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"청크 {chunkId} 로드 실패: {e.Message}");
+            }
+        }
+    }
     private SO_Building GetBuildingData(EBuildingType type)
     {
         foreach (var data in buildingData)
@@ -61,48 +94,41 @@ public class BuildingManager : MonoBehaviour
         return buildingObj;
     }
 
-    private void DestroyBuildingGameObject(string buildingId)
-    {
-        if (buildingGameObjects.ContainsKey(buildingId))
-        {
-            Destroy(buildingGameObjects[buildingId]);
-            buildingGameObjects.Remove(buildingId);
-        }
-    }
-
     public Vector3 SnapToGrid(Vector3 position, Vector2Int size)
     {
-        // 건물의 중심점을 기준으로 스냅
-        float centerOffsetX = (size.x - 1) * 0.5f;
-        float centerOffsetZ = (size.y - 1) * 0.5f;
-
-        // 중심점을 그리드에 스냅
-        Vector3 centerPos = position + new Vector3(centerOffsetX, 0, centerOffsetZ);
-        Vector3 snappedCenter = new Vector3(
-            Mathf.Round(centerPos.x),
+        // 피벗을 항상 정수 그리드에 배치
+        return new Vector3(
+            Mathf.Round(position.x),
             position.y,
-            Mathf.Round(centerPos.z)
+            Mathf.Round(position.z)
         );
-
-        // 피벗 위치로 다시 변환
-        return snappedCenter - new Vector3(centerOffsetX, 0, centerOffsetZ);
     }
 
     public bool CanPlaceBuilding(string chunkId, Vector3 worldPosition, Vector2Int size)
     {
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(chunkId);
         Vector3 localPosition = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, chunkPos);
-        var snappedPosition = SnapToGrid(localPosition, size);
         var buildings = GetLoadedBuildings(chunkId);
 
-        // 배치하려는 영역 체크 (모두 로컬 좌표계에서 비교)
+        // 중앙 피벗 기준으로 배치하려는 영역의 시작점 계산
+        float halfSizeX = size.x * 0.5f;
+        float halfSizeZ = size.y * 0.5f;
+
+        Vector3 startPosition = new Vector3(
+            localPosition.x - halfSizeX + 0.5f,
+            localPosition.y,
+            localPosition.z - halfSizeZ + 0.5f
+        );
+
+        // 배치하려는 영역 체크
         for (int x = 0; x < size.x; x++)
         {
             for (int z = 0; z < size.y; z++)
             {
-                var checkPos = snappedPosition + new Vector3(x * gridSize, 0, z * gridSize);
+                var checkPos = startPosition + new Vector3(x * gridSize, 0, z * gridSize);
                 if (IsPositionOccupied(buildings, checkPos))
                 {
+                    Debug.Log($"배치 실패 - 위치 ({checkPos.x}, {checkPos.z})가 점유됨");
                     return false;
                 }
             }
@@ -112,18 +138,39 @@ public class BuildingManager : MonoBehaviour
 
     private bool IsPositionOccupied(List<Building> buildings, Vector3 position)
     {
+        Vector2Int checkGrid = new Vector2Int(
+          Mathf.RoundToInt(position.x),
+          Mathf.RoundToInt(position.z)
+      );
+
         foreach (var building in buildings)
         {
-            var buildingPos = building.Position;
-            var buildingSize = building.Size;
+            // 중앙 피벗 건물의 실제 점유 영역 계산
+            Vector3 buildingCenter = building.Position;
 
-            for (int x = 0; x < buildingSize.x; x++)
+            // 건물 크기의 절반만큼 뒤로 이동하여 시작점 계산
+            float halfSizeX = building.Size.x * 0.5f;
+            float halfSizeZ = building.Size.y * 0.5f;
+
+            Vector2 buildingStart = new Vector2(
+                buildingCenter.x - halfSizeX + 0.5f,  // 0.5f는 그리드 중앙 보정
+                buildingCenter.z - halfSizeZ + 0.5f
+            );
+
+            // 건물이 차지하는 모든 그리드 체크
+            for (int x = 0; x < building.Size.x; x++)
             {
-                for (int z = 0; z < buildingSize.y; z++)
+                for (int z = 0; z < building.Size.y; z++)
                 {
-                    var occupiedPos = buildingPos + new Vector3(x * gridSize, 0, z * gridSize);
-                    if (Vector3.Distance(occupiedPos, position) < 0.1f)
+                    Vector2Int occupiedGrid = new Vector2Int(
+                        Mathf.RoundToInt(buildingStart.x + x),
+                        Mathf.RoundToInt(buildingStart.y + z)
+                    );
+
+                    if (occupiedGrid.x == checkGrid.x && occupiedGrid.y == checkGrid.y)
                     {
+                        Debug.Log($"충돌! 체크:{checkGrid} vs 점유:{occupiedGrid}");
+                        Debug.Log($"건물중심:{buildingCenter}, 시작점:{buildingStart}, 크기:{building.Size}");
                         return true;
                     }
                 }
@@ -142,17 +189,16 @@ public class BuildingManager : MonoBehaviour
         }
 
         Vector3 localPosition = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, WorldManager.Instance.GetChunkPositionFromId(chunkId));
-        Vector3 snappedPosition = SnapToGrid(localPosition, buildingData.Size);
 
+        // 이미 스냅된 위치가 들어오므로 추가 스냅 불필요
         if (!CanPlaceBuilding(chunkId, worldPosition, buildingData.Size))
         {
             return false;
         }
 
-        var building = new Building(type, chunkId, snappedPosition, rotation, buildingData.Size);
+        var building = new Building(type, chunkId, localPosition, rotation, buildingData.Size);
         await AddBuilding(building);
 
-        // 게임 오브젝트 생성
         GameObject buildingObj = CreateBuildingGameObject(building);
         if (buildingObj != null)
         {
@@ -232,4 +278,6 @@ public class BuildingManager : MonoBehaviour
     {
         return GetBuildingData(type);
     }
+
+
 }
