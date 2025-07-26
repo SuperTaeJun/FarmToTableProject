@@ -10,10 +10,10 @@ public class BuildingManager : MonoBehaviour
 
     private BuildingRepository _buildingRepository;
     private Dictionary<string, List<Building>> loadedBuildings = new Dictionary<string, List<Building>>();
-    private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // ���ӿ�����Ʈ ĳ��
+    private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // 건물 오브젝트 캐시
 
     [SerializeField] private float gridSize = 1f;
-    [SerializeField] private SO_Building[] buildingData; // SO_Building ������
+    [SerializeField] private SO_Building[] buildingData; // SO_Building 배열 데이터
 
     private void Awake()
     {
@@ -38,30 +38,31 @@ public class BuildingManager : MonoBehaviour
     public async Task LoadAllBuilding()
     {
         var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
-        Debug.Log($"�ε�� ûũ ��: {loadedChunks?.Count() ?? 0}");
+        Debug.Log($"로딩된 청크 수: {loadedChunks?.Count() ?? 0}");
 
         if (loadedChunks == null || !loadedChunks.Any())
         {
-            Debug.Log("�ε�� ûũ�� �����ϴ�.");
+            Debug.Log("로딩된 청크가 없습니다.");
             return;
         }
 
         foreach (var chunkPos in loadedChunks)
         {
             string chunkId = chunkPos.ToChunkId();
-            Debug.Log($"ûũ �ε� �õ�: {chunkId}");
+            Debug.Log($"청크 로딩 시도: {chunkId}");
 
             try
             {
                 var buildings = await LoadBuildingsForChunk(chunkId);
-                Debug.Log($"ûũ {chunkId}���� {buildings.Count}�� �ǹ� �ε��");
+                Debug.Log($"청크 {chunkId}에서 {buildings.Count}개의 건물 로딩됨");
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"ûũ {chunkId} �ε� ����: {e.Message}");
+                Debug.LogError($"청크 {chunkId} 로딩 실패: {e.Message}");
             }
         }
     }
+
     private SO_Building GetBuildingData(EBuildingType type)
     {
         foreach (var data in buildingData)
@@ -83,11 +84,11 @@ public class BuildingManager : MonoBehaviour
             return null;
         }
 
-        // ���� ��ǥ�� ��ȯ
+        // 로컬 좌표를 월드 좌표로 변환
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(building.ChunkId);
         Vector3 worldPosition = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, building.Position);
 
-        // ���� ������Ʈ ����
+        // 건물 게임오브젝트 생성
         GameObject buildingObj = Instantiate(buildingData.Prefab, worldPosition, Quaternion.Euler(building.Rotation));
         buildingObj.name = $"{building.Type}_{building.GetBuildingId()}";
 
@@ -96,7 +97,7 @@ public class BuildingManager : MonoBehaviour
 
     public Vector3 SnapToGrid(Vector3 position, Vector2Int size)
     {
-        // �ǹ��� �׻� ���� �׸��忡 ��ġ
+        // 건물은 반드시 정해진 그리드에 위치
         return new Vector3(
             Mathf.Round(position.x),
             position.y,
@@ -107,12 +108,12 @@ public class BuildingManager : MonoBehaviour
     public bool CanPlaceBuilding(string chunkId, Vector3 worldPosition, Vector2Int size)
     {
         Debug.Log($"건물 배치 확인 시작 - 크기: {size}, 위치: {worldPosition}");
-        
+
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(chunkId);
         Vector3 localPosition = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, chunkPos);
         var buildings = GetLoadedBuildings(chunkId);
 
-        // �߾� �ǹ� �������� ��ġ�Ϸ��� ������ ������ ���
+        // 중심 좌표 기준으로 크기만큼 영역 계산
         float halfSizeX = size.x * 0.5f;
         float halfSizeZ = size.y * 0.5f;
 
@@ -137,7 +138,7 @@ public class BuildingManager : MonoBehaviour
             for (int z = 0; z < size.y; z++)
             {
                 var checkPos = startPosition + new Vector3(x * gridSize, 0, z * gridSize);
-                
+
                 // 다른 건물과의 충돌 확인
                 if (IsPositionOccupied(buildings, checkPos))
                 {
@@ -146,17 +147,16 @@ public class BuildingManager : MonoBehaviour
                 }
             }
         }
-        
+
         Debug.Log("건물 배치 가능!");
         return true;
     }
-    
-    // 건물 크기만큼의 영역이 평지인지 확인하는 메서드
+
     private bool IsAreaFlat(ChunkPosition chunkPos, Vector3 startPosition, Vector2Int size)
     {
         float baseHeight = -999f;
         bool baseHeightSet = false;
-        
+
         // 건물 크기만큼의 모든 그리드 높이 확인
         for (int x = 0; x < size.x; x++)
         {
@@ -165,53 +165,44 @@ public class BuildingManager : MonoBehaviour
                 var checkPos = startPosition + new Vector3(x * gridSize, 0, z * gridSize);
                 Vector3 worldCheckPos = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, checkPos);
                 float height = WorldManager.Instance.GetGroundHeight(worldCheckPos);
-                
-                // 유효하지 않은 높이값 체크
+
                 if (height < -100f) return false;
-                
-                // 첫 번째 유효한 높이를 기준 높이로 설정
+
                 if (!baseHeightSet)
                 {
                     baseHeight = height;
                     baseHeightSet = true;
                 }
-                else
+                else if (Mathf.Abs(height - baseHeight) > 0.25f)
                 {
-                    // 기준 높이와의 차이가 0.25f를 초과하면 평지가 아님
-                    if (Mathf.Abs(height - baseHeight) > 0.25f)
-                    {
-                        Debug.Log($"높이 차이 발견: 기준({baseHeight}) vs 현재({height}) = {Mathf.Abs(height - baseHeight)}");
-                        return false;
-                    }
+                    Debug.Log($"높이 차이 발견: 기준({baseHeight}) vs 현재({height}) = {Mathf.Abs(height - baseHeight)}");
+                    return false;
                 }
             }
         }
-        
+
         return true;
     }
 
     private bool IsPositionOccupied(List<Building> buildings, Vector3 position)
     {
         Vector2Int checkGrid = new Vector2Int(
-          Mathf.RoundToInt(position.x),
-          Mathf.RoundToInt(position.z)
-      );
+            Mathf.RoundToInt(position.x),
+            Mathf.RoundToInt(position.z)
+        );
 
         foreach (var building in buildings)
         {
-            // �߾� �ǹ� �ǹ��� ���� ���� ���� ���
+            // 중심 좌표 기준으로 영역 계산
             Vector3 buildingCenter = building.Position;
-
-            // �ǹ� ũ���� ���ݸ�ŭ �ڷ� �̵��Ͽ� ������ ���
             float halfSizeX = building.Size.x * 0.5f;
             float halfSizeZ = building.Size.y * 0.5f;
 
             Vector2 buildingStart = new Vector2(
-                buildingCenter.x - halfSizeX + 0.5f,  // 0.5f�� �׸��� �߾� ����
+                buildingCenter.x - halfSizeX + 0.5f,
                 buildingCenter.z - halfSizeZ + 0.5f
             );
 
-            // �ǹ��� �����ϴ� ��� �׸��� üũ
             for (int x = 0; x < building.Size.x; x++)
             {
                 for (int z = 0; z < building.Size.y; z++)
@@ -221,10 +212,10 @@ public class BuildingManager : MonoBehaviour
                         Mathf.RoundToInt(buildingStart.y + z)
                     );
 
-                    if (occupiedGrid.x == checkGrid.x && occupiedGrid.y == checkGrid.y)
+                    if (occupiedGrid == checkGrid)
                     {
-                        Debug.Log($"�浹! üũ:{checkGrid} vs ����:{occupiedGrid}");
-                        Debug.Log($"�ǹ��߽�:{buildingCenter}, ������:{buildingStart}, ũ��:{building.Size}");
+                        Debug.Log($"충돌! 체크:{checkGrid} vs 점유:{occupiedGrid}");
+                        Debug.Log($"건물중심:{buildingCenter}, 시작위치:{buildingStart}, 크기:{building.Size}");
                         return true;
                     }
                 }
@@ -244,7 +235,6 @@ public class BuildingManager : MonoBehaviour
 
         Vector3 localPosition = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, WorldManager.Instance.GetChunkPositionFromId(chunkId));
 
-        // �̹� ������ ��ġ�� �����Ƿ� �߰� ���� ���ʿ�
         if (!CanPlaceBuilding(chunkId, worldPosition, buildingData.Size))
         {
             return false;
@@ -278,7 +268,7 @@ public class BuildingManager : MonoBehaviour
         var buildings = await _buildingRepository.LoadBuildingByChunk(chunkId);
         loadedBuildings[chunkId] = buildings;
 
-        // �ε�� �ǹ����� ���� ������Ʈ ����
+        // 로딩된 건물에 대해 게임오브젝트 생성
         foreach (var building in buildings)
         {
             GameObject buildingObj = CreateBuildingGameObject(building);
@@ -309,7 +299,7 @@ public class BuildingManager : MonoBehaviour
 
     public void UnloadChunk(string chunkId)
     {
-        // �ش� ûũ�� ���� ������Ʈ�� ����
+        // 해당 청크의 건물 오브젝트 삭제
         var buildingsToRemove = new List<string>();
         foreach (var kvp in buildingGameObjects)
         {
@@ -333,25 +323,20 @@ public class BuildingManager : MonoBehaviour
         return GetBuildingData(type);
     }
 
-    // 위치에서 건물 정보를 가져오는 메서드
     public Vector2Int? GetBuildingSizeAtPosition(Vector3 worldPosition, float searchRadius = 0.5f)
     {
-        // 모든 로드된 건물 중에서 해당 위치와 가까운 건물 찾기
         foreach (var chunkBuildings in loadedBuildings.Values)
         {
             foreach (var building in chunkBuildings)
             {
-                // 건물의 월드 좌표 계산
                 ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(building.ChunkId);
                 Vector3 buildingWorldPos = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, building.Position);
-                
-                // 거리 확인 (Y축 제외)
+
                 Vector3 flatWorldPos = new Vector3(worldPosition.x, 0, worldPosition.z);
                 Vector3 flatBuildingPos = new Vector3(buildingWorldPos.x, 0, buildingWorldPos.z);
-                
+
                 if (Vector3.Distance(flatWorldPos, flatBuildingPos) <= searchRadius)
                 {
-                    // 해당 건물의 크기 정보 반환
                     SO_Building buildingInfo = GetBuildingInfo(building.Type);
                     if (buildingInfo != null)
                     {
@@ -360,9 +345,7 @@ public class BuildingManager : MonoBehaviour
                 }
             }
         }
-        
-        return null; // 건물이 없으면 null 반환
+
+        return null;
     }
-
-
 }

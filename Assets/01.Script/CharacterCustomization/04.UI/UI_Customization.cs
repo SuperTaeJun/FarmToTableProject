@@ -8,7 +8,6 @@ public class CustomizationUI : MonoBehaviour
 {
     [Header("Buttons")]
     public PartButtonInfo[] PartButtons;
-
     public Button NextButton;
     public Button DanceAnimationButton;
     public Button IdleAnimationButton;
@@ -16,7 +15,7 @@ public class CustomizationUI : MonoBehaviour
     private void Start()
     {
 
-        // ÀÌº¥Æ® ±¸µ¶
+        // ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         foreach (var partButtonInfo in PartButtons)
         {
             ECustomizationPartType part = partButtonInfo.Part;
@@ -70,7 +69,7 @@ public class CustomizationUI : MonoBehaviour
     {
         await CustomizationManager.Instance.SaveCustomizationAsync();
 
-        //¸¸¾à¿¡ ÀÌ¹Ì ¿ùµå°¡ ÀÖÀ¸¸é ¹Ù·Î ¾ÀÀÌµ¿
+        //ï¿½ï¿½ï¿½à¿¡ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
         if (GameObject.FindWithTag("World"))
             FadeManager.Instance.FadeToScene("MainScene");
         else

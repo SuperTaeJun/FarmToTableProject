@@ -42,8 +42,6 @@ public class WorldRepository : FirebaseRepositoryBase
         return $"{pos.X}_{pos.Y}_{pos.Z}";
     }
 
-    #region DTO <-> Domain º¯È¯
-
     public WorldDocumentDto ConvertToDto(Chunk chunk)
     {
         var dto = new WorldDocumentDto
@@ -102,8 +100,6 @@ public class WorldRepository : FirebaseRepositoryBase
 
         return chunk;
     }
-
-    #endregion
     public async Task<List<ChunkPosition>> GetAllChunkPositionsFromFirebase()
     {
         var chunkPositions = new List<ChunkPosition>();

@@ -466,44 +466,4 @@ public class ChunkGenerator : MonoBehaviour
         // 인접 청크가 없거나 해당 위치에 블록이 없으면 true 반환
         return !WorldManager.Instance.HasBlockAt(adjacentChunkPos, adjacentX, adjacentY, adjacentZ);
     }
-    //private bool IsBlockVisible(string[,,] chunkData, int x, int y, int z)
-    //{
-    //    Vector3Int[] directions = {
-    //    Vector3Int.left,    // -X
-    //    Vector3Int.right,   // +X
-    //    Vector3Int.up,      // +Y
-    //    Vector3Int.back,    // -Z
-    //    Vector3Int.forward  // +Z
-    //    // Vector3Int.down 제외 (밑면은 안 그림)
-    //};
-
-    //    int chunkSizeX = chunkData.GetLength(0);
-    //    int chunkSizeY = chunkData.GetLength(1);
-    //    int chunkSizeZ = chunkData.GetLength(2);
-
-    //    foreach (var dir in directions)
-    //    {
-    //        int nx = x + dir.x;
-    //        int ny = y + dir.y;
-    //        int nz = z + dir.z;
-
-    //        // 청크 범위를 벗어나는 경우
-    //        if (nx < 0 || nx >= chunkSizeX ||
-    //            ny < 0 || ny >= chunkSizeY ||
-    //            nz < 0 || nz >= chunkSizeZ)
-    //        {
-    //            // 청크 경계 밖은 비어있다고 가정하여 visible
-    //            continue;
-    //        }
-
-    //        // 인접한 위치에 블록이 없으면 현재 블록이 보임
-    //        if (chunkData[nx, ny, nz] == null)
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-    //    // 모든 면이 막혀있으면 보이지 않음
-    //    return false;
-    //}
 }

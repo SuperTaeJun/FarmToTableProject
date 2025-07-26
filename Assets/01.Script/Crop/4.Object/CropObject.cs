@@ -83,6 +83,7 @@ public class CropObject : MonoBehaviour
     {
         if (IsThisCrop(harvestedCrop))
         {
+            _=InventoryManager.Instance.AddCropToInventory(harvestedCrop.Type);
             Destroy(gameObject);
         }
     }

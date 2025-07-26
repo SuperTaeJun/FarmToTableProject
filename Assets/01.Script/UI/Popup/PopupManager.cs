@@ -6,7 +6,9 @@ public enum EPopupType
 {
     UI_SeedSelectPopup,
     UI_OptionPopup,
-    UI_BuildingPopup
+    UI_BuildingPopup,
+    UI_InventoryPopup,
+    UI_ShopPopup
 }
 public class PopupManager : MonoBehaviour
 {
@@ -45,6 +47,26 @@ public class PopupManager : MonoBehaviour
         PopUpOpen(popupType.ToString(), callBack);
         OnPopupStateChanged?.Invoke(true);
     }
+    
+    public void OpenInventory(EInventoryType inventoryType = EInventoryType.Player, Action callBack = null)
+    {
+        var inventoryPopup = OpenPopup<UI_Inventory>(EPopupType.UI_InventoryPopup, callBack);
+        if (inventoryPopup != null)
+        {
+            inventoryPopup.OpenInventory(inventoryType);
+        }
+        OnPopupStateChanged?.Invoke(true);
+    }
+    
+    public void OpenShop(Action callBack = null)
+    {
+        var shopPopup = OpenPopup<UI_Shop>(EPopupType.UI_ShopPopup, callBack);
+        if (shopPopup != null)
+        {
+            shopPopup.OpenShop();
+        }
+        OnPopupStateChanged?.Invoke(true);
+    }
 
     public void PopUpOpen(string popupName, Action closeCallback)
     {
@@ -62,6 +84,6 @@ public class PopupManager : MonoBehaviour
     public void PopUpClose(Action callBack = null)
     {
         _openPopups.Pop();
-        OnPopupStateChanged?.Invoke(_openPopups.Count > 0); // ÆË¾÷ »óÅÂ ¾Ë¸²
+        OnPopupStateChanged?.Invoke(_openPopups.Count > 0); // ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½
     }
 }
