@@ -9,9 +9,9 @@ public class InventoryItem
     public string ItemId { get; private set; }
     public DateTime AcquiredTime { get; private set; }
     
-    private static ItemDatabase itemDatabase;
+    private static SO_ItemDatabase itemDatabase;
     
-    public static void SetItemDatabase(ItemDatabase database)
+    public static void SetItemDatabase(SO_ItemDatabase database)
     {
         itemDatabase = database;
     }
@@ -84,7 +84,7 @@ public class InventoryItem
         return itemDatabase?.IsStackable(ItemType) ?? false;
     }
     
-    public ItemData GetItemData()
+    public SO_ItemData GetItemData()
     {
         return itemDatabase?.GetItemData(ItemType);
     }

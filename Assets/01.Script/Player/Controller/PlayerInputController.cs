@@ -43,6 +43,11 @@ public class PlayerInputController : MonoBehaviour
         HandleInteractionInput();
         HandleModeChangeInput(); // 모드 변경 입력 추가
         HandleOptionPopupInput();
+
+        if(Input.GetKeyDown(KeyCode.F2))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_ShopPopup);
+        }
     }
 
     private void OnPopupStateChanged(bool isOpen)

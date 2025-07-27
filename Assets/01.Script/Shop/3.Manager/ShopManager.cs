@@ -7,19 +7,17 @@ using UnityEngine;
 public class ShopManager : MonoBehaviour
 {
     [Header("상점 설정")]
-    [SerializeField] private ShopData _shopData;
-    [SerializeField] private int _playerMoney = 1000; // 임시로 여기서 관리
+    [SerializeField] private SO_ShopData _shopData;
     
     public static ShopManager Instance;
     private InventoryManager _inventoryManager;
+    private CurrencyManager _currencyManager;
     
-    public int PlayerMoney => _playerMoney;
-    public ShopData ShopData => _shopData;
+    public SO_ShopData ShopData => _shopData;
     
     // 상점 이벤트들
     public DebugEvent<ShopTransaction> OnItemPurchased = new DebugEvent<ShopTransaction>();
     public DebugEvent<ShopTransaction> OnItemSold = new DebugEvent<ShopTransaction>();
-    public DebugEvent<int> OnMoneyChanged = new DebugEvent<int>();
     
     private void Awake()
     {
@@ -38,6 +36,7 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         _inventoryManager = InventoryManager.Instance;
+        _currencyManager = CurrencyManager.Instance;
     }
     
     #region 구매 시스템
@@ -53,9 +52,10 @@ public class ShopManager : MonoBehaviour
         }
         
         int totalPrice = shopItem.GetTotalBuyPrice(quantity);
-        if (!CanAfford(totalPrice))
+        if (!_currencyManager.CanAfford(ECurrencyType.Money, totalPrice))
         {
-            Debug.LogWarning($"돈이 부족합니다. 필요: {totalPrice}, 보유: {_playerMoney}");
+            int currentMoney = _currencyManager.GetCurrencyAmount(ECurrencyType.Money);
+            Debug.LogWarning($"돈이 부족합니다. 필요: {totalPrice}, 보유: {currentMoney}");
             return false;
         }
         
@@ -69,7 +69,7 @@ public class ShopManager : MonoBehaviour
         if (shopItem.TryPurchase(quantity))
         {
             await _inventoryManager.TryAddItem(itemType, quantity);
-            DeductMoney(totalPrice);
+            await _currencyManager.TrySpendCurrency(ECurrencyType.Money, totalPrice);
             
             var transaction = new ShopTransaction(ETransactionType.Buy, itemType, quantity, shopItem.BuyPrice, _shopData.shopType);
             OnItemPurchased.Invoke(transaction);
@@ -117,7 +117,7 @@ public class ShopManager : MonoBehaviour
         if (await _inventoryManager.TryRemoveItem(itemType, quantity))
         {
             int totalPrice = shopItem.GetTotalSellPrice(quantity);
-            AddMoney(totalPrice);
+            await _currencyManager.TryEarnCurrency(ECurrencyType.Money, totalPrice);
             
             var transaction = new ShopTransaction(ETransactionType.Sell, itemType, quantity, shopItem.SellPrice, _shopData.shopType);
             OnItemSold.Invoke(transaction);
@@ -152,28 +152,25 @@ public class ShopManager : MonoBehaviour
     }
     #endregion
     
-    #region 돈 관리
+    #region 재화 관리
     public bool CanAfford(int amount)
     {
-        return _playerMoney >= amount;
+        return _currencyManager?.CanAfford(ECurrencyType.Money, amount) ?? false;
     }
     
-    public void AddMoney(int amount)
+    public bool CanAfford(ECurrencyType currencyType, int amount)
     {
-        if (amount > 0)
-        {
-            _playerMoney += amount;
-            OnMoneyChanged.Invoke(_playerMoney);
-        }
+        return _currencyManager?.CanAfford(currencyType, amount) ?? false;
     }
     
-    public void DeductMoney(int amount)
+    public int GetPlayerMoney()
     {
-        if (amount > 0 && _playerMoney >= amount)
-        {
-            _playerMoney -= amount;
-            OnMoneyChanged.Invoke(_playerMoney);
-        }
+        return _currencyManager?.GetCurrencyAmount(ECurrencyType.Money) ?? 0;
+    }
+    
+    public int GetPlayerCurrency(ECurrencyType currencyType)
+    {
+        return _currencyManager?.GetCurrencyAmount(currencyType) ?? 0;
     }
     #endregion
     

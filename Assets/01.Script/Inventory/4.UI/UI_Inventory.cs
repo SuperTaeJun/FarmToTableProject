@@ -12,7 +12,6 @@ public class UI_Inventory : UI_Popup
 
     [Header("정보 패널")]
     [SerializeField] private TextMeshProUGUI _slotCountText;
-    [SerializeField] private TextMeshProUGUI _inventoryTypeText;
 
     private List<UI_InventorySlot> _slots = new List<UI_InventorySlot>();
     private InventoryManager _inventoryManager;
@@ -68,16 +67,6 @@ public class UI_Inventory : UI_Popup
         if (_inventoryManager != null)
         {
             _inventoryManager.SwitchInventory(inventoryType);
-            UpdateInventoryTypeDisplay();
-        }
-    }
-
-    private void UpdateInventoryTypeDisplay()
-    {
-        if (_inventoryTypeText != null && _inventoryManager != null)
-        {
-            string typeName = _inventoryManager.CurrentInventoryType == EInventoryType.Player ? "플레이어 인벤토리" : "차량 인벤토리";
-            _inventoryTypeText.text = typeName;
         }
     }
 
@@ -87,7 +76,6 @@ public class UI_Inventory : UI_Popup
 
         // 슬롯 정보 업데이트
         UpdateSlotCountDisplay();
-        UpdateInventoryTypeDisplay();
 
         // 모든 슬롯 초기화
         foreach (var slot in _slots)

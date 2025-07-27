@@ -83,8 +83,14 @@ public class Player : MonoBehaviour
         _characterController.gameObject.SetActive(true);
     }
 
-    private void TryGenerateChunk()
+    private async void TryGenerateChunk()
     {
+        bool canBuy  = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
+        if (canBuy == false)
+        {
+            UiController.ActiveDialogBox(EPlayerUiType.LackOfMoney);
+            return;
+        }
 
         Vector3 pos = transform.position;
 

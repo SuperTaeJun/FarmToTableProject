@@ -28,6 +28,7 @@ public class UI_Shop : UI_Popup
     [SerializeField] private GameObject _sellItemSlotPrefab;
     
     private ShopManager _shopManager;
+    private CurrencyManager _currencyManager;
     private List<UI_ShopItemSlot> _buySlots = new List<UI_ShopItemSlot>();
     private List<UI_ShopItemSlot> _sellSlots = new List<UI_ShopItemSlot>();
     private EShopCategory _currentCategory = EShopCategory.All;
@@ -62,12 +63,17 @@ public class UI_Shop : UI_Popup
     private void Start()
     {
         _shopManager = ShopManager.Instance;
+        _currencyManager = CurrencyManager.Instance;
         
         if (_shopManager != null)
         {
             _shopManager.OnItemPurchased.AddListener(OnItemPurchased);
             _shopManager.OnItemSold.AddListener(OnItemSold);
-            _shopManager.OnMoneyChanged.AddListener(UpdateMoneyDisplay);
+        }
+        
+        if (_currencyManager != null)
+        {
+            _currencyManager.OnCurrencyChanged.AddListener(OnCurrencyChanged);
         }
     }
     
@@ -81,7 +87,7 @@ public class UI_Shop : UI_Popup
         
         UpdateShopInfo();
         SwitchTab(true); // 기본적으로 구매 탭 열기
-        UpdateMoneyDisplay(_shopManager.PlayerMoney);
+        UpdateMoneyDisplay();
     }
     
     private void UpdateShopInfo()
@@ -238,10 +244,19 @@ public class UI_Shop : UI_Popup
         // 판매 효과나 알림 표시
     }
     
-    private void UpdateMoneyDisplay(int money)
+    private void OnCurrencyChanged(ECurrencyType currencyType, int oldAmount, int newAmount)
     {
-        if (_playerMoneyText != null)
+        if (currencyType == ECurrencyType.Money)
         {
+            UpdateMoneyDisplay();
+        }
+    }
+    
+    private void UpdateMoneyDisplay()
+    {
+        if (_playerMoneyText != null && _currencyManager != null)
+        {
+            int money = _currencyManager.GetCurrencyAmount(ECurrencyType.Money);
             _playerMoneyText.text = $"💰 {money:N0}";
         }
     }
@@ -258,7 +273,11 @@ public class UI_Shop : UI_Popup
         {
             _shopManager.OnItemPurchased.RemoveListener(OnItemPurchased);
             _shopManager.OnItemSold.RemoveListener(OnItemSold);
-            _shopManager.OnMoneyChanged.RemoveListener(UpdateMoneyDisplay);
+        }
+        
+        if (_currencyManager != null)
+        {
+            _currencyManager.OnCurrencyChanged.RemoveListener(OnCurrencyChanged);
         }
         
         if (_closeButton != null)

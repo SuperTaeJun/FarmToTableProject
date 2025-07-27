@@ -3,11 +3,11 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item Database", menuName = "Inventory/Item Database")]
-public class ItemDatabase : ScriptableObject
+public class SO_ItemDatabase : ScriptableObject
 {
-    [SerializeField] private List<ItemData> itemDataList = new List<ItemData>();
+    [SerializeField] private List<SO_ItemData> itemDataList = new List<SO_ItemData>();
     
-    private Dictionary<EItemType, ItemData> itemDataDictionary;
+    private Dictionary<EItemType, SO_ItemData> itemDataDictionary;
     
     private void OnEnable()
     {
@@ -16,7 +16,7 @@ public class ItemDatabase : ScriptableObject
     
     private void BuildDictionary()
     {
-        itemDataDictionary = new Dictionary<EItemType, ItemData>();
+        itemDataDictionary = new Dictionary<EItemType, SO_ItemData>();
         
         foreach (var itemData in itemDataList)
         {
@@ -27,12 +27,12 @@ public class ItemDatabase : ScriptableObject
         }
     }
     
-    public ItemData GetItemData(EItemType itemType)
+    public SO_ItemData GetItemData(EItemType itemType)
     {
         if (itemDataDictionary == null)
             BuildDictionary();
             
-        return itemDataDictionary.TryGetValue(itemType, out ItemData data) ? data : null;
+        return itemDataDictionary.TryGetValue(itemType, out SO_ItemData data) ? data : null;
     }
     
     public Sprite GetItemIcon(EItemType itemType)
@@ -65,12 +65,12 @@ public class ItemDatabase : ScriptableObject
         return itemData?.isStackable ?? false;
     }
     
-    public List<ItemData> GetAllItems()
+    public List<SO_ItemData> GetAllItems()
     {
         return itemDataList.ToList();
     }
     
-    public void AddItemData(ItemData itemData)
+    public void AddItemData(SO_ItemData itemData)
     {
         if (itemData != null && !itemDataList.Contains(itemData))
         {
@@ -79,7 +79,7 @@ public class ItemDatabase : ScriptableObject
         }
     }
     
-    public void RemoveItemData(ItemData itemData)
+    public void RemoveItemData(SO_ItemData itemData)
     {
         if (itemDataList.Contains(itemData))
         {
@@ -99,7 +99,7 @@ public class ItemDatabase : ScriptableObject
         {
             if (!existingTypes.Contains(itemType))
             {
-                var newItemData = CreateInstance<ItemData>();
+                var newItemData = CreateInstance<SO_ItemData>();
                 newItemData.itemType = itemType;
                 newItemData.itemName = itemType.ToString();
                 newItemData.name = $"ItemData_{itemType}";

@@ -67,3 +67,67 @@ public class DebugEvent
         return result;
     }
 }
+
+public class DebugEvent<T1, T2>
+{
+    private readonly List<Action<T1, T2>> listeners = new List<Action<T1, T2>>();
+
+    public void AddListener(Action<T1, T2> listener)
+    {
+        if (!listeners.Contains(listener))
+        {
+            listeners.Add(listener);
+            Debug.Log($"[DebugEvent] Listener added: {listener.Method.DeclaringType}.{listener.Method.Name}");
+        }
+    }
+
+    public void RemoveListener(Action<T1, T2> listener)
+    {
+        if (listeners.Contains(listener))
+        {
+            listeners.Remove(listener);
+            Debug.Log($"[DebugEvent] Listener removed: {listener.Method.DeclaringType}.{listener.Method.Name}");
+        }
+    }
+
+    public void Invoke(T1 param1, T2 param2)
+    {
+        Debug.Log($"[DebugEvent] Invoked with parameters: {param1}, {param2}");
+        foreach (var listener in listeners)
+        {
+            listener.Invoke(param1, param2);
+        }
+    }
+}
+
+public class DebugEvent<T1, T2, T3>
+{
+    private readonly List<Action<T1, T2, T3>> listeners = new List<Action<T1, T2, T3>>();
+
+    public void AddListener(Action<T1, T2, T3> listener)
+    {
+        if (!listeners.Contains(listener))
+        {
+            listeners.Add(listener);
+            Debug.Log($"[DebugEvent] Listener added: {listener.Method.DeclaringType}.{listener.Method.Name}");
+        }
+    }
+
+    public void RemoveListener(Action<T1, T2, T3> listener)
+    {
+        if (listeners.Contains(listener))
+        {
+            listeners.Remove(listener);
+            Debug.Log($"[DebugEvent] Listener removed: {listener.Method.DeclaringType}.{listener.Method.Name}");
+        }
+    }
+
+    public void Invoke(T1 param1, T2 param2, T3 param3)
+    {
+        Debug.Log($"[DebugEvent] Invoked with parameters: {param1}, {param2}, {param3}");
+        foreach (var listener in listeners)
+        {
+            listener.Invoke(param1, param2, param3);
+        }
+    }
+}

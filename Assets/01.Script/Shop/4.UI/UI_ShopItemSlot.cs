@@ -80,7 +80,7 @@ public class UI_ShopItemSlot : MonoBehaviour
         // 아이템 아이콘 설정
         if (_itemIcon != null)
         {
-            var itemData = InventoryManager.Instance?.GetComponent<ItemDatabase>()?.GetItemData(_itemType);
+            var itemData = InventoryManager.Instance?.ItemDatabase?.GetItemData(_itemType);
             if (itemData?.icon != null)
             {
                 _itemIcon.sprite = itemData.icon;
@@ -170,7 +170,7 @@ public class UI_ShopItemSlot : MonoBehaviour
     private string GetItemDisplayName()
     {
         // ItemDatabase에서 아이템 이름 가져오기
-        var itemData = InventoryManager.Instance?.GetComponent<ItemDatabase>()?.GetItemData(_itemType);
+        var itemData = InventoryManager.Instance?.ItemDatabase?.GetItemData(_itemType);
         return itemData?.GetDisplayName() ?? _itemType.ToString();
     }
     

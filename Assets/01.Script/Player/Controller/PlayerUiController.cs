@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public enum EPlayerUiType
 {
     Chunk,
+    LackOfMoney
 }
 public class PlayerUiController : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class PlayerUiController : MonoBehaviour
         {
             case EPlayerUiType.Chunk:
                 _dialogText.text = "<Color=red>F</Color>를 눌러\n땅을 구매할까...";
+                break;
+            case EPlayerUiType.LackOfMoney:
+                _dialogText.text = "돈이 부족한거 같아...";
                 break;
         }
     }

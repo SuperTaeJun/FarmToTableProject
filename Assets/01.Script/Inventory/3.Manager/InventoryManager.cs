@@ -8,7 +8,7 @@ public class InventoryManager : MonoBehaviour
 {
     [Header("인벤토리 설정")]
     [SerializeField] private int _maxSlots = 30;
-    [SerializeField] private ItemDatabase _itemDatabase;
+    [SerializeField] private SO_ItemDatabase _itemDatabase;
 
     public static InventoryManager Instance;
     private InventoryRepository _repo;
@@ -20,6 +20,7 @@ public class InventoryManager : MonoBehaviour
     public int UsedSlots => Items.Count;
     public int AvailableSlots => _maxSlots - Items.Count;
     public EInventoryType CurrentInventoryType => _currentInventoryType;
+    public SO_ItemDatabase ItemDatabase => _itemDatabase;
 
     // 인벤토리 이벤트들
     public DebugEvent<InventoryItem> OnItemAdded = new DebugEvent<InventoryItem>();

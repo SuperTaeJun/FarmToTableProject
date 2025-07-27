@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Shop Data", menuName = "Shop/Shop Data")]
-public class ShopData : ScriptableObject
+public class SO_ShopData : ScriptableObject
 {
     [Header("상점 기본 정보")]
     public EShopType shopType;

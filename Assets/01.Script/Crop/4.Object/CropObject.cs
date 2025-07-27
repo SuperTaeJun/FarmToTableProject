@@ -12,6 +12,7 @@ public class CropObject : MonoBehaviour
 
     [SerializeField] GameObject _wateringIndicator;
     [SerializeField] GameObject _harvestIndicator;
+
     void Start()
     {
         InitializeCrop();
@@ -25,7 +26,7 @@ public class CropObject : MonoBehaviour
         _localPosition = WorldManager.Instance.GetLocalPositionInChunk(transform.position, chunkPosition);
         _chunkId = $"{chunkPosition.X}_{chunkPosition.Y}_{chunkPosition.Z}";
 
-        // �۹� ������ ��������
+        // 작물 데이터를 CropsManager에서 불러옴
         _crop = CropsManager.Instance.GetCrop(_chunkId, _localPosition);
 
         if (_crop != null)
@@ -37,7 +38,7 @@ public class CropObject : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"�۹� �����͸� ã�� �� �����ϴ�: {_chunkId}, {_localPosition}");
+            Debug.LogWarning($"작물 데이터를 찾을 수 없습니다: {_chunkId}, {_localPosition}");
         }
     }
 
@@ -58,7 +59,7 @@ public class CropObject : MonoBehaviour
     {
         if (_growthStageObjects == null || _growthStageObjects.Length == 0)
         {
-            Debug.LogWarning("���� �ܰ� ������Ʈ�� �������� �ʾҽ��ϴ�.");
+            Debug.LogWarning("성장 단계 오브젝트가 설정되어 있지 않습니다.");
             return;
         }
 
@@ -71,22 +72,24 @@ public class CropObject : MonoBehaviour
         int stageIndex = (int)stage;
         if (stageIndex < _growthStageObjects.Length && _growthStageObjects[stageIndex] != null)
         {
-            Debug.Log($"���� �ܰ� {stage}�� �����߽��ϴ�.");
+            Debug.Log($"성장 단계 {stage}를 설정했습니다.");
             _growthStageObjects[stageIndex].SetActive(true);
         }
         else
         {
-            Debug.LogWarning($"���� �ܰ� {stage}�� �ش��ϴ� ������Ʈ�� �����ϴ�.");
+            Debug.LogWarning($"성장 단계 {stage}에 해당하는 오브젝트가 존재하지 않습니다.");
         }
     }
+
     private void OnCropHarvested(Crop harvestedCrop)
     {
         if (IsThisCrop(harvestedCrop))
         {
-            _=InventoryManager.Instance.AddCropToInventory(harvestedCrop.Type);
+            _ = InventoryManager.Instance.AddCropToInventory(harvestedCrop.Type);
             Destroy(gameObject);
         }
     }
+
     private void OnCropGrowthUpdated(Crop updatedCrop)
     {
         if (IsThisCrop(updatedCrop))
@@ -96,8 +99,8 @@ public class CropObject : MonoBehaviour
                 _currentStage = updatedCrop.GrowthStage;
                 SetGrowthMesh(_currentStage);
 
-                // �ܰ躰 �α�
-                Debug.Log($"�۹� ����: {_currentStage}");
+                // 성장 단계 로그
+                Debug.Log($"작물 성장 단계: {_currentStage}");
             }
         }
     }
@@ -106,7 +109,7 @@ public class CropObject : MonoBehaviour
     {
         if (IsThisCrop(crop))
         {
-            Debug.Log($"�۹� ���� �ߴ� - ���� �ʿ��մϴ�: {crop.GrowthStage}");
+            Debug.Log($"작물 성장이 멈춤 - 물 주기 필요: {crop.GrowthStage}");
         }
     }
 
@@ -115,7 +118,7 @@ public class CropObject : MonoBehaviour
         if (IsThisCrop(crop))
         {
             ShowNeedsWaterIndicator();
-            Debug.Log($"���� �ʿ��մϴ� - ���� �ܰ�: {crop.GrowthStage}");
+            Debug.Log($"물 주기 필요 - 현재 성장 단계: {crop.GrowthStage}");
         }
     }
 
@@ -124,7 +127,7 @@ public class CropObject : MonoBehaviour
         if (IsThisCrop(crop))
         {
             ShowReadyToHarvestIndicator();
-            Debug.Log($"��Ȯ �غ� �Ϸ�!");
+            Debug.Log($"수확 준비 완료!");
         }
     }
 
@@ -134,7 +137,7 @@ public class CropObject : MonoBehaviour
         {
             ShowWateredEffect();
             HideNeedsWaterIndicator();
-            Debug.Log($"���� �־����ϴ� - �ܰ�: {crop.GrowthStage}");
+            Debug.Log($"물 주기 완료 - 현재 성장 단계: {crop.GrowthStage}");
         }
     }
 
@@ -155,7 +158,7 @@ public class CropObject : MonoBehaviour
 
     private void ShowWateredEffect()
     {
-        // �� �� ȿ�� (��ƼŬ, ���� ��)
+        // 물 준 효과 (파티클, 사운드 등)
     }
 
     private void ShowReadyToHarvestIndicator()

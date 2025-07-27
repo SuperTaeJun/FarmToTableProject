@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Inventory/Item Data")]
-public class ItemData : ScriptableObject
+public class SO_ItemData : ScriptableObject
 {
     [Header("Basic Info")]
     public EItemType itemType;
