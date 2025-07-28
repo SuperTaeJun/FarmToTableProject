@@ -7,11 +7,13 @@ using System;
 public class UI_SeedSelect : UI_Popup
 {
     [SerializeField] private List<SeedButtonInfo> Buttons = new List<SeedButtonInfo>();
-
+    [SerializeField] private Button _closeButton;
     private void Start()
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         PlayerFarmingAbility ability = player.GetAbility<PlayerFarmingAbility>();
+
+        _closeButton.onClick.AddListener(Close);
 
         //이벤트 등록
         foreach (var button in Buttons)

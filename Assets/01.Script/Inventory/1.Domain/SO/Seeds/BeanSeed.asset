@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd1d6cab391e3d42b9d284685f5ee88, type: 3}
+  m_Name: BeanSeed
+  m_EditorClassIdentifier: 
+  itemType: 2
+  itemName: "\uCF69\uC528\uC557"
+  description: 
+  icon: {fileID: 21300000, guid: f55e317f1675b1e4da63bbe2cf56c912, type: 3}
+  previewImage: {fileID: 21300000, guid: f55e317f1675b1e4da63bbe2cf56c912, type: 3}
+  maxStackSize: 99
+  isStackable: 1
+  weight: 1
+  sellPrice: 0
+  buyPrice: 0
