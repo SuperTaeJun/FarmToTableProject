@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7cff9d9582a7e4dae016fc7efce202, type: 3}
+  m_Name: SO_ShopData
+  m_EditorClassIdentifier: 
+  shopType: 0
+  shopName: "\uC791\uBB3C \uC0C1"
+  shopDescription: 
+  availableItems:
+  - itemType: 13
+    stock: 0
+    buyPrice: 0
+    sellPrice: 500
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 14
+    stock: 0
+    buyPrice: 0
+    sellPrice: 600
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 13
+    stock: 0
+    buyPrice: 0
+    sellPrice: 255
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 16
+    stock: 0
+    buyPrice: 0
+    sellPrice: 900
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 17
+    stock: 0
+    buyPrice: 0
+    sellPrice: 800
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 18
+    stock: 0
+    buyPrice: 0
+    sellPrice: 500
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 19
+    stock: 0
+    buyPrice: 0
+    sellPrice: 700
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 20
+    stock: 0
+    buyPrice: 0
+    sellPrice: 1500
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 21
+    stock: 0
+    buyPrice: 0
+    sellPrice: 850
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 22
+    stock: 0
+    buyPrice: 0
+    sellPrice: 2000
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 23
+    stock: 0
+    buyPrice: 0
+    sellPrice: 600
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 24
+    stock: 0
+    buyPrice: 0
+    sellPrice: 700
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  - itemType: 25
+    stock: 0
+    buyPrice: 0
+    sellPrice: 1200
+    canBuy: 0
+    canSell: 1
+    hasUnlimitedStock: 0
+  discountRate: 0
+  isOpen: 1

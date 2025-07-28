@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dd1d6cab391e3d42b9d284685f5ee88, type: 3}
-  m_Name: New Item Data
+  m_Name: Onion
   m_EditorClassIdentifier: 
-  itemType: 13
-  itemName: Carrot
-  description: 
-  icon: {fileID: 21300000, guid: d1f377e298b9a9942a041b2fc1f7420f, type: 3}
-  previewImage: {fileID: 21300000, guid: d1f377e298b9a9942a041b2fc1f7420f, type: 3}
+  itemType: 23
+  itemName: "\uC591\uD30C"
+  description: "\uADC0\uC5FD\uAC8C \uC0DD\uAE34 \uAC00"
+  icon: {fileID: 21300000, guid: b876ceef288c0c743b51a4ca4baef86e, type: 3}
+  previewImage: {fileID: 21300000, guid: b876ceef288c0c743b51a4ca4baef86e, type: 3}
   maxStackSize: 99
   isStackable: 1
   weight: 1
-  sellPrice: 0
+  sellPrice: 600
   buyPrice: 0

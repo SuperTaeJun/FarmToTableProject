@@ -76,7 +76,17 @@ public class UI_Shop : UI_Popup
             _currencyManager.OnCurrencyChanged.AddListener(OnCurrencyChanged);
         }
     }
-    
+    public override void Close()
+    {
+        base.Close();
+
+        _buyTabButton.image.color = Color.white;
+        _buyTabPanel.gameObject.SetActive(true);
+
+        _sellTabButton.image.color = Color.white;
+        _sellTabPanel.gameObject.SetActive(false);
+    }
+
     public void OpenShop()
     {
         if (_shopManager == null || _shopManager.ShopData == null)
@@ -110,13 +120,17 @@ public class UI_Shop : UI_Popup
         
         // 탭 버튼 스타일 업데이트 (선택적)
         UpdateTabButtonStyles();
-        
+
+        _buyTabButton.image.color = Color.white;
+        _sellTabButton.image.color = Color.white;
         if (isBuyTab)
         {
+            _buyTabButton.image.color = Color.green;
             RefreshBuyItems();
         }
         else
         {
+            _sellTabButton.image.color = Color.green;
             RefreshSellItems();
         }
     }
@@ -257,14 +271,8 @@ public class UI_Shop : UI_Popup
         if (_playerMoneyText != null && _currencyManager != null)
         {
             int money = _currencyManager.GetCurrencyAmount(ECurrencyType.Money);
-            _playerMoneyText.text = $"💰 {money:N0}";
+            _playerMoneyText.text = $"{money:N0}원";
         }
-    }
-    
-    public new void Open(System.Action callback = null)
-    {
-        base.Open(callback);
-        OpenShop();
     }
     
     private void OnDestroy()

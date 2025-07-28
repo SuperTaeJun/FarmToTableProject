@@ -11,12 +11,6 @@ public class UI_ShopItemSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceText;
     [SerializeField] private TextMeshProUGUI _quantityText;
     [SerializeField] private Button _actionButton;
-    [SerializeField] private TextMeshProUGUI _actionButtonText;
-    
-    [Header("수량 조절")]
-    [SerializeField] private Button _decreaseButton;
-    [SerializeField] private Button _increaseButton;
-    [SerializeField] private TextMeshProUGUI _selectedQuantityText;
     
     private EItemType _itemType;
     private int _selectedQuantity = 1;
@@ -35,11 +29,6 @@ public class UI_ShopItemSlot : MonoBehaviour
         if (_actionButton != null)
             _actionButton.onClick.AddListener(OnActionButtonClicked);
             
-        if (_decreaseButton != null)
-            _decreaseButton.onClick.AddListener(DecreaseQuantity);
-            
-        if (_increaseButton != null)
-            _increaseButton.onClick.AddListener(IncreaseQuantity);
     }
     
     public void SetupBuySlot(ShopItem shopItem, Action<EItemType, int> onBuyClicked)
@@ -52,8 +41,6 @@ public class UI_ShopItemSlot : MonoBehaviour
         
         SetupSlotUI();
         
-        if (_actionButtonText != null)
-            _actionButtonText.text = "구매";
     }
     
     public void SetupSellSlot(InventoryItem inventoryItem, int sellPrice, Action<EItemType, int> onSellClicked)
@@ -66,11 +53,9 @@ public class UI_ShopItemSlot : MonoBehaviour
         
         SetupSlotUI();
         
-        if (_actionButtonText != null)
-            _actionButtonText.text = "판매";
             
         if (_quantityText != null)
-            _quantityText.text = $"보유: {inventoryItem.Quantity}";
+            _quantityText.text = $"{inventoryItem.Quantity}";
     }
     
     private void SetupSlotUI()
@@ -108,22 +93,8 @@ public class UI_ShopItemSlot : MonoBehaviour
         if (_priceText != null)
         {
             int totalPrice = _unitPrice * _selectedQuantity;
-            string pricePrefix = _isBuyMode ? "구매가: " : "판매가: ";
-            _priceText.text = $"{pricePrefix}{totalPrice:N0}원";
+            _priceText.text = $"{totalPrice:N0}원";
         }
-        
-        // 선택된 수량 표시
-        if (_selectedQuantityText != null)
-        {
-            _selectedQuantityText.text = _selectedQuantity.ToString();
-        }
-        
-        // 버튼 활성화/비활성화
-        if (_decreaseButton != null)
-            _decreaseButton.interactable = _selectedQuantity > 1;
-            
-        if (_increaseButton != null)
-            _increaseButton.interactable = _selectedQuantity < _maxQuantity;
             
         // 구매/판매 버튼 활성화 체크
         if (_actionButton != null)
@@ -144,24 +115,6 @@ public class UI_ShopItemSlot : MonoBehaviour
         }
     }
     
-    private void DecreaseQuantity()
-    {
-        if (_selectedQuantity > 1)
-        {
-            _selectedQuantity--;
-            UpdateUI();
-        }
-    }
-    
-    private void IncreaseQuantity()
-    {
-        if (_selectedQuantity < _maxQuantity)
-        {
-            _selectedQuantity++;
-            UpdateUI();
-        }
-    }
-    
     private void OnActionButtonClicked()
     {
         _onActionClicked?.Invoke(_itemType, _selectedQuantity);
@@ -178,11 +131,5 @@ public class UI_ShopItemSlot : MonoBehaviour
     {
         if (_actionButton != null)
             _actionButton.onClick.RemoveListener(OnActionButtonClicked);
-            
-        if (_decreaseButton != null)
-            _decreaseButton.onClick.RemoveListener(DecreaseQuantity);
-            
-        if (_increaseButton != null)
-            _increaseButton.onClick.RemoveListener(IncreaseQuantity);
     }
 }

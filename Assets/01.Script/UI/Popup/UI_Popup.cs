@@ -6,7 +6,7 @@ public class UI_Popup : MonoBehaviour
 {
     public Action _closeCallback;
 
-    public void Open(Action callback = null)
+    public virtual void Open(Action callback = null)
     {
         _closeCallback = callback;
         Cursor.lockState = CursorLockMode.None;
@@ -18,7 +18,7 @@ public class UI_Popup : MonoBehaviour
         gameObject.transform.DOScale(1f, 0.2f).SetEase(Ease.OutCirc).SetUpdate(true);
     }
 
-    public void Close()
+    public virtual void Close()
     {
         _closeCallback?.Invoke();
 

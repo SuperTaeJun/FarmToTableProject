@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd1d6cab391e3d42b9d284685f5ee88, type: 3}
+  m_Name: Carrot
+  m_EditorClassIdentifier: 
+  itemType: 13
+  itemName: "\uB2F9\uADFC"
+  description: "\uADC0\uC5FD\uAC8C \uC0DD\uAE34 \uB2F9\uADFC"
+  icon: {fileID: 21300000, guid: d1f377e298b9a9942a041b2fc1f7420f, type: 3}
+  previewImage: {fileID: 21300000, guid: d1f377e298b9a9942a041b2fc1f7420f, type: 3}
+  maxStackSize: 99
+  isStackable: 1
+  weight: 1
+  sellPrice: 500
+  buyPrice: 0

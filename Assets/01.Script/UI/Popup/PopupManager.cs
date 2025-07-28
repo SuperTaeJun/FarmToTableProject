@@ -47,26 +47,6 @@ public class PopupManager : MonoBehaviour
         PopUpOpen(popupType.ToString(), callBack);
         OnPopupStateChanged?.Invoke(true);
     }
-    
-    public void OpenInventory(EInventoryType inventoryType = EInventoryType.Player, Action callBack = null)
-    {
-        var inventoryPopup = OpenPopup<UI_Inventory>(EPopupType.UI_InventoryPopup, callBack);
-        if (inventoryPopup != null)
-        {
-            inventoryPopup.OpenInventory(inventoryType);
-        }
-        OnPopupStateChanged?.Invoke(true);
-    }
-    
-    public void OpenShop(Action callBack = null)
-    {
-        var shopPopup = OpenPopup<UI_Shop>(EPopupType.UI_ShopPopup, callBack);
-        if (shopPopup != null)
-        {
-            shopPopup.OpenShop();
-        }
-        OnPopupStateChanged?.Invoke(true);
-    }
 
     public void PopUpOpen(string popupName, Action closeCallback)
     {

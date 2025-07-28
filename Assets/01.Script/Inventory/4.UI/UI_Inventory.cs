@@ -62,14 +62,6 @@ public class UI_Inventory : UI_Popup
         }
     }
 
-    public void OpenInventory(EInventoryType inventoryType)
-    {
-        if (_inventoryManager != null)
-        {
-            _inventoryManager.SwitchInventory(inventoryType);
-        }
-    }
-
     private void UpdateUI()
     {
         if (_inventoryManager == null) return;

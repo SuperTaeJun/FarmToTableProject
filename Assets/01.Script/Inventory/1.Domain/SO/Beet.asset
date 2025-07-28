@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd1d6cab391e3d42b9d284685f5ee88, type: 3}
+  m_Name: Beet
+  m_EditorClassIdentifier: 
+  itemType: 14
+  itemName: "\uBE44\uD2B8"
+  description: "\uADC0\uC5FD\uAC8C \uC0DD\uAE34 \uBE44"
+  icon: {fileID: 21300000, guid: a714d1b8baceee54f844c8f3a3f54fe8, type: 3}
+  previewImage: {fileID: 21300000, guid: a714d1b8baceee54f844c8f3a3f54fe8, type: 3}
+  maxStackSize: 99
+  isStackable: 1
+  weight: 1
+  sellPrice: 600
+  buyPrice: 0
