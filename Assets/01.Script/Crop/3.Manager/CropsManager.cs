@@ -2,16 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class CropsManager : MonoBehaviour
 {
-    [Header("������")]
-    [SerializeField] private List<CropPrefabs> _cropPrefabs;
-
     public static CropsManager Instance;
     private CropRepository _repo;
     private Dictionary<string, Crop> _crops = new Dictionary<string, Crop>();
     public Dictionary<string, Crop> Crops => _crops;
+    
+    // Addressables 캐시
+    private Dictionary<ECropType, GameObject> _cachedCropPrefabs = new Dictionary<ECropType, GameObject>();
 
     [Header("Crop Data")]
     [SerializeField] private List<SO_Crop> _cropDataList;
@@ -60,6 +61,7 @@ public class CropsManager : MonoBehaviour
 
     private async void Start()
     {
+        await PreloadAllCropPrefabs();
         await LoadAllCrops();
         StartGrowthUpdate();
     }
@@ -83,8 +85,12 @@ public class CropsManager : MonoBehaviour
             _crops[cropKey] = crop;
             Vector3 worldPos = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkId, crop.Position);
 
-            GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == crop.Type).Prefab, gameObject.transform);
-            cropObject.transform.position = worldPos;
+            GameObject prefab = GetCropPrefab(crop.Type);
+            if (prefab != null)
+            {
+                GameObject cropObject = GameObject.Instantiate(prefab, gameObject.transform);
+                cropObject.transform.position = worldPos;
+            }
         }
     }
 
@@ -110,7 +116,14 @@ public class CropsManager : MonoBehaviour
 
         var newCrop = new Crop(cropType, chunkId, localPos);
         _crops[cropKey] = newCrop;
-        GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == cropType).Prefab, gameObject.transform);
+        GameObject prefab = GetCropPrefab(cropType);
+        if (prefab == null)
+        {
+            Debug.LogError($"농작물 프리팹을 찾을 수 없습니다: {cropType}");
+            return;
+        }
+        
+        GameObject cropObject = GameObject.Instantiate(prefab, gameObject.transform);
         cropObject.transform.position = worldPos;
         await _repo.SaveSingleCrop(newCrop);
         OnCropPlanted.Invoke(newCrop);
@@ -166,6 +179,42 @@ public class CropsManager : MonoBehaviour
     public SO_Crop GetCropData(ECropType cropType)
     {
         return _cropDataDict.TryGetValue(cropType, out SO_Crop cropData) ? cropData : null;
+    }
+    
+    private async Task PreloadAllCropPrefabs()
+    {
+        Debug.Log("농작물 프리팹 사전 로딩 시작...");
+        
+        foreach (ECropType cropType in System.Enum.GetValues(typeof(ECropType)))
+        {
+            try
+            {
+                string address = $"Crop_{cropType}";
+                var handle = Addressables.LoadAssetAsync<GameObject>(address);
+                GameObject prefab = await handle.Task;
+                
+                if (prefab != null)
+                {
+                    _cachedCropPrefabs[cropType] = prefab;
+                    Debug.Log($"농작물 프리팹 로드 완료: {cropType}");
+                }
+                else
+                {
+                    Debug.LogWarning($"농작물 프리팹을 찾을 수 없습니다: {address}");
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"농작물 프리팹 로드 실패: {cropType} - {e.Message}");
+            }
+        }
+        
+        Debug.Log($"농작물 프리팹 사전 로딩 완료: {_cachedCropPrefabs.Count}개");
+    }
+    
+    private GameObject GetCropPrefab(ECropType cropType)
+    {
+        return _cachedCropPrefabs.TryGetValue(cropType, out GameObject prefab) ? prefab : null;
     }
     private async void UpdateCropGrowth()
     {
@@ -291,9 +340,3 @@ public class CropsManager : MonoBehaviour
 
 }
 
-[Serializable]
-public struct CropPrefabs
-{
-    public ECropType type;
-    public GameObject Prefab;
-}

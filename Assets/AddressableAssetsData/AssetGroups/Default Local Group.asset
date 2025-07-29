@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_GUID: fabf2358eafcb1f4a920c8b0e994d4cd
+  m_SerializeEntries:
+  - m_GUID: 1a658a3d70fa26d449315cadf2af69b1
+    m_Address: Crop_Corn
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26eeb2296bae8984484c608a2aeb7c38
+    m_Address: Crop_Chilli
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51a379a00391c2d44a1c4196cd93b0df
+    m_Address: Crop_Watermelon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65d9c81fef2541e4899e55a9c28826e8
+    m_Address: Crop_Onion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78125d7fa9cd95e41a74362bd8bbe081
+    m_Address: Crop_Pepper
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82975e9fec1437f47b111f84e7755682
+    m_Address: Crop_Carrot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86a4f4ede228fa24b9b8d2c81abf39c8
+    m_Address: Crop_Pumkin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86de88e82f5244d428b6f72e26c9e2ca
+    m_Address: Crop_Bean
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 892698b7b7544d045a16172a9bf02226
+    m_Address: Crop_Cucumber
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca5c508a4d7556146afd8eebdda8ad6f
+    m_Address: Crop_Broccoli
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf2f893fce1868147b21c7470d12e94b
+    m_Address: Crop_Beet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d370173dc602f3d43abe8990f8ffb5f7
+    m_Address: Crop_Asparagus
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e13fee73d4259a34ca2c7294ce944eef
+    m_Address: Crop_Eggplant
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 20bc0848db085a142876aced9fef9442, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f6c6dc63a1263094b92e10d7eda9da60, type: 2}
+    - {fileID: 11400000, guid: c557ec6d58a64784da26b397ced93893, type: 2}
