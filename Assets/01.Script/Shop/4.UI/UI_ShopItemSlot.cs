@@ -117,7 +117,8 @@ public class UI_ShopItemSlot : MonoBehaviour
     
     private void OnActionButtonClicked()
     {
-        _onActionClicked?.Invoke(_itemType, _selectedQuantity);
+        // 구매/판매 모드 모두 최대 수량을 전달 (정보 패널에서 수량 조절하기 위해)
+        _onActionClicked?.Invoke(_itemType, _maxQuantity);
     }
     
     private string GetItemDisplayName()

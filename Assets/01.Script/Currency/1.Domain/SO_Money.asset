@@ -21,4 +21,4 @@ MonoBehaviour:
   maxAmount: 999999
   canGoNegative: 0
   displayFormat: '{0:N0}'
-  currencySymbol: G
+  currencySymbol: "\uC6D0"

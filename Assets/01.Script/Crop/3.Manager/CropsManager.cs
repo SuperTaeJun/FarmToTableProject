@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CropsManager : MonoBehaviour
 {
-    [Header("ÇÁ¸®ÆÕ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private List<CropPrefabs> _cropPrefabs;
 
     public static CropsManager Instance;
@@ -14,20 +14,20 @@ public class CropsManager : MonoBehaviour
     public Dictionary<string, Crop> Crops => _crops;
 
     [Header("Growth Settings")]
-    [SerializeField] private float _baseGrowthRate = 360f; // ±âº» ¼ºÀå·ü (½Ã°£´ç)
+    [SerializeField] private float _baseGrowthRate = 360f; // ï¿½âº» ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½Ã°ï¿½ï¿½ï¿½)
 
-    //ÇÃ·¹ÀÌ¾î°¡ È£ÃâÇÏ¸é ¹ßµ¿s
+    //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ È£ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ßµï¿½s
     public DebugEvent<Crop> OnCropPlanted = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropHarvested = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropWatered = new DebugEvent<Crop>();
 
-    //ÀÏÁ¤½Ã°£¸¶´Ù ¼ºÀå ¾÷µ¥ÀÌÆ® , ¹°¾øÀ¸¸é ¼ºÀå ½ºÅ¾
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® , ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¾
     public DebugEvent<Crop> OnCropGrowthUpdated = new DebugEvent<Crop>();
-    public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>(); // ¼ºÀå Áß´Ü
-    
-    // ³óÀÛ¹°ÇÑÅ× º¸³»´Â ÀÌº¥Æ® ÀÌº¥Æ®¿¡µû¶ó ÀÎµðÄÉÀÌÅÍ ¿Â¿ÀÇÁ
-    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // ¹°ÀÌ ÇÊ¿äÇÒ ¶§
-    public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>(); // ¼öÈ® ÁØºñµÊ
+    public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½
+
+    // ï¿½ï¿½ï¿½Û¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½Ìºï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¿ï¿½ï¿½ï¿½
+    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½
+    public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>(); // ï¿½ï¿½È® ï¿½Øºï¿½ï¿½
 
     private void Awake()
     {
@@ -69,20 +69,26 @@ public class CropsManager : MonoBehaviour
             _crops[cropKey] = crop;
             Vector3 worldPos = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkId, crop.Position);
 
-            GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == crop.Type).Prefab,gameObject.transform);
+            GameObject cropObject = GameObject.Instantiate(_cropPrefabs.Find((t) => t.type == crop.Type).Prefab, gameObject.transform);
             cropObject.transform.position = worldPos;
         }
     }
 
     public async Task PlantCrop(ECropType cropType, string chunkId, Vector3 worldPos)
     {
+
+        if (!InventoryManager.Instance.HasSeed(cropType)) return;
+        bool canUse = await InventoryManager.Instance.TryUseSeed(cropType);
+        if (!canUse) return;
+
+
         Debug.Log(chunkId + "_" + worldPos);
 
         Chunk currentChunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPos);
         Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(worldPos, currentChunk.Position);
         string cropKey = GetCropKey(chunkId, localPos);
 
-        // ÀÌ¹Ì ÇØ´ç À§Ä¡¿¡ ÀÛ¹°ÀÌ ÀÖ´ÂÁö È®ÀÎ
+        // ï¿½Ì¹ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Û¹ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (_crops.ContainsKey(cropKey))
         {
             return;
@@ -140,7 +146,7 @@ public class CropsManager : MonoBehaviour
 
     private void StartGrowthUpdate()
     {
-        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f); // 1ºÐ¸¶´Ù ¼ºÀå ¾÷µ¥ÀÌÆ®
+        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f); // 1ï¿½Ð¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     }
     private async void UpdateCropGrowth()
     {
@@ -151,38 +157,38 @@ public class CropsManager : MonoBehaviour
             if (crop.GrowthStage == ECropGrowthStage.Harvest)
                 continue;
 
-            // ¾¾¾Ñ ´Ü°è´Â Ç×»ó ¼ºÀå °¡´É, ´Ù¸¥ ´Ü°è´Â ¹°ÀÌ ÇÊ¿ä
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ù¸ï¿½ ï¿½Ü°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
             if (crop.GrowthStage != ECropGrowthStage.Seed && !crop.IsWateredForCurrentStage())
             {
-                OnCropGrowthStopped.Invoke(crop); // ¼ºÀå Áß´Ü ÀÌº¥Æ®
-                OnCropNeedsWater.Invoke(crop); // ¹° ÇÊ¿ä ÀÌº¥Æ®
-                continue; // ¼ºÀå ¾÷µ¥ÀÌÆ® °Ç³Ê¶Ù±â
+                OnCropGrowthStopped.Invoke(crop); // ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½ ï¿½Ìºï¿½Æ®
+                OnCropNeedsWater.Invoke(crop); // ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½Ìºï¿½Æ®
+                continue; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ç³Ê¶Ù±ï¿½
             }
 
             var previousStage = crop.GrowthStage;
-            crop.UpdateGrowth(_baseGrowthRate / 3600f); // ÃÊ ´ÜÀ§·Î °è»ê (1½Ã°£ = 3600ÃÊ)
+            crop.UpdateGrowth(_baseGrowthRate / 3600f); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (1ï¿½Ã°ï¿½ = 3600ï¿½ï¿½)
             cropsToUpdate.Add(crop);
 
-            // ¼ºÀå ´Ü°è°¡ º¯°æµÇ¾úÀ¸¸é ÀÌº¥Æ® ¹ß»ý
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°è°¡ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ß»ï¿½
             if (previousStage != crop.GrowthStage)
             {
                 OnCropGrowthUpdated.Invoke(crop);
 
                 if (crop.GrowthStage == ECropGrowthStage.Harvest)
                 {
-                    // ¼öÈ® °¡´É »óÅÂ
+                    // ï¿½ï¿½È® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     OnCropReadyToHarvest.Invoke(crop);
                 }
                 else if (crop.GrowthStage == ECropGrowthStage.Vegetative ||
                          crop.GrowthStage == ECropGrowthStage.Mature)
                 {
-                    // Vegetative³ª Mature ´Ü°è¿¡ µµ´ÞÇÏ¸é ¹°ÀÌ ÇÊ¿ä
+                    // Vegetativeï¿½ï¿½ Mature ï¿½Ü°è¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
                     OnCropNeedsWater.Invoke(crop);
                 }
             }
         }
 
-        // ¼ºÀåÀÌ ¾÷µ¥ÀÌÆ®µÈ ÀÛ¹°µéÀ» DB¿¡ ÀúÀå
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Û¹ï¿½ï¿½ï¿½ï¿½ï¿½ DBï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var updatedChunks = new HashSet<string>();
         foreach (var crop in cropsToUpdate)
         {
@@ -204,22 +210,22 @@ public class CropsManager : MonoBehaviour
             return;
         }
 
-        // ¾¾¾Ñ ´Ü°è³ª ¼öÈ® ´Ü°è¿¡¼­´Â ¹°À» ÁÙ ¼ö ¾øÀ½
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°è³ª ï¿½ï¿½È® ï¿½Ü°è¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (crop.GrowthStage == ECropGrowthStage.Seed ||
             crop.GrowthStage == ECropGrowthStage.Harvest)
         {
-            Debug.Log("ÀÌ ´Ü°è¿¡¼­´Â ¹°À» ÁÙ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ ï¿½Ü°è¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
-        // ÀÌ¹Ì ¹°À» ÁÖ¾ú´ÂÁö È®ÀÎ
+        // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (crop.IsWateredForCurrentStage())
         {
-            Debug.Log("ÀÌ¹Ì ÀÌ ´Ü°è¿¡¼­ ¹°À» ÁÖ¾ú½À´Ï´Ù.");
+            Debug.Log("ï¿½Ì¹ï¿½ ï¿½ï¿½ ï¿½Ü°è¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
-        crop.WaterCurrentStage(); // ÇöÀç ´Ü°è¿¡ ¹° ÁÖ±â
+        crop.WaterCurrentStage(); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°è¿¡ ï¿½ï¿½ ï¿½Ö±ï¿½
         await _repo.WaterCrop(chunkId, localPosition);
         OnCropWatered.Invoke(crop);
     }
@@ -233,45 +239,18 @@ public class CropsManager : MonoBehaviour
         CancelInvoke(nameof(UpdateCropGrowth));
     }
 
-    //¿ÜºÎ °ø°³ ¸Þ¼­µå
+    //ï¿½Üºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     public Crop GetCropAtWorldPosition(Vector3 worldPosition)
     {
-        // ¿ùµå Æ÷Áö¼ÇÀ» Ã»Å© ID¿Í ·ÎÄÃ Æ÷Áö¼ÇÀ¸·Î º¯È¯
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã»Å© IDï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         string chunkId = WorldManager.GetChunkId(worldPosition);
         Chunk currentChunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPosition);
         Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, currentChunk.Position);
 
-        // ±âÁ¸ GetCrop ¸Þ¼­µå »ç¿ë
+        // ï¿½ï¿½ï¿½ï¿½ GetCrop ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         return GetCrop(chunkId, localPos);
     }
 
-    // Ãß°¡·Î ÀÛ¹° »óÅÂ¸¦ È®ÀÎÇÏ´Â À¯Æ¿¸®Æ¼ ¸Þ¼­µåµéµµ ¸¸µé¸é ÁÁÀ» °Í °°¾Æ¿ä
-    public bool CanPlantAtWorldPosition(Vector3 worldPosition)
-    {
-        // ÇØ´ç À§Ä¡¿¡ ÀÌ¹Ì ÀÛ¹°ÀÌ ÀÖ´ÂÁö È®ÀÎ
-        var existingCrop = GetCropAtWorldPosition(worldPosition);
-        if (existingCrop != null) return false;
-
-        // ºí·° Å¸ÀÔ È®ÀÎ (ÈëÀÌ³ª ÀÜµðÀÎÁö)
-        EBlockType blockType = WorldManager.Instance.GetBlockType(worldPosition);
-        return blockType == EBlockType.Dirt || blockType == EBlockType.Grass;
-    }
-
-    public bool CanWaterAtWorldPosition(Vector3 worldPosition)
-    {
-        var crop = GetCropAtWorldPosition(worldPosition);
-        if (crop == null) return false;
-
-        return crop.GrowthStage != ECropGrowthStage.Seed &&
-               crop.GrowthStage != ECropGrowthStage.Harvest &&
-               !crop.IsWateredForCurrentStage();
-    }
-
-    public bool CanHarvestAtWorldPosition(Vector3 worldPosition)
-    {
-        var crop = GetCropAtWorldPosition(worldPosition);
-        return crop != null && crop.CanHarvest();
-    }
     public ECropGrowthStage? GetCropGrowthStageAtWorldPosition(Vector3 worldPosition)
     {
         var crop = GetCropAtWorldPosition(worldPosition);

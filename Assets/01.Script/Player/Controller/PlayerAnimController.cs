@@ -26,8 +26,8 @@ public class PlayerAnimController : MonoBehaviour
                 break;
 
             case EPlayerMode.Farming:
-                HandleFarmingAnimation();
                 _owner.InputController.SetPlayerMoveInputLock(true);
+                HandleFarmingAnimation();
                 break;
 
             case EPlayerMode.Construction:
@@ -41,9 +41,16 @@ public class PlayerAnimController : MonoBehaviour
         var growthStage = CropsManager.Instance?.GetCropGrowthStageAtWorldPosition(selectedPos);
         switch (growthStage)
         {
-            case null: // 작물이 없음 - 심기
+            case null:
                 if (CanPlantAt(selectedPos))
                 {
+                    ECropType currentCrop = _owner.GetAbility<PlayerFarmingAbility>().CurrentSeed;
+                    if (InventoryManager.Instance.HasSeed(currentCrop) == false)
+                    {
+                        _owner.GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.LackOfSeed);
+                        _owner.InputController.SetPlayerMoveInputLock(false);
+                        return;
+                    }
                     _owner.Animator.SetTrigger("Plant");
                 }
                 else

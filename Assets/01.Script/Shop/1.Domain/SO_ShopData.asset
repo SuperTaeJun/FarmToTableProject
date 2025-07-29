@@ -108,56 +108,56 @@ MonoBehaviour:
     canSell: 1
     hasUnlimitedStock: 0
   - itemType: 0
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 1
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 2
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 3
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 4
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 5
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 6
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1
     canSell: 0
     hasUnlimitedStock: 0
   - itemType: 7
-    stock: 0
+    stock: 99
     buyPrice: 1
     sellPrice: 0
     canBuy: 1

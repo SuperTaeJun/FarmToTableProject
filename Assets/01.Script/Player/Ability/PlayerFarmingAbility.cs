@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerFarmingAbility : PlayerAbility
 {
     private ECropType _currentSeed = ECropType.Carrot;
+    public ECropType CurrentSeed => _currentSeed;
 
     public void SetCurrentSeed(ECropType type)
     {

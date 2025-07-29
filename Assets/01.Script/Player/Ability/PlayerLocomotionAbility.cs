@@ -115,12 +115,12 @@ public class PlayerLocomotionAbility : PlayerAbility
         if (isAtWorldEdge && !_isInMarginZone)
         {
             _isInMarginZone = true;
-            _owner.UiController.ActiveDialogBox(EPlayerUiType.Chunk);
+            _owner.GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.Chunk);
         }
         else if (!isAtWorldEdge && _isInMarginZone)
         {
             _isInMarginZone = false;
-            _owner.UiController.DisActiveDialogBox();
+            _owner.GetAbility<PlayerNotificationAbility>()?.DisActiveDialogBox();
         }
 
         // 이동 가능 여부 체크 (기존 로직)

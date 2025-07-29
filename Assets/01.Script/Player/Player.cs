@@ -16,8 +16,6 @@ public class Player : MonoBehaviour
     public Animator Animator => _animator;
     private PlayerInputController _inputController;
     public PlayerInputController InputController => _inputController;
-    private PlayerUiController _uiController;
-    public PlayerUiController UiController => _uiController;
     private PlayerModeController _modeController;
     public PlayerModeController ModeController => _modeController;
     private PlayerVisualController _visualController;
@@ -30,7 +28,6 @@ public class Player : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _inputController = GetComponent<PlayerInputController>();
-        _uiController = GetComponentInChildren<PlayerUiController>();
         _visualController = GetComponentInChildren<PlayerVisualController>();
     }
 
@@ -88,7 +85,7 @@ public class Player : MonoBehaviour
         bool canBuy  = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
         if (canBuy == false)
         {
-            UiController.ActiveDialogBox(EPlayerUiType.LackOfMoney);
+            GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.LackOfMoney);
             return;
         }
 

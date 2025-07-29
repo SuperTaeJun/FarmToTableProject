@@ -26,13 +26,32 @@ public class UI_Shop : UI_Popup
     [Header("판매 탭")]
     [SerializeField] private Transform _sellItemsParent;
     [SerializeField] private GameObject _sellItemSlotPrefab;
-    
+
+    [Header("아이템 정보 패널 (구매/판매 공통)")]
+    [SerializeField] private Transform _itemInfoParent;
+    [SerializeField] private Button _upButton;
+    [SerializeField] private Button _downButton;
+    [SerializeField] private Button _actionButton;
+    [SerializeField] private Image _itemIcon;
+    [SerializeField] private TextMeshProUGUI _itemNameText;
+    [SerializeField] private TextMeshProUGUI _quantityText;
+    [SerializeField] private TextMeshProUGUI _totalPriceText;
+    [SerializeField] private TextMeshProUGUI _actionButtonText;
+
     private ShopManager _shopManager;
     private CurrencyManager _currencyManager;
     private List<UI_ShopItemSlot> _buySlots = new List<UI_ShopItemSlot>();
     private List<UI_ShopItemSlot> _sellSlots = new List<UI_ShopItemSlot>();
     private EShopCategory _currentCategory = EShopCategory.All;
     private bool _isBuyTabActive = true;
+    
+    // 아이템 선택 관련 변수 (구매/판매 공통)
+    private EItemType _selectedItemType;
+    private int _selectedQuantity = 1;
+    private int _maxQuantity = 0;
+    private int _unitPrice = 0;
+    private bool _hasItemSelected = false;
+    private bool _isBuyMode = true;
     
     private void Awake()
     {
@@ -58,6 +77,16 @@ public class UI_Shop : UI_Popup
             
         if (_materialsCategoryButton != null)
             _materialsCategoryButton.onClick.AddListener(() => SetCategory(EShopCategory.Materials));
+            
+        // 아이템 정보 패널 버튼들
+        if (_upButton != null)
+            _upButton.onClick.AddListener(IncreaseQuantity);
+            
+        if (_downButton != null)
+            _downButton.onClick.AddListener(DecreaseQuantity);
+            
+        if (_actionButton != null)
+            _actionButton.onClick.AddListener(ExecuteAction);
     }
     
     private void Start()
@@ -132,7 +161,10 @@ public class UI_Shop : UI_Popup
         {
             _sellTabButton.image.color = Color.green;
             RefreshSellItems();
+            ClearItemInfo(); // 판매 탭으로 전환할 때 선택 정보 초기화
         }
+        
+        _isBuyMode = isBuyTab;
     }
     
     private void UpdateTabButtonStyles()
@@ -196,7 +228,7 @@ public class UI_Shop : UI_Popup
         
         if (slot != null)
         {
-            slot.SetupBuySlot(shopItem, OnBuyItemClicked);
+            slot.SetupBuySlot(shopItem, OnBuyItemSelected);
             _buySlots.Add(slot);
         }
     }
@@ -211,7 +243,7 @@ public class UI_Shop : UI_Popup
         if (slot != null)
         {
             int sellPrice = _shopManager.GetSellPrice(inventoryItem.ItemType);
-            slot.SetupSellSlot(inventoryItem, sellPrice, OnSellItemClicked);
+            slot.SetupSellSlot(inventoryItem, sellPrice, OnSellItemSelected);
             _sellSlots.Add(slot);
         }
     }
@@ -236,14 +268,22 @@ public class UI_Shop : UI_Popup
         _sellSlots.Clear();
     }
     
-    private async void OnBuyItemClicked(EItemType itemType, int quantity)
+    private void OnBuyItemSelected(EItemType itemType, int maxQuantity)
     {
-        await _shopManager.TryBuyItem(itemType, quantity);
+        // 구매 아이템 선택 시 정보 패널에 표시
+        var shopItem = _shopManager.ShopData?.GetShopItem(itemType);
+        if (shopItem != null)
+        {
+            int buyPrice = shopItem.BuyPrice;
+            SetupItemInfo(itemType, maxQuantity, buyPrice, true);
+        }
     }
     
-    private async void OnSellItemClicked(EItemType itemType, int quantity)
+    private void OnSellItemSelected(EItemType itemType, int maxQuantity)
     {
-        await _shopManager.TrySellItem(itemType, quantity);
+        // 판매 아이템 선택 시 정보 패널에 표시
+        int sellPrice = _shopManager.GetSellPrice(itemType, 1);
+        SetupItemInfo(itemType, maxQuantity, sellPrice, false);
     }
     
     private void OnItemPurchased(ShopTransaction transaction)
@@ -291,4 +331,141 @@ public class UI_Shop : UI_Popup
         if (_closeButton != null)
             _closeButton.onClick.RemoveListener(Close);
     }
+    
+    #region 아이템 정보 시스템 (구매/판매 공통)
+    private void SetupItemInfo(EItemType itemType, int maxQuantity, int unitPrice, bool isBuyMode)
+    {
+        _selectedItemType = itemType;
+        _maxQuantity = maxQuantity;
+        _selectedQuantity = 1;
+        _unitPrice = unitPrice;
+        _hasItemSelected = true;
+        _isBuyMode = isBuyMode;
+        
+        // 아이템 정보 표시
+        var itemData = InventoryManager.Instance?.ItemDatabase?.GetItemData(itemType);
+        
+        if (_itemIcon != null && itemData?.icon != null)
+        {
+            _itemIcon.sprite = itemData.icon;
+            _itemIcon.color = Color.white;
+        }
+        
+        if (_itemNameText != null)
+        {
+            string itemName = itemData?.GetDisplayName() ?? itemType.ToString();
+            _itemNameText.text = itemName;
+        }
+        
+        // 액션 버튼 텍스트 설정
+        if (_actionButtonText != null)
+            _actionButtonText.text = isBuyMode ? "구매" : "판매";
+        
+        // 정보 패널 활성화
+        if (_itemInfoParent != null)
+            _itemInfoParent.gameObject.SetActive(true);
+            
+        UpdateItemInfo();
+    }
+    
+    private void UpdateItemInfo()
+    {
+        if (!_hasItemSelected) return;
+        
+        // 수량 표시
+        if (_quantityText != null)
+        {
+            if (_isBuyMode)
+                _quantityText.text = $"{_selectedQuantity}개";
+            else
+                _quantityText.text = $"{_selectedQuantity} / {_maxQuantity}";
+        }
+        
+        // 총 가격 표시
+        if (_totalPriceText != null)
+        {
+            int totalPrice = _unitPrice * _selectedQuantity;
+            _totalPriceText.text = $"총액: {totalPrice:N0}원";
+        }
+        
+        // 버튼 상태 업데이트
+        if (_upButton != null)
+            _upButton.interactable = _selectedQuantity < _maxQuantity;
+            
+        if (_downButton != null)
+            _downButton.interactable = _selectedQuantity > 1;
+            
+        if (_actionButton != null)
+        {
+            if (_isBuyMode)
+            {
+                // 구매 가능 여부 체크
+                int totalPrice = _unitPrice * _selectedQuantity;
+                bool canAfford = _shopManager.CanAfford(totalPrice);
+                bool hasSpace = InventoryManager.Instance?.CanAddItem(_selectedItemType, _selectedQuantity) ?? false;
+                _actionButton.interactable = canAfford && hasSpace && _selectedQuantity > 0;
+            }
+            else
+            {
+                // 판매 가능 여부 체크
+                _actionButton.interactable = _selectedQuantity > 0 && _selectedQuantity <= _maxQuantity;
+            }
+        }
+    }
+    
+    private void ClearItemInfo()
+    {
+        _hasItemSelected = false;
+        _selectedQuantity = 1;
+        _maxQuantity = 0;
+        _unitPrice = 0;
+        
+        if (_itemInfoParent != null)
+            _itemInfoParent.gameObject.SetActive(false);
+    }
+    
+    private void IncreaseQuantity()
+    {
+        if (_hasItemSelected && _selectedQuantity < _maxQuantity)
+        {
+            _selectedQuantity++;
+            UpdateItemInfo();
+        }
+    }
+    
+    private void DecreaseQuantity()
+    {
+        if (_hasItemSelected && _selectedQuantity > 1)
+        {
+            _selectedQuantity--;
+            UpdateItemInfo();
+        }
+    }
+    
+    private async void ExecuteAction()
+    {
+        if (!_hasItemSelected) return;
+        
+        bool success;
+        if (_isBuyMode)
+        {
+            success = await _shopManager.TryBuyItem(_selectedItemType, _selectedQuantity);
+        }
+        else
+        {
+            success = await _shopManager.TrySellItem(_selectedItemType, _selectedQuantity);
+        }
+        
+        if (success)
+        {
+            // 성공 시 UI 갱신
+            if (_isBuyMode)
+                RefreshBuyItems();
+            else
+                RefreshSellItems();
+                
+            ClearItemInfo();
+        }
+    }
+    #endregion
 }

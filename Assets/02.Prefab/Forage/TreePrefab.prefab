@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 14262423341272486}
   - component: {fileID: 20510990451543633}
   - component: {fileID: 1017814411801863439}
+  - component: {fileID: 2309828956358648407}
   m_Layer: 0
   m_Name: cactus_1_LOD0
   m_TagString: Untagged
@@ -86,6 +87,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2309828956358648407
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249648327669927987}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1673858, y: 1.6193701, z: 1.1673858}
+  m_Center: {x: 0, y: 1.2553903, z: 0}
 --- !u!1 &2412922645729206338
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +119,7 @@ GameObject:
   - component: {fileID: 4536077529189498426}
   - component: {fileID: 766797164021250451}
   - component: {fileID: 7279544690972711079}
+  - component: {fileID: 186979799855593358}
   m_Layer: 0
   m_Name: cactus_1_LOD2
   m_TagString: Untagged
@@ -172,6 +195,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &186979799855593358
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2412922645729206338}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1673858, y: 1.6075422, z: 1.1673858}
+  m_Center: {x: 0, y: 1.2494763, z: 0}
 --- !u!1 &5789794289881988070
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,6 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a640b12ab226c3347815ce12aaa54a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detectRadius: 2
 --- !u!1 &6395759897575188850
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,6 +303,7 @@ GameObject:
   - component: {fileID: 1513451742137029285}
   - component: {fileID: 586330955713088362}
   - component: {fileID: 4893608885900338872}
+  - component: {fileID: 6113462018255688283}
   m_Layer: 0
   m_Name: cactus_1_LOD1
   m_TagString: Untagged
@@ -333,3 +379,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6113462018255688283
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6395759897575188850}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1673858, y: 1.6193701, z: 1.1673858}
+  m_Center: {x: 0, y: 1.2553903, z: 0}
