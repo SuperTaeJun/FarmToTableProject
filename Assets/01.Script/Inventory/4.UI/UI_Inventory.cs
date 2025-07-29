@@ -30,9 +30,6 @@ public class UI_Inventory : UI_Popup
         {
             // 이벤트 구독
             _inventoryManager.OnInventoryChanged.AddListener(UpdateUI);
-            _inventoryManager.OnItemAdded.AddListener(OnItemAdded);
-            _inventoryManager.OnItemRemoved.AddListener(OnItemRemoved);
-            _inventoryManager.OnItemQuantityChanged.AddListener(OnItemQuantityChanged);
             
             InitializeSlots();
             UpdateUI();
@@ -91,45 +88,11 @@ public class UI_Inventory : UI_Popup
         }
     }
 
-    private void OnItemAdded(InventoryItem item)
-    {
-        Debug.Log($"아이템 추가됨: {item.ItemType} x{item.Quantity}");
-        // 필요시 추가 효과나 애니메이션
-    }
-
-    private void OnItemRemoved(InventoryItem item)
-    {
-        Debug.Log($"아이템 제거됨: {item.ItemType} x{item.Quantity}");
-        // 필요시 추가 효과나 애니메이션
-    }
-
-    private void OnItemQuantityChanged(InventoryItem item)
-    {
-        Debug.Log($"아이템 수량 변경됨: {item.ItemType} x{item.Quantity}");
-        // 필요시 추가 효과나 애니메이션
-    }
-
-    public void ShowInventory()
-    {
-        // PopupManager를 통해 열 때는 이미 Open()이 호출됨
-        UpdateUI();
-    }
-
-    // UI_Popup의 Open을 오버라이드하여 추가 초기화 수행
-    public new void Open(System.Action callback = null)
-    {
-        base.Open(callback);
-        ShowInventory();
-    }
-
     private void OnDestroy()
     {
         if (_inventoryManager != null)
         {
             _inventoryManager.OnInventoryChanged.RemoveListener(UpdateUI);
-            _inventoryManager.OnItemAdded.RemoveListener(OnItemAdded);
-            _inventoryManager.OnItemRemoved.RemoveListener(OnItemRemoved);
-            _inventoryManager.OnItemQuantityChanged.RemoveListener(OnItemQuantityChanged);
         }
 
         if (_closeButton != null)

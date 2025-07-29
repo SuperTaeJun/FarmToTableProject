@@ -23,9 +23,6 @@ public class InventoryManager : MonoBehaviour
     public SO_ItemDatabase ItemDatabase => _itemDatabase;
 
     // 인벤토리 이벤트들
-    public DebugEvent<InventoryItem> OnItemAdded = new DebugEvent<InventoryItem>();
-    public DebugEvent<InventoryItem> OnItemRemoved = new DebugEvent<InventoryItem>();
-    public DebugEvent<InventoryItem> OnItemQuantityChanged = new DebugEvent<InventoryItem>();
     public DebugEvent OnInventoryChanged = new DebugEvent();
 
     private void Awake()
@@ -118,7 +115,6 @@ public class InventoryManager : MonoBehaviour
             stackableItem.AddQuantity(quantity);
             if (inventoryType == EInventoryType.Player)
                 await _repo.UpdateItemQuantity(stackableItem.ItemId, stackableItem.Quantity);
-            OnItemQuantityChanged.Invoke(stackableItem);
             OnInventoryChanged.Invoke();
             return true;
         }
@@ -135,7 +131,6 @@ public class InventoryManager : MonoBehaviour
             targetInventory.Add(newItem);
             if (inventoryType == EInventoryType.Player)
                 await _repo.AddItem(newItem);
-            OnItemAdded.Invoke(newItem);
             OnInventoryChanged.Invoke();
             return true;
         }
@@ -165,13 +160,11 @@ public class InventoryManager : MonoBehaviour
                 targetInventory.Remove(item);
                 if (inventoryType == EInventoryType.Player)
                     await _repo.RemoveItem(item.ItemId);
-                OnItemRemoved.Invoke(item);
             }
             else
             {
                 if (inventoryType == EInventoryType.Player)
                     await _repo.UpdateItemQuantity(item.ItemId, item.Quantity);
-                OnItemQuantityChanged.Invoke(item);
             }
             
             OnInventoryChanged.Invoke();
@@ -318,14 +311,6 @@ public class InventoryManager : MonoBehaviour
         if (Instance == this)
         {
             _ = SaveInventory(); // 게임 종료 시 저장
-        }
-    }
-
-    private void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus && Instance == this)
-        {
-            _ = SaveInventory(); // 앱 일시정지 시 저장
         }
     }
 }

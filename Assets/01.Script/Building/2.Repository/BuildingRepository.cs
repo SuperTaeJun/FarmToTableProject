@@ -20,6 +20,7 @@ public class BuildingRepository : FirebaseRepositoryBase
             };
             await docRef.SetAsync(docData);
         }, $"빌딩들 저장 청크 : [{chunkId}]");
+
     }
     public async Task<List<Building>> LoadBuildingByChunk(string chunkId)
     {
