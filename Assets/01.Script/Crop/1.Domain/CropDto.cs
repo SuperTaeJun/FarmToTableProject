@@ -24,10 +24,16 @@ public class CropDto
     public float PositionZ { get; set; }
 
     [FirestoreProperty]
-    public Timestamp PlantedTime { get; set; }
+    public int PlantedDay { get; set; }
 
     [FirestoreProperty]
-    public Timestamp LastWateredTime { get; set; }
+    public int PlantedHour { get; set; }
+
+    [FirestoreProperty]
+    public int LastWateredDay { get; set; }
+
+    [FirestoreProperty]
+    public int LastWateredHour { get; set; }
 
     [FirestoreProperty]
     public bool IsWatered { get; set; }
@@ -35,7 +41,7 @@ public class CropDto
     [FirestoreProperty]
     public float GrowthProgress { get; set; }
 
-    // ´Ü°èº° ¹° ÁÖ±â »óÅÂ Ãß°¡
+    // ï¿½Ü°èº° ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     [FirestoreProperty]
     public bool IsWateredForVegetative { get; set; }
 
@@ -52,10 +58,10 @@ public class CropDto
         PositionX = crop.Position.x;
         PositionY = crop.Position.y;
         PositionZ = crop.Position.z;
-        PlantedTime = Timestamp.FromDateTime(crop.PlantedTime.ToUniversalTime());
-        LastWateredTime = crop.LastWateredTime == DateTime.MinValue ?
-            Timestamp.FromDateTime(DateTime.MinValue.ToUniversalTime()) :
-            Timestamp.FromDateTime(crop.LastWateredTime.ToUniversalTime());
+        PlantedDay = crop.PlantedDay;
+        PlantedHour = crop.PlantedHour;
+        LastWateredDay = crop.LastWateredDay;
+        LastWateredHour = crop.LastWateredHour;
         IsWatered = crop.IsWatered;
         GrowthProgress = crop.GrowthProgress;
         IsWateredForVegetative = crop.IsWateredForVegetative;
@@ -65,18 +71,16 @@ public class CropDto
     public Crop ToCrop()
     {
         Vector3 position = new Vector3(PositionX, PositionY, PositionZ);
-        DateTime plantedTime = PlantedTime.ToDateTime().ToLocalTime();
-        DateTime lastWateredTime = LastWateredTime.ToDateTime() == DateTime.MinValue.ToUniversalTime() ?
-            DateTime.MinValue :
-            LastWateredTime.ToDateTime().ToLocalTime();
 
         return new Crop(
             (ECropType)Type,
             ChunkId,
             position,
             (ECropGrowthStage)GrowthStage,
-            plantedTime,
-            lastWateredTime,
+            PlantedDay,
+            PlantedHour,
+            LastWateredDay,
+            LastWateredHour,
             IsWatered,
             GrowthProgress,
             IsWateredForVegetative,

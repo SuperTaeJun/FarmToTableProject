@@ -13305,7 +13305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2989eff007176542937e5e24199c508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsPerDay: 600
+  secondsPerDay: 60
   startHour: 12
 --- !u!1 &1397404187
 GameObject:
@@ -17445,7 +17445,20 @@ MonoBehaviour:
     Prefab: {fileID: 2032410925639778383, guid: 78125d7fa9cd95e41a74362bd8bbe081, type: 3}
   - type: 12
     Prefab: {fileID: 942913312485320666, guid: d370173dc602f3d43abe8990f8ffb5f7, type: 3}
-  _baseGrowthRate: 360
+  _cropDataList:
+  - {fileID: 11400000, guid: e8e0bc00016f7024fa97e803bec6ee8a, type: 2}
+  - {fileID: 11400000, guid: 4acc69264390da14b8bb55bef84fb49c, type: 2}
+  - {fileID: 11400000, guid: a75a35f70a5f7564d8868816bc2545ff, type: 2}
+  - {fileID: 11400000, guid: 87a1a2f750f5a9946b83bb2e8f03c484, type: 2}
+  - {fileID: 11400000, guid: 2fbaeea74d242ae479ce49423c502d59, type: 2}
+  - {fileID: 11400000, guid: 3b4c7a954b8869e4d9bb5d1b43fc4e72, type: 2}
+  - {fileID: 11400000, guid: 951d85cb1c9d531439ecb0a4067b0bf1, type: 2}
+  - {fileID: 11400000, guid: 3eaf3a994b5bfb742a3f318bdccd1a40, type: 2}
+  - {fileID: 11400000, guid: 365456c0364860f45823aee1cc12baba, type: 2}
+  - {fileID: 11400000, guid: 8a138fd69341c694585807fb0df3ec26, type: 2}
+  - {fileID: 11400000, guid: cc6f27ef12224ef48a6e24cec584e896, type: 2}
+  - {fileID: 11400000, guid: 76a103e79ba54f64b9f794a67055b318, type: 2}
+  - {fileID: 11400000, guid: 4d2183590c789e24689663641f0852b5, type: 2}
 --- !u!4 &1858222633
 Transform:
   m_ObjectHideFlags: 0

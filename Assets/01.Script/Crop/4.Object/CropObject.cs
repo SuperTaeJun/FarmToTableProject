@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class CropObject : MonoBehaviour
 {
-    [SerializeField] private SO_Crop _data;
     [SerializeField] private GameObject[] _growthStageObjects;
 
     private Crop _crop;

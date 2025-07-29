@@ -7,12 +7,14 @@ public class Crop
     public ECropGrowthStage GrowthStage { get; private set; }
     public string ChunkId { get; private set; }
     public Vector3 Position { get; private set; }
-    public DateTime PlantedTime { get; private set; }
-    public DateTime LastWateredTime { get; private set; }
+    public int PlantedDay { get; private set; }
+    public int PlantedHour { get; private set; }
+    public int LastWateredDay { get; private set; }
+    public int LastWateredHour { get; private set; }
     public bool IsWatered { get; private set; }
     public float GrowthProgress { get; private set; }
 
-    // °¢ ´Ü°èº° ¹° ÁÖ±â »óÅÂ Ãß°¡
+    // ï¿½ï¿½ ï¿½Ü°èº° ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     public bool IsWateredForVegetative { get; private set; }
     public bool IsWateredForMature { get; private set; }
 
@@ -22,22 +24,37 @@ public class Crop
         ChunkId = chunkId;
         Position = position;
         GrowthStage = ECropGrowthStage.Seed;
-        PlantedTime = DateTime.Now;
-        LastWateredTime = DateTime.MinValue;
+        
+        // í˜„ìž¬ ê²Œìž„ ì‹œê°„ìœ¼ë¡œ ì‹¬ì€ ì‹œê°„ ì„¤ì •
+        if (GameTimeManager.Instance != null)
+        {
+            PlantedDay = GameTimeManager.Instance.CurrentDay;
+            PlantedHour = GameTimeManager.Instance.CurrentHour;
+        }
+        else
+        {
+            PlantedDay = 0;
+            PlantedHour = 0;
+        }
+        
+        LastWateredDay = -1; // í•œ ë²ˆë„ ë¬¼ ì•ˆ ì¤€ ìƒíƒœ
+        LastWateredHour = -1;
         IsWatered = false;
         GrowthProgress = 0f;
         IsWateredForVegetative = false;
         IsWateredForMature = false;
     }
 
-    public Crop(ECropType type, string chunkId, Vector3 position, ECropGrowthStage stage, DateTime plantedTime, DateTime lastWateredTime, bool isWatered, float growthProgress, bool isWateredForVegetative = false, bool isWateredForMature = false)
+    public Crop(ECropType type, string chunkId, Vector3 position, ECropGrowthStage stage, int plantedDay, int plantedHour, int lastWateredDay, int lastWateredHour, bool isWatered, float growthProgress, bool isWateredForVegetative = false, bool isWateredForMature = false)
     {
         Type = type;
         ChunkId = chunkId;
         Position = position;
         GrowthStage = stage;
-        PlantedTime = plantedTime;
-        LastWateredTime = lastWateredTime;
+        PlantedDay = plantedDay;
+        PlantedHour = plantedHour;
+        LastWateredDay = lastWateredDay;
+        LastWateredHour = lastWateredHour;
         IsWatered = isWatered;
         GrowthProgress = growthProgress;
         IsWateredForVegetative = isWateredForVegetative;
@@ -46,10 +63,14 @@ public class Crop
     public void Water()
     {
         IsWatered = true;
-        LastWateredTime = DateTime.Now;
+        if (GameTimeManager.Instance != null)
+        {
+            LastWateredDay = GameTimeManager.Instance.CurrentDay;
+            LastWateredHour = GameTimeManager.Instance.CurrentHour;
+        }
     }
 
-    // ´Ü°èº° ¹° ÁÖ±â ½Ã½ºÅÛ
+    // ï¿½Ü°èº° ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½Ã½ï¿½ï¿½ï¿½
     public void WaterCurrentStage()
     {
         switch (GrowthStage)
@@ -63,20 +84,24 @@ public class Crop
         }
 
         IsWatered = true;
-        LastWateredTime = DateTime.Now;
+        if (GameTimeManager.Instance != null)
+        {
+            LastWateredDay = GameTimeManager.Instance.CurrentDay;
+            LastWateredHour = GameTimeManager.Instance.CurrentHour;
+        }
     }
     public bool IsWateredForCurrentStage()
     {
         switch (GrowthStage)
         {
             case ECropGrowthStage.Seed:
-                return true; // ¾¾¾ÑÀº ¹° ÇÊ¿ä ¾øÀ½
+                return true; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½
             case ECropGrowthStage.Vegetative:
                 return IsWateredForVegetative;
             case ECropGrowthStage.Mature:
                 return IsWateredForMature;
             case ECropGrowthStage.Harvest:
-                return true; // ¼öÈ®Àº ¹° ÇÊ¿ä ¾øÀ½
+                return true; // ï¿½ï¿½È®ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½
             default:
                 return false;
         }
@@ -88,7 +113,7 @@ public class Crop
         {
             case ECropGrowthStage.Seed:
             case ECropGrowthStage.Harvest:
-                return false; // ¾¾¾Ñ°ú ¼öÈ® ´Ü°è´Â ¹°À» ÁÙ ¼ö ¾øÀ½
+                return false; // ï¿½ï¿½ï¿½Ñ°ï¿½ ï¿½ï¿½È® ï¿½Ü°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             case ECropGrowthStage.Vegetative:
                 return !IsWateredForVegetative;
             case ECropGrowthStage.Mature:
@@ -104,7 +129,14 @@ public class Crop
         GrowthProgress = Mathf.Clamp01(GrowthProgress + deltaProgress);
         UpdateGrowthStage();
 
-        // ´Ü°è°¡ º¯°æµÇ¾úÀ» ¶§ ¹° »óÅÂ ÃÊ±âÈ­´Â ÇÏÁö ¾ÊÀ½ (ÀÌ¹Ì ÁØ ¹°Àº À¯Áö)
+        // ï¿½Ü°è°¡ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ì¹ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+    }
+    
+    public void UpdateGrowthWithCropData(float deltaProgress, SO_Crop cropData)
+    {
+        var previousStage = GrowthStage;
+        GrowthProgress = Mathf.Clamp01(GrowthProgress + deltaProgress);
+        UpdateGrowthStageWithCropData(cropData);
     }
 
     private void UpdateGrowthStage()
@@ -114,6 +146,18 @@ public class Crop
         else if (GrowthProgress >= 0.5f)
             GrowthStage = ECropGrowthStage.Mature;
         else if (GrowthProgress >= 0.2f)
+            GrowthStage = ECropGrowthStage.Vegetative;
+        else
+            GrowthStage = ECropGrowthStage.Seed;
+    }
+    
+    private void UpdateGrowthStageWithCropData(SO_Crop cropData)
+    {
+        if (GrowthProgress >= cropData.HarvestStageRatio)
+            GrowthStage = ECropGrowthStage.Harvest;
+        else if (GrowthProgress >= cropData.MatureStageRatio)
+            GrowthStage = ECropGrowthStage.Mature;
+        else if (GrowthProgress >= cropData.VegetativeStageRatio)
             GrowthStage = ECropGrowthStage.Vegetative;
         else
             GrowthStage = ECropGrowthStage.Seed;

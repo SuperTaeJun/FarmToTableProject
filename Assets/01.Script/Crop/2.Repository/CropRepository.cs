@@ -65,12 +65,12 @@ public class CropRepository : FirebaseRepositoryBase
                 cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
             }
 
-            // °°Àº À§Ä¡ÀÇ ±âÁ¸ ÀÛ¹° Á¦°Å
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Û¹ï¿½ ï¿½ï¿½ï¿½ï¿½
             cropList.RemoveAll(c => Vector3.Distance(
                 new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                 crop.Position) < 0.1f);
 
-            // »õ ÀÛ¹° Ãß°¡
+            // ï¿½ï¿½ ï¿½Û¹ï¿½ ï¿½ß°ï¿½
             cropList.Add(new CropDto(crop));
 
             var docData = new Dictionary<string, object>
@@ -92,7 +92,7 @@ public class CropRepository : FirebaseRepositoryBase
             {
                 var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
 
-                // ÇØ´ç À§Ä¡ÀÇ ÀÛ¹° Á¦°Å
+                // ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Û¹ï¿½ ï¿½ï¿½ï¿½ï¿½
                 cropList.RemoveAll(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
@@ -117,7 +117,7 @@ public class CropRepository : FirebaseRepositoryBase
             {
                 var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
 
-                // ÇØ´ç À§Ä¡ÀÇ ÀÛ¹° Ã£¾Æ¼­ ¼ºÀåµµ ¾÷µ¥ÀÌÆ®
+                // ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Û¹ï¿½ Ã£ï¿½Æ¼ï¿½ ï¿½ï¿½ï¿½åµµ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
                 var targetCrop = cropList.Find(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
@@ -126,7 +126,7 @@ public class CropRepository : FirebaseRepositoryBase
                 {
                     targetCrop.GrowthProgress = newGrowthProgress;
 
-                    // ¼ºÀå ´Ü°è Àç°è»ê
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½
                     if (newGrowthProgress >= 1.0f)
                         targetCrop.GrowthStage = (int)ECropGrowthStage.Harvest;
                     else if (newGrowthProgress >= 0.5f)
@@ -157,7 +157,7 @@ public class CropRepository : FirebaseRepositoryBase
             {
                 var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
 
-                // ÇØ´ç À§Ä¡ÀÇ ÀÛ¹° Ã£¾Æ¼­ ¹°ÁÖ±â
+                // ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Û¹ï¿½ Ã£ï¿½Æ¼ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½
                 var targetCrop = cropList.Find(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
@@ -165,7 +165,11 @@ public class CropRepository : FirebaseRepositoryBase
                 if (targetCrop != null)
                 {
                     targetCrop.IsWatered = true;
-                    targetCrop.LastWateredTime = Timestamp.FromDateTime(DateTime.Now.ToUniversalTime());
+                    if (GameTimeManager.Instance != null)
+                    {
+                        targetCrop.LastWateredDay = GameTimeManager.Instance.CurrentDay;
+                        targetCrop.LastWateredHour = GameTimeManager.Instance.CurrentHour;
+                    }
 
                     var docData = new Dictionary<string, object>
                     {

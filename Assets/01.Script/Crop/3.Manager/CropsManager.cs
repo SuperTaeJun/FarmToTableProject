@@ -13,8 +13,9 @@ public class CropsManager : MonoBehaviour
     private Dictionary<string, Crop> _crops = new Dictionary<string, Crop>();
     public Dictionary<string, Crop> Crops => _crops;
 
-    [Header("Growth Settings")]
-    [SerializeField] private float _baseGrowthRate = 360f; // �⺻ ����� (�ð���)
+    [Header("Crop Data")]
+    [SerializeField] private List<SO_Crop> _cropDataList;
+    private Dictionary<ECropType, SO_Crop> _cropDataDict = new Dictionary<ECropType, SO_Crop>(); // �⺻ ����� (�ð���)
 
     //�÷��̾ ȣ���ϸ� �ߵ�s
     public DebugEvent<Crop> OnCropPlanted = new DebugEvent<Crop>();
@@ -42,6 +43,19 @@ public class CropsManager : MonoBehaviour
             return;
         }
         _repo = new CropRepository();
+        InitializeCropDataDict();
+    }
+    
+    private void InitializeCropDataDict()
+    {
+        _cropDataDict.Clear();
+        foreach (var cropData in _cropDataList)
+        {
+            if (cropData != null)
+            {
+                _cropDataDict[cropData.Type] = cropData;
+            }
+        }
     }
 
     private async void Start()
@@ -148,6 +162,11 @@ public class CropsManager : MonoBehaviour
     {
         InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f); // 1�и��� ���� ������Ʈ
     }
+    
+    public SO_Crop GetCropData(ECropType cropType)
+    {
+        return _cropDataDict.TryGetValue(cropType, out SO_Crop cropData) ? cropData : null;
+    }
     private async void UpdateCropGrowth()
     {
         var cropsToUpdate = new List<Crop>();
@@ -166,7 +185,20 @@ public class CropsManager : MonoBehaviour
             }
 
             var previousStage = crop.GrowthStage;
-            crop.UpdateGrowth(_baseGrowthRate / 3600f); // �� ������ ��� (1�ð� = 3600��)
+            // SO_Crop 데이터에서 성장 시간 가져오기
+            SO_Crop cropData = GetCropData(crop.Type);
+            if (cropData == null)
+            {
+                Debug.LogWarning($"Crop data not found for type: {crop.Type}");
+                continue;
+            }
+            
+            // GameTimeManager의 시간을 기반으로 성장률 계산
+            float gameHoursPerSecond = GameTimeManager.Instance != null ? 
+                24f / GameTimeManager.Instance.secondsPerDay : 1f / 3600f;
+            
+            float growthRatePerSecond = gameHoursPerSecond / cropData.GrowthTimeInHours;
+            crop.UpdateGrowthWithCropData(growthRatePerSecond * 5f, cropData); // 5초마다 업데이트하므로 5를 곱함
             cropsToUpdate.Add(crop);
 
             // ���� �ܰ谡 ����Ǿ����� �̺�Ʈ �߻�
