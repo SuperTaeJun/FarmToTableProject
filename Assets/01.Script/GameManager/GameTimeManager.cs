@@ -1,22 +1,30 @@
 using System;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class GameTimeManager : MonoBehaviour
 {
     public static GameTimeManager Instance { get; private set; }
 
     [Header("Time Settings")]
-    [Tooltip("°ÔÀÓ ³» ÇÏ·ç°¡ ¸î ÃÊÀÎÁö")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ï·ç°¡ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public float secondsPerDay = 60f;
-    [Tooltip("½ÃÀÛ ½Ã°£ (½Ã)")]
-    public int startHour = 12; // 12½ÃºÎÅÍ ½ÃÀÛ
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ï¿½ï¿½)")]
+    public int startHour = 12; // 12ï¿½Ãºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     private float totalGameTime = 0f;
     private int previousDay = 0;
     private int previousHour = 0;
     private int previousMinute = 0;
 
-    // ÀÌº¥Æ® Á¤ÀÇ
+    // Firebase Repository
+    private GameTimeRepository _repository;
+    
+    // ìë™ ì €ì¥ ì„¤ì •
+    private float _saveInterval = 60f; // 60ì´ˆë§ˆë‹¤ ì €ì¥
+    private float _saveTimer;
+
+    // ì´ë²¤íŠ¸ ì •ì˜
     public DebugEvent<int> OnDayChanged= new DebugEvent<int>();
     public DebugEvent<int, int> OnTimeChanged = new DebugEvent<int, int> { };
 
@@ -64,6 +72,7 @@ public class GameTimeManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            _repository = new GameTimeRepository();
         }
         else
         {
@@ -72,14 +81,15 @@ public class GameTimeManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private async void Start()
     {
-        // ÃÊ±â°ª ¼³Á¤
+        await LoadGameTime();
+        
         previousDay = CurrentDay;
         previousHour = CurrentHour;
         previousMinute = CurrentMinute;
 
-        // ½ÃÀÛÇÒ ¶§ ÇÑ ¹ø ÀÌº¥Æ® ¹ß»ı (ÃÊ±â ¼³Á¤À» À§ÇØ)
+        OnDayChanged?.Invoke(previousDay);
         OnTimeChanged?.Invoke(CurrentHour, CurrentMinute);
     }
 
@@ -87,6 +97,14 @@ public class GameTimeManager : MonoBehaviour
     {
         totalGameTime += Time.deltaTime;
         CheckTimeChanges();
+        
+        // ìë™ ì €ì¥ íƒ€ì´ë¨¸
+        _saveTimer += Time.deltaTime;
+        if (_saveTimer >= _saveInterval)
+        {
+            _ = SaveGameTime(); // ë¹„ë™ê¸° ì €ì¥
+            _saveTimer = 0f;
+        }
     }
 
     private void CheckTimeChanges()
@@ -95,31 +113,100 @@ public class GameTimeManager : MonoBehaviour
         int currentHour = CurrentHour;
         int currentMinute = CurrentMinute;
 
-        // ºĞ º¯È­ Ã¼Å©
+        // ï¿½ï¿½ ï¿½ï¿½È­ Ã¼Å©
         if (currentMinute != previousMinute)
         {
             OnTimeChanged?.Invoke(currentHour, currentMinute);
             previousMinute = currentMinute;
         }
 
-        // ½Ã°£ º¯È­ Ã¼Å©
+        // ï¿½Ã°ï¿½ ï¿½ï¿½È­ Ã¼Å©
         if (currentHour != previousHour)
         {
             previousHour = currentHour;
         }
 
-        // ³¯Â¥ º¯È­ Ã¼Å©
+        // ë‚ ì§œ ë³€í™” ì²´í¬
         if (currentDay != previousDay)
         {
             OnDayChanged?.Invoke(currentDay);
             previousDay = currentDay;
+            
+            // ë‚ ì§œê°€ ë°”ë€” ë•Œë§ˆë‹¤ ì €ì¥
+            _ = SaveGameTime();
         }
     }
 
+    public async Task SaveGameTime()
+    {
+        var gameTimeDto = new GameTimeDto
+        {
+            CurrentDay = CurrentDay,
+            CurrentHour = CurrentHour,
+            CurrentMinute = CurrentMinute
+        };
+
+        await _repository.SaveGameTimeAsync(gameTimeDto);
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½: Day {CurrentDay}, {CurrentHour:D2}:{CurrentMinute:D2}");
+    }
+
+    public async Task LoadGameTime()
+    {
+        var gameTimeDto = await _repository.LoadGameTimeAsync();
+        
+        if (gameTimeDto != null)
+        {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ totalGameTime ï¿½ï¿½ï¿½
+            SetGameTime(gameTimeDto.CurrentDay, gameTimeDto.CurrentHour, gameTimeDto.CurrentMinute);
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½Îµï¿½: Day {CurrentDay}, {CurrentHour:D2}:{CurrentMinute:D2}");
+        }
+        else
+        {
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½âº»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
+        }
+    }
+
+    private void SetGameTime(int day, int hour, int minute)
+    {
+        // ï¿½ï¿½Ç¥ ï¿½Ã°ï¿½ï¿½ï¿½ totalGameTimeï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+        float targetTotalTime = day * secondsPerDay;
+        
+        // ï¿½Ã°Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+        float targetHour = (hour - startHour + 24) % 24;
+        float targetMinute = minute;
+        float timeInDay = (targetHour + targetMinute / 60f) / 24f * secondsPerDay;
+        
+        totalGameTime = targetTotalTime + timeInDay;
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            _ = SaveGameTime();
+        }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            _ = SaveGameTime();
+        }
+    }
+    
     private void OnDestroy()
     {
-        // ÀÌº¥Æ® Á¤¸® (¸Ş¸ğ¸® ´©¼ö ¹æÁö)
+        // ì–´í”Œë¦¬ì¼€ì´ì…˜ ì¢…ë£Œ ì‹œ ì €ì¥
+        _ = SaveGameTime();
+        
+        // ì´ë²¤íŠ¸ ì •ë¦¬ (ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ ë°©ì§€)
         OnDayChanged = null;
         OnTimeChanged = null;
+
+        //if(Instance == this)
+        //{
+        //    Instance = null;
+        //}
     }
 }

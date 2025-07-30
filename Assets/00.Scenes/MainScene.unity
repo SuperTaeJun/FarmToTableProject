@@ -1565,6 +1565,7 @@ GameObject:
   - component: {fileID: 170903625}
   - component: {fileID: 170903624}
   - component: {fileID: 170903626}
+  - component: {fileID: 170903627}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1675,6 +1676,28 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &170903627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170903623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54a2029382517c041b2a9d26f22b162f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyboxMaterial: {fileID: 2100000, guid: c82cbb272a39f944a9956b88c0d71827, type: 2}
+  directionalLight: {fileID: 170903624}
+  maxIntensity: 3
+  minIntensity: 0.2
+  dayColor: {r: 1, g: 0.80784315, b: 0.60784316, a: 1}
+  nightColor: {r: 0, g: 0, b: 0, a: 1}
+  dayAmbientColor: {r: 1, g: 1, b: 1, a: 1}
+  nightAmbientColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  dayFogColor: {r: 0.39215687, g: 0.8039216, b: 0.9372549, a: 1}
+  nightFogColor: {r: 0.27058825, g: 0.29803923, b: 0.37254903, a: 1}
 --- !u!1 &181602430
 GameObject:
   m_ObjectHideFlags: 0
@@ -13247,7 +13270,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1395145070}
-  - component: {fileID: 1395145069}
   - component: {fileID: 1395145071}
   m_Layer: 0
   m_Name: Game
@@ -13256,28 +13278,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1395145069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1395145068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54a2029382517c041b2a9d26f22b162f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skyboxMaterial: {fileID: 2100000, guid: c82cbb272a39f944a9956b88c0d71827, type: 2}
-  directionalLight: {fileID: 170903624}
-  maxIntensity: 3
-  minIntensity: 0.2
-  dayColor: {r: 1, g: 0.80784315, b: 0.60784316, a: 1}
-  nightColor: {r: 0, g: 0, b: 0, a: 1}
-  dayAmbientColor: {r: 1, g: 1, b: 1, a: 1}
-  nightAmbientColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
-  dayFogColor: {r: 0.39215687, g: 0.8039216, b: 0.9372549, a: 1}
-  nightFogColor: {r: 0.27058825, g: 0.29803923, b: 0.37254903, a: 1}
 --- !u!4 &1395145070
 Transform:
   m_ObjectHideFlags: 0

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
-    public Transform cameraTarget; // Ä«¸Ş¶ó°¡ µû¶ó´Ù´Ò ºó ¿ÀºêÁ§Æ®
+    public Transform cameraTarget; // Ä«ï¿½Ş¶ï¿½ ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     [SerializeField] private SO_PlayerData _data;
     public SO_PlayerData Data => _data;
 
@@ -21,6 +22,10 @@ public class Player : MonoBehaviour
     private PlayerVisualController _visualController;
     public PlayerVisualController VisualController => _visualController;
 
+    private PlayerDataRepository _playerRepository;
+    private float _saveInterval = 10f; // 10ì´ˆë§ˆë‹¤ ì €ì¥
+    private float _saveTimer;
+
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private void Awake()
     {
@@ -29,10 +34,15 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _inputController = GetComponent<PlayerInputController>();
         _visualController = GetComponentInChildren<PlayerVisualController>();
+        _playerRepository = new PlayerDataRepository();
     }
 
-    void Start()
+    async void Start()
     {
+        // Firebaseì—ì„œ ì €ì¥ëœ ìœ„ì¹˜ ë¡œë“œ
+        await LoadPlayerPosition();
+
+        // ê¸°ì¡´ ë¡œì»¬ ì €ì¥ ë°ì´í„°ë„ ì²´í¬ (í˜¸í™˜ì„±)
         if (PlayerDataHolder.Instance.IsSavedData())
         {
             _characterController.gameObject.SetActive(false);
@@ -42,14 +52,23 @@ public class Player : MonoBehaviour
         }
 
         InputController.OnChunkPurchaseInput.AddListener(TryGenerateChunk);
-
     }
 
     void Update()
     {
+        // ìë™ ì €ì¥ íƒ€ì´ë¨¸
+        _saveTimer += Time.deltaTime;
+        if (_saveTimer >= _saveInterval)
+        {
+            _ = SavePlayerPosition(); // ë¹„ë™ê¸° ì €ì¥ (await í•˜ì§€ ì•ŠìŒ)
+            _saveTimer = 0f;
+        }
+
         if (Input.GetKeyDown(KeyCode.F1))
         {
             PlayerDataHolder.Instance.SavedData(gameObject.transform.position, gameObject.transform.rotation);
+            // Firebaseì—ë„ ì €ì¥
+            _ = SavePlayerPosition();
             FadeManager.Instance.FadeToScene("CharacterSelectScene");
         }
     }
@@ -71,7 +90,7 @@ public class Player : MonoBehaviour
             return ability as T;
         }
 
-        throw new Exception($"¾îºô¸®Æ¼ {type.Name}À» {gameObject.name}¿¡¼­ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+        throw new Exception($"ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ {type.Name}ï¿½ï¿½ {gameObject.name}ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
     }
     public void SetPositionForCharacterController(Vector3 newPos)
     {
@@ -111,7 +130,7 @@ public class Player : MonoBehaviour
         float minDist = Mathf.Min(distLeft, distRight, distBack, distForward);
         if (minDist > 3.0f)
         {
-            Debug.Log("¾ÆÁ÷ °æ°è±îÁö ¸Ö¾î¼­ Ã»Å©¸¦ »ı¼ºÇÏÁö ¾ÊÀ½.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾î¼­ Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.");
             return;
         }
         int moveX = 0;
@@ -128,7 +147,7 @@ public class Player : MonoBehaviour
 
         if (moveX == 0 && moveZ == 0)
         {
-            Debug.Log("¹æÇâ ÆÇÁ¤ ½ÇÆĞ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
@@ -139,14 +158,58 @@ public class Player : MonoBehaviour
 
         if (!WorldManager.Instance.HasChunk(targetPos))
         {
-            Debug.Log($"»õ Ã»Å© »ı¼º: {targetPos.X}, {targetPos.Z}");
+            Debug.Log($"ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½: {targetPos.X}, {targetPos.Z}");
 
             FadeManager.Instance.FadeScreenWithEvent(()=>WorldManager.Instance.GenerateAndBuildChunk(targetPos));
         }
         else
         {
-            Debug.Log("ÇØ´ç Ã»Å© ÀÌ¹Ì Á¸Àç!");
+            Debug.Log("ï¿½Ø´ï¿½ Ã»Å© ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½!");
         }
+    }
 
+    public async Task SavePlayerPosition()
+    {
+        var playerData = new PlayerDataDto();
+        playerData.SetPosition(transform.position);
+        playerData.SetRotation(transform.rotation);
+        playerData.LastSaved = System.DateTime.UtcNow;
+
+        await _playerRepository.SavePlayerDataAsync(playerData);
+        Debug.Log($"í”Œë ˆì´ì–´ ìœ„ì¹˜ ì €ì¥ë¨: {transform.position}");
+    }
+
+    public async Task LoadPlayerPosition()
+    {
+        var playerData = await _playerRepository.LoadPlayerDataAsync();
+        
+        if (playerData != null)
+        {
+            _characterController.gameObject.SetActive(false);
+            transform.position = playerData.GetPosition();
+            transform.rotation = playerData.GetRotation();
+            _characterController.gameObject.SetActive(true);
+            Debug.Log($"í”Œë ˆì´ì–´ ìœ„ì¹˜ ë¡œë“œë¨: {transform.position}");
+        }
+        else
+        {
+            Debug.Log("ì €ì¥ëœ í”Œë ˆì´ì–´ ìœ„ì¹˜ê°€ ì—†ìŠµë‹ˆë‹¤.");
+        }
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            _ = SavePlayerPosition();
+        }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            _ = SavePlayerPosition();
+        }
     }
 }

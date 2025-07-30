@@ -21,6 +21,10 @@ public class FirebaseManager : MonoBehaviourSingleton<FirebaseManager>
 
     protected override void Awake()
     {
+        
+    }
+    private void Start()
+    {
         _initTask = InitFirebase(); // 초기화 Task 저장
     }
 
