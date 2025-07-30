@@ -19,7 +19,7 @@ public class PlayerInputController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    private void Start() // ¶Ç´Â ÀûÀýÇÑ ÃÊ±âÈ­ À§Ä¡
+    private void Start() // ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½Ä¡
     {
         PopupManager.Instance.OnPopupStateChanged += OnPopupStateChanged;
     }
@@ -36,17 +36,23 @@ public class PlayerInputController : MonoBehaviour
         if (!_playerMoveInputLock)
         {
             HandleMoveInput();
-            HandleCameraRotateInput();
+
         }
+        HandleCameraRotateInput();
+
         HandleLeftMouseInput();
         HandleMouseCursor();
         HandleInteractionInput();
-        HandleModeChangeInput(); // ¸ðµå º¯°æ ÀÔ·Â Ãß°¡
+        HandleModeChangeInput(); // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ß°ï¿½
         HandleOptionPopupInput();
 
-        if(Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2))
         {
             PopupManager.Instance.Open(EPopupType.UI_ShopPopup);
+        }
+          if(Input.GetKeyDown(KeyCode.F3))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_Vehicle);
         }
     }
 
@@ -105,7 +111,7 @@ public class PlayerInputController : MonoBehaviour
     {
         if (_isPopupOpen) return;
 
-        // ÆË¾÷ÀÌ ¾øÀ» ¶§¸¸ ½ÇÁ¦ Ä¿¼­ Á¦¾î
+        // ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
             _isCursorLocked = false;

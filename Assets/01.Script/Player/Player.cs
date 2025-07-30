@@ -35,6 +35,12 @@ public class Player : MonoBehaviour
         _inputController = GetComponent<PlayerInputController>();
         _visualController = GetComponentInChildren<PlayerVisualController>();
         _playerRepository = new PlayerDataRepository();
+        
+        // PlayerVehicleAbility 컴포넌트 추가 (없으면)
+        if (GetComponent<PlayerVehicleAbility>() == null)
+        {
+            gameObject.AddComponent<PlayerVehicleAbility>();
+        }
     }
 
     async void Start()

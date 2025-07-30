@@ -4,7 +4,8 @@ public enum EPlayerMode
 {
     BlockEdit,    // ��������
     Farming,        // �����
-    Construction    // �Ǽ����
+    Construction,   // �Ǽ����
+    Vehicle         // ���
 }
 public class PlayerModeController : MonoBehaviour
 {

@@ -734,6 +734,8 @@ GameObject:
   - component: {fileID: 647329235317968566}
   - component: {fileID: 1744108034386868912}
   - component: {fileID: 7607041658801088623}
+  - component: {fileID: 4574786206568259920}
+  - component: {fileID: 3685155062759500704}
   m_Layer: 0
   m_Name: Tractor
   m_TagString: Untagged
@@ -839,6 +841,56 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43852050844139018, guid: 2f43c5ea3a262d74caf00528c4c0ded4, type: 2}
+--- !u!114 &4574786206568259920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7479474908317246216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e36c80555c4e14dbe06c2556d7894e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicleType: 2
+  maxSpeed: 10
+  acceleration: 5
+  brakeForce: 10
+  turnSpeed: 100
+  playerMountPoint: {fileID: 1631289614919925412}
+  plowingSpeed: 2
+  plowingWidth: 3
+  farmlandLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!54 &3685155062759500704
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7479474908317246216}
+  serializedVersion: 4
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7661701083602516771
 GameObject:
   m_ObjectHideFlags: 0

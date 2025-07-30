@@ -8,7 +8,8 @@ public enum EPopupType
     UI_OptionPopup,
     UI_BuildingPopup,
     UI_InventoryPopup,
-    UI_ShopPopup
+    UI_ShopPopup,
+    UI_Vehicle
 }
 public class PopupManager : MonoBehaviour
 {
