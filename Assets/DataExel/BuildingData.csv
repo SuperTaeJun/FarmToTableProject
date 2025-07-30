@@ -1,0 +1,9 @@
+Type,Prefab,PreviewPrefab,Size,Cost
+Fence,Prefab_Fence,Prefab_Preview_Fence,"1,1",0
+LetterBox,Prefab_LetterBox,Prefab_Preview_LetterBox,"1,1",0
+Table,Prefab_Table1,Prefab_Preview_Table1,"2,3",0
+Table2,Prefab_Table2,Prefab_Preview_Table2,"2,3",0
+Totem1,Prefab_Totem1,Prefab_Preview_Totem1,"1,1",0
+Totem2,Prefab_Totem2,Prefab_Preview_Totem2,"1,1",0
+Totem3,Prefab_Totem3,Prefab_Preview_Totem3,"1,1",0
+Totem4,Prefab_Totem4,Prefab_Preview_Totem4,"1,1",0
