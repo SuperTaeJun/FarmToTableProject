@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Firebase.Firestore;
 
-public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
+public class CustomizationManager : MonoBehaviour
 {
+    public static CustomizationManager Instance;
+
     public CharacterCustomization CurrentCustomization { get; private set; }
     [SerializeField] private List<PartsMaxIndex> _partsMaxIndexMap;
 
@@ -15,9 +17,18 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
     //일단 디폴트유저로해둠
     string userId = "DefaultUser";
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         _repo = new CharacterCustomizationRepository();
 
@@ -87,6 +98,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
     public async Task LoadCustomizationAsync(string userID)
     {
+
         CurrentCustomization = await _repo.LoadCustomizationAsync(userID);
 
         if (IsAllPartsDefault(CurrentCustomization))
@@ -98,6 +110,7 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
         {
             OnPartChanged?.Invoke(part.Key, part.Value);
         }
+
     }
 
     //디폴트 커마상태인지 확인
@@ -160,7 +173,6 @@ public class CustomizationManager : MonoBehaviourSingleton<CustomizationManager>
 
         ChangePart(part, newIndex);
     }
-
 }
 [System.Serializable]
 public class PartsMaxIndex

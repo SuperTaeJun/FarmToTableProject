@@ -5,8 +5,9 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class FirebaseManager : MonoBehaviourSingleton<FirebaseManager>
+public class FirebaseManager : MonoBehaviour
 {
+    public static FirebaseManager Instance;
 
     public FirebaseApp App { get; private set; }
     public FirebaseAuth Auth { get; private set; }
@@ -19,13 +20,23 @@ public class FirebaseManager : MonoBehaviourSingleton<FirebaseManager>
 
     public event Action OnFirebaseInitialized;
 
-    protected override void Awake()
+    private  void Awake()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _initTask = InitFirebase(); // 초기화 Task 저장
     }
     private void Start()
     {
-        _initTask = InitFirebase(); // 초기화 Task 저장
+
     }
 
     private async Task InitFirebase()
@@ -49,4 +60,6 @@ public class FirebaseManager : MonoBehaviourSingleton<FirebaseManager>
             throw new Exception("Firebase 초기화 실패");
         }
     }
+
+
 }

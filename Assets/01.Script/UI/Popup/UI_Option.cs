@@ -25,16 +25,6 @@ public class UI_Option : UI_Popup
     }
     private void OnClikedReturnToTitle()
     {
-        // 모든 DontDestroyOnLoad 객체들 찾아서 삭제
-        GameObject[] allObjects = FindObjectsOfType<GameObject>();
-        foreach (GameObject obj in allObjects)
-        {
-            if (obj.scene.name == "DontDestroyOnLoad")
-            {
-                Destroy(obj);
-            }
-        }
-
         SceneManager.LoadScene("TitleScene"); // 타이틀 씬 로드
     }
 

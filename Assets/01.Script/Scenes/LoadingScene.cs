@@ -1,6 +1,7 @@
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
 public class LoadingScene : MonoBehaviour
 {
     private const string NEXT_SCENE_NAME = "CharacterSelectScene";
@@ -24,7 +25,9 @@ public class LoadingScene : MonoBehaviour
             var customizationLoadTask = CustomizationManager.Instance.LoadCustomizationAsync(DEFAULT_USER_ID);
             Debug.Log("Customization 로드 시작");
 
+
             await Task.WhenAll(minLoadingTask, customizationLoadTask);
+
 
             Debug.Log("Customization 초기화 완료");
 

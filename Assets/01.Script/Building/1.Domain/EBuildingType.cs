@@ -10,5 +10,8 @@ public enum EBuildingType
     Totem2,
     Totem3,
     Totem4,
+    Store,
+    Closet,
+    Shelter,
     None
 }

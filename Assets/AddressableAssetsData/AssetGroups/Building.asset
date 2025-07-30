@@ -80,6 +80,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0af38c5a59d1b1439da3a2e5e1b0d45
+    m_Address: Prefab_Shelter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ceb3c2f7244a192438059f43598e0ab4
     m_Address: Prefab_Fence
     m_ReadOnly: 0
