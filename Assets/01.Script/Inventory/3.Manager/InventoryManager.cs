@@ -55,7 +55,12 @@ public class InventoryManager : MonoBehaviour
     }
 
     private async void Start()
-    {
+    {   
+        if (_itemDatabase != null)
+        {
+            //사전에 어드레서블에서 아이콘들 준비
+            await _itemDatabase.PreloadCommonIcons();
+        }
         await LoadInventory();
     }
 
@@ -274,7 +279,7 @@ public class InventoryManager : MonoBehaviour
             ECropType.Broccoli => EItemType.Broccoli,
             ECropType.Chilli => EItemType.Chilli,
             ECropType.Cucumber => EItemType.Cucumber,
-            ECropType.Eggplaint => EItemType.Eggplaint,
+            ECropType.Eggplant => EItemType.Eggplaint,
             ECropType.Pumkin => EItemType.Pumkin,
             ECropType.Corn => EItemType.Corn,
             ECropType.Watermelon => EItemType.Watermelon,
@@ -295,7 +300,7 @@ public class InventoryManager : MonoBehaviour
             ECropType.Broccoli => EItemType.BroccoliSeed,
             ECropType.Chilli => EItemType.ChilliSeed,
             ECropType.Cucumber => EItemType.CucumberSeed,
-            ECropType.Eggplaint => EItemType.EggplaintSeed,
+            ECropType.Eggplant => EItemType.EggplaintSeed,
             ECropType.Pumkin => EItemType.PumkinSeed,
             ECropType.Corn => EItemType.CornSeed,
             ECropType.Watermelon => EItemType.WatermelonSeed,

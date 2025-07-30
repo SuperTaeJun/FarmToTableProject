@@ -6,7 +6,7 @@ public enum ECropType
     Broccoli,
     Chilli,
     Cucumber,
-    Eggplaint,
+    Eggplant,
     Pumkin,
     Corn,
     Watermelon,

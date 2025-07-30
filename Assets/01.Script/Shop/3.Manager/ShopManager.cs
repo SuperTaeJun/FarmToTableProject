@@ -39,7 +39,7 @@ public class ShopManager : MonoBehaviour
         _currencyManager = CurrencyManager.Instance;
     }
     
-    #region 구매 시스템
+
     public async Task<bool> TryBuyItem(EItemType itemType, int quantity = 1)
     {
         if (_shopData == null) return false;
@@ -93,9 +93,6 @@ public class ShopManager : MonoBehaviour
             _ => allItems
         };
     }
-    #endregion
-    
-    #region 판매 시스템
     public async Task<bool> TrySellItem(EItemType itemType, int quantity = 1)
     {
         if (_shopData == null) return false;
@@ -150,9 +147,7 @@ public class ShopManager : MonoBehaviour
         var shopItem = _shopData.GetShopItem(itemType);
         return shopItem?.GetTotalSellPrice(quantity) ?? 0;
     }
-    #endregion
-    
-    #region 재화 관리
+
     public bool CanAfford(int amount)
     {
         return _currencyManager?.CanAfford(ECurrencyType.Money, amount) ?? false;
@@ -172,9 +167,7 @@ public class ShopManager : MonoBehaviour
     {
         return _currencyManager?.GetCurrencyAmount(currencyType) ?? 0;
     }
-    #endregion
-    
-    #region 유틸리티
+
     private bool IsItemInCategory(EItemType itemType, EShopCategory category)
     {
         return category switch
@@ -192,5 +185,5 @@ public class ShopManager : MonoBehaviour
         var shopItem = _shopData.GetShopItem(itemType);
         return shopItem?.GetTotalBuyPrice(quantity) ?? 0;
     }
-    #endregion
+
 }

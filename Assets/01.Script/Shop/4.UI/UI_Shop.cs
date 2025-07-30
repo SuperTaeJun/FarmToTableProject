@@ -345,9 +345,9 @@ public class UI_Shop : UI_Popup
         // 아이템 정보 표시
         var itemData = InventoryManager.Instance?.ItemDatabase?.GetItemData(itemType);
         
-        if (_itemIcon != null && itemData?.icon != null)
+        if (_itemIcon != null)
         {
-            _itemIcon.sprite = itemData.icon;
+            _itemIcon.sprite = InventoryManager.Instance.ItemDatabase.GetItemIcon(itemType);
             _itemIcon.color = Color.white;
         }
         

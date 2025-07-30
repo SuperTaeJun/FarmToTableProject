@@ -43,7 +43,7 @@ public class PlayerBuildAbility : PlayerAbility
         if (_selectedType != EBuildingType.None)
         {
             RefreshPreviewInstance();
-            
+
             // PlayerSelectAbility의 그리드 크기를 건축물 크기로 동기화
             SO_Building buildingInfo = BuildingManager.Instance.GetBuildingInfo(_selectedType);
             if (buildingInfo != null)
@@ -92,14 +92,10 @@ public class PlayerBuildAbility : PlayerAbility
     private void RefreshPreviewInstance()
     {
         DestroyPreview();
-        SO_Building buildingInfo = BuildingManager.Instance.GetBuildingInfo(_selectedType);
+        _previewInstance = BuildingManager.Instance.CreatePreviewInstance(_selectedType);
+        _currentRotation = Quaternion.identity;
+        _previewInstance.transform.rotation = _currentRotation;
 
-        if (buildingInfo?.PreviewPrefab != null)
-        {
-            _previewInstance = Instantiate(buildingInfo.PreviewPrefab);
-            _currentRotation = Quaternion.identity;
-            _previewInstance.transform.rotation = _currentRotation;
-        }
     }
 
     private void DestroyPreview()

@@ -13,7 +13,13 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // 건물 오브젝트 캐시
 
     [SerializeField] private float gridSize = 1f;
+
     [SerializeField] private SO_Building[] buildingData; // SO_Building 배열 데이터
+
+    //프리팹들을 미리 캐싱해둠
+    private Dictionary<EBuildingType, GameObject> cachedPrefabs = new Dictionary<EBuildingType, GameObject>();
+    private Dictionary<EBuildingType, GameObject> cachedPreviewPrefabs = new Dictionary<EBuildingType, GameObject>();
+
 
     private void Awake()
     {
@@ -32,7 +38,31 @@ public class BuildingManager : MonoBehaviour
 
     private async void Start()
     {
+        await LoadAllPrefabs();
         await LoadAllBuilding();
+    }
+    private async Task LoadAllPrefabs()
+    {
+        Debug.Log("모든 Building 프리팹 로드 시작...");
+
+        foreach (var data in buildingData)
+        {
+            // 메인 프리팹 로드
+            if (data.Prefab != null)
+            {
+                var prefab = await data.Prefab.LoadAssetAsync<GameObject>().Task;
+                cachedPrefabs[data.Type] = prefab;
+            }
+
+            // 프리뷰 프리팹 로드
+            if (data.PreviewPrefab != null)
+            {
+                var previewPrefab = await data.PreviewPrefab.LoadAssetAsync<GameObject>().Task;
+                cachedPreviewPrefabs[data.Type] = previewPrefab;
+            }
+        }
+
+        Debug.Log($"프리팹 로드 완료: {cachedPrefabs.Count}개");
     }
 
     public async Task LoadAllBuilding()
@@ -74,26 +104,43 @@ public class BuildingManager : MonoBehaviour
         }
         return null;
     }
-
     private GameObject CreateBuildingGameObject(Building building)
     {
-        var buildingData = GetBuildingData(building.Type);
-        if (buildingData == null || buildingData.Prefab == null)
+        if (!cachedPrefabs.TryGetValue(building.Type, out GameObject prefab))
         {
-            Debug.LogError($"Building data not found for type: {building.Type}");
+            Debug.LogError($"프리팹을 찾을 수 없음: {building.Type}");
             return null;
         }
 
-        // 로컬 좌표를 월드 좌표로 변환
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(building.ChunkId);
         Vector3 worldPosition = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, building.Position);
 
-        // 건물 게임오브젝트 생성
-        GameObject buildingObj = Instantiate(buildingData.Prefab, worldPosition, Quaternion.Euler(building.Rotation));
+        GameObject buildingObj = Instantiate(prefab, worldPosition, Quaternion.Euler(building.Rotation));
         buildingObj.name = $"{building.Type}_{building.GetBuildingId()}";
 
         return buildingObj;
     }
+
+    public GameObject GetPreviewPrefab(EBuildingType type)
+    {
+        cachedPreviewPrefabs.TryGetValue(type, out GameObject previewPrefab);
+        return previewPrefab;
+    }
+
+    // 프리뷰 인스턴스 생성해서 반환
+    public GameObject CreatePreviewInstance(EBuildingType type)
+    {
+        if (!cachedPreviewPrefabs.TryGetValue(type, out GameObject previewPrefab))
+        {
+            Debug.LogWarning($"프리뷰 프리팹을 찾을 수 없음: {type}");
+            return null;
+        }
+
+        GameObject previewInstance = Instantiate(previewPrefab);
+
+        return previewInstance;
+    }
+
 
     public Vector3 SnapToGrid(Vector3 position, Vector2Int size)
     {

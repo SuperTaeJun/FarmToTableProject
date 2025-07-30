@@ -65,10 +65,10 @@ public class UI_ShopItemSlot : MonoBehaviour
         // 아이템 아이콘 설정
         if (_itemIcon != null)
         {
-            var itemData = InventoryManager.Instance?.ItemDatabase?.GetItemData(_itemType);
-            if (itemData?.icon != null)
+            var itemData = InventoryManager.Instance.ItemDatabase.GetItemIcon(_itemType);
+            if (itemData != null)
             {
-                _itemIcon.sprite = itemData.icon;
+                _itemIcon.sprite = itemData;
                 _itemIcon.color = Color.white;
             }
             else
