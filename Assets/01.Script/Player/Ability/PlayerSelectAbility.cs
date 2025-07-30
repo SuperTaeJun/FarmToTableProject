@@ -75,8 +75,11 @@ public class PlayerSelectAbility : PlayerAbility
             {
                 if (gridPosition != lastGridPosition)
                 {
-                    // 건설모드가 아닐 때 해당 위치의 건물 크기 체크
-                    CheckAndSetBuildingSize(gridPosition);
+                    // 건설모드가 아닐 때만 해당 위치의 건물 크기 체크
+                    if (_owner.ModeController.CurrentMode != EPlayerMode.Construction)
+                    {
+                        CheckAndSetBuildingSize(gridPosition);
+                    }
                     
                     UpdateGridLines(gridPosition);
                     lastGridPosition = gridPosition;
@@ -100,8 +103,8 @@ public class PlayerSelectAbility : PlayerAbility
         if (!snapToGrid) return worldPosition;
 
         // �ٴ� �׸���� Y���� �״�� �ΰ� X, Z�ุ ����
-        float snappedX = Mathf.Round(worldPosition.x / cellSize) * cellSize;
-        float snappedZ = Mathf.Round(worldPosition.z / cellSize) * cellSize;
+        float snappedX = Mathf.Round(worldPosition.x / (cellSize * ChunkGenerator.Instance.blockOffset.x)) * (cellSize * ChunkGenerator.Instance.blockOffset.x);
+        float snappedZ = Mathf.Round(worldPosition.z / (cellSize * ChunkGenerator.Instance.blockOffset.z)) * (cellSize * ChunkGenerator.Instance.blockOffset.z);
         return new Vector3(snappedX, worldPosition.y, snappedZ);
     }
 
@@ -128,7 +131,7 @@ public class PlayerSelectAbility : PlayerAbility
 
     void DrawSingleCellGrid(Vector3 centerPosition)
     {
-        float halfSize = cellSize * 0.5f;
+        float halfSize = cellSize * ChunkGenerator.Instance.blockOffset.x * 0.5f;
         float offset = 0.02f; // 바닥에서 살짝 위로올림
         Vector3 offsetPos = centerPosition + Vector3.up * offset;
 
@@ -151,10 +154,10 @@ public class PlayerSelectAbility : PlayerAbility
         Vector3 offsetPos = gridCenter + Vector3.up * offset;
         
         // 그리드 크기에 따른 전체 크기 계산
-        float totalWidth = currentGridSize.x * cellSize;
-        float totalHeight = currentGridSize.y * cellSize;
-        float halfWidth = totalWidth * 0.5f;
-        float halfHeight = totalHeight * 0.5f;
+        float totalWidth = currentGridSize.x * cellSize * ChunkGenerator.Instance.blockOffset.x;
+        float totalHeight = currentGridSize.y * cellSize * ChunkGenerator.Instance.blockOffset.z;
+        float halfWidth = totalWidth * ChunkGenerator.Instance.blockOffset.x * 0.5f;
+        float halfHeight = totalHeight * ChunkGenerator.Instance.blockOffset.z * 0.5f;
 
         // 외곽 테두리만 그리기 (성능 최적화)
         Vector3[] corners = new Vector3[5];
@@ -184,6 +187,12 @@ public class PlayerSelectAbility : PlayerAbility
         currentGridSize = size;
         isDynamicSizeMode = size != Vector2Int.one;
         UpdatePositionCount();
+        
+        // 즉시 그리드 라인 업데이트
+        if (lastGridPosition != Vector3.zero && currentLineRenderer != null)
+        {
+            UpdateGridLines(lastGridPosition);
+        }
     }
 
     public void ResetToSingleCell()
@@ -220,8 +229,7 @@ public class PlayerSelectAbility : PlayerAbility
     private void CheckAndSetBuildingSize(Vector3 position)
     {
         // 건설모드가 아닐 때만 실행
-        PlayerModeController modeController = _owner.GetComponent<PlayerModeController>();
-        if (modeController != null && modeController.CurrentMode == EPlayerMode.Construction)
+        if (_owner.ModeController.CurrentMode == EPlayerMode.Construction)
         {
             return;
         }
@@ -229,7 +237,7 @@ public class PlayerSelectAbility : PlayerAbility
         // BuildingManager를 통해 해당 위치의 건물 크기 정보 가져오기
         if (BuildingManager.Instance != null)
         {
-            Vector2Int? buildingSize = BuildingManager.Instance.GetBuildingSizeAtPosition(position, cellSize * 0.5f);
+            Vector2Int? buildingSize = BuildingManager.Instance.GetBuildingSizeAtPosition(position, cellSize * ChunkGenerator.Instance.blockOffset.x * 0.5f);
             
             if (buildingSize.HasValue)
             {

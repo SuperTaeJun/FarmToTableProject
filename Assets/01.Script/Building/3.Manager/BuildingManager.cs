@@ -12,7 +12,6 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, List<Building>> loadedBuildings = new Dictionary<string, List<Building>>();
     private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // 건물 오브젝트 캐시
 
-    [SerializeField] private float gridSize = 1f;
 
     [SerializeField] private SO_Building[] buildingData; // SO_Building 배열 데이터
 
@@ -161,13 +160,13 @@ public class BuildingManager : MonoBehaviour
         var buildings = GetLoadedBuildings(chunkId);
 
         // 중심 좌표 기준으로 크기만큼 영역 계산
-        float halfSizeX = size.x * 0.5f;
-        float halfSizeZ = size.y * 0.5f;
+        float halfSizeX = size.x * ChunkGenerator.Instance.blockOffset.x * 0.5f;
+        float halfSizeZ = size.y * ChunkGenerator.Instance.blockOffset.z * 0.5f;
 
         Vector3 startPosition = new Vector3(
-            localPosition.x - halfSizeX + 0.5f,
+            localPosition.x - halfSizeX + (ChunkGenerator.Instance.blockOffset.x * 0.5f),
             localPosition.y,
-            localPosition.z - halfSizeZ + 0.5f
+            localPosition.z - halfSizeZ + (ChunkGenerator.Instance.blockOffset.z * 0.5f)
         );
 
         Debug.Log($"시작 위치: {startPosition}, 로컬 위치: {localPosition}");
@@ -184,7 +183,7 @@ public class BuildingManager : MonoBehaviour
         {
             for (int z = 0; z < size.y; z++)
             {
-                var checkPos = startPosition + new Vector3(x * gridSize, 0, z * gridSize);
+                var checkPos = startPosition + new Vector3(x * ChunkGenerator.Instance.blockOffset.x, 0, z * ChunkGenerator.Instance.blockOffset.z);
 
                 // 다른 건물과의 충돌 확인
                 if (IsPositionOccupied(buildings, checkPos))
@@ -209,7 +208,7 @@ public class BuildingManager : MonoBehaviour
         {
             for (int z = 0; z < size.y; z++)
             {
-                var checkPos = startPosition + new Vector3(x * gridSize, 0, z * gridSize);
+                var checkPos = startPosition + new Vector3(x * ChunkGenerator.Instance.blockOffset.x, 0, z * ChunkGenerator.Instance.blockOffset.z);
                 Vector3 worldCheckPos = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, checkPos);
                 float height = WorldManager.Instance.GetGroundHeight(worldCheckPos);
 
@@ -220,7 +219,7 @@ public class BuildingManager : MonoBehaviour
                     baseHeight = height;
                     baseHeightSet = true;
                 }
-                else if (Mathf.Abs(height - baseHeight) > 0.25f)
+                else if (Mathf.Abs(height - baseHeight) > (ChunkGenerator.Instance.blockOffset.y * 0.5f))
                 {
                     Debug.Log($"높이 차이 발견: 기준({baseHeight}) vs 현재({height}) = {Mathf.Abs(height - baseHeight)}");
                     return false;
@@ -234,20 +233,20 @@ public class BuildingManager : MonoBehaviour
     private bool IsPositionOccupied(List<Building> buildings, Vector3 position)
     {
         Vector2Int checkGrid = new Vector2Int(
-            Mathf.RoundToInt(position.x),
-            Mathf.RoundToInt(position.z)
+            Mathf.RoundToInt(position.x / ChunkGenerator.Instance.blockOffset.x),
+            Mathf.RoundToInt(position.z / ChunkGenerator.Instance.blockOffset.z)
         );
 
         foreach (var building in buildings)
         {
             // 중심 좌표 기준으로 영역 계산
             Vector3 buildingCenter = building.Position;
-            float halfSizeX = building.Size.x * 0.5f;
-            float halfSizeZ = building.Size.y * 0.5f;
+            float halfSizeX = building.Size.x * ChunkGenerator.Instance.blockOffset.x * 0.5f;
+            float halfSizeZ = building.Size.y * ChunkGenerator.Instance.blockOffset.z * 0.5f;
 
             Vector2 buildingStart = new Vector2(
-                buildingCenter.x - halfSizeX + 0.5f,
-                buildingCenter.z - halfSizeZ + 0.5f
+                buildingCenter.x - halfSizeX + (ChunkGenerator.Instance.blockOffset.x * 0.5f),
+                buildingCenter.z - halfSizeZ + (ChunkGenerator.Instance.blockOffset.z * 0.5f)
             );
 
             for (int x = 0; x < building.Size.x; x++)
@@ -255,8 +254,8 @@ public class BuildingManager : MonoBehaviour
                 for (int z = 0; z < building.Size.y; z++)
                 {
                     Vector2Int occupiedGrid = new Vector2Int(
-                        Mathf.RoundToInt(buildingStart.x + x),
-                        Mathf.RoundToInt(buildingStart.y + z)
+                        Mathf.RoundToInt((buildingStart.x + x * ChunkGenerator.Instance.blockOffset.x) / ChunkGenerator.Instance.blockOffset.x),
+                        Mathf.RoundToInt((buildingStart.y + z * ChunkGenerator.Instance.blockOffset.z) / ChunkGenerator.Instance.blockOffset.z)
                     );
 
                     if (occupiedGrid == checkGrid)

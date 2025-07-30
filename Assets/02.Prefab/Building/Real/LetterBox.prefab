@@ -122,5 +122,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingType: 0
-  gridSize: {x: 1, y: 1}

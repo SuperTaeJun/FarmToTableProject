@@ -972,7 +972,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldHeight: 16
-  blockOffset: {x: 1, y: 0.5, z: 1}
+  blockOffset: {x: 2, y: 0.5, z: 2}
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -1154,6 +1154,14 @@ PrefabInstance:
     - target: {fileID: 1490754740362530856, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
       propertyPath: m_Name
       value: World
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207933815983931542, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
+      propertyPath: worldDepth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207933815983931542, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
+      propertyPath: worldWidth
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6207933815983931542, guid: 84c6edaf5f4d29044b495d85503eb554, type: 3}
       propertyPath: dynamicGenerator

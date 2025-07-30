@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5491217379366004808}
   - component: {fileID: 7443522058326094398}
   - component: {fileID: 998123401753755561}
-  - component: {fileID: 6697096543165613611}
+  - component: {fileID: 4051979330094258304}
   m_Layer: 0
   m_Name: fence_LOD0
   m_TagString: Untagged
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6697096543165613611
+--- !u!65 &4051979330094258304
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,8 +106,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.059793, y: 0.799995, z: 0.30965516}
-  m_Center: {x: 0, y: 0.3500025, z: 0.12622924}
+  m_Size: {x: 2.119586, y: 1.9474871, z: 0.6193103}
+  m_Center: {x: 0, y: 0.87375355, z: 0.25245848}
 --- !u!1 &2139351033768652737
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,5 +153,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingType: 0
-  gridSize: {x: 1, y: 1}

@@ -8,7 +8,7 @@ public class ChunkGenerator : MonoBehaviour
 
     [Header("World Settings")]
     public int worldHeight = 16;
-    public Vector3 blockOffset = new Vector3(1, 0.5f, 1);
+    public Vector3 blockOffset = new Vector3(2, 0.5f, 2);
     public LayerMask GroundLayer;
 
     [Header("Block Prefabs")]
@@ -52,8 +52,8 @@ public class ChunkGenerator : MonoBehaviour
 
         System.Diagnostics.Stopwatch frameTimer = new System.Diagnostics.Stopwatch();
 
-        // 1´Ü°è: ºí·Ï µ¥ÀÌÅÍ Ã³¸® (¼­ºê Ã»Å© ´ÜÀ§·Î)
-        const int subChunkSize = 2; // subChunkSize x subChunkSize Å©±â·Î Ã»Å©¸¦ Ã³¸®
+        // 1ï¿½Ü°ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+        const int subChunkSize = 2; // subChunkSize x subChunkSize Å©ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ Ã³ï¿½ï¿½
 
         for (int subX = 0; subX < chunkSize; subX += subChunkSize)
         {
@@ -61,7 +61,7 @@ public class ChunkGenerator : MonoBehaviour
             {
                 frameTimer.Restart();
 
-                // 4x4 ¼­ºê Ã»Å© Ã³¸®
+                // 4x4 ï¿½ï¿½ï¿½ï¿½ Ã»Å© Ã³ï¿½ï¿½
                 int endX = Mathf.Min(subX + subChunkSize, chunkSize);
                 int endZ = Mathf.Min(subZ + subChunkSize, chunkSize);
 
@@ -117,14 +117,14 @@ public class ChunkGenerator : MonoBehaviour
                     }
                 }
 
-                // ¼­ºê Ã»Å©¸¶´Ù yield
+                // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ï¿½ï¿½ yield
                 yield return null;
             }
         }
 
-        // 2´Ü°è: ¸Þ½Ã °áÇÕ (´õ ÀÛÀº ´ÜÀ§·Î)
+        // 2ï¿½Ü°ï¿½: ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         List<GameObject> createdChunkObjects = new List<GameObject>();
-        const int maxCombinePerFrame = 150; // ´õ ÀÛ°Ô ¼³Á¤
+        const int maxCombinePerFrame = 150; // ï¿½ï¿½ ï¿½Û°ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         foreach (var kvp in blockCombineInstances)
         {
@@ -134,7 +134,7 @@ public class ChunkGenerator : MonoBehaviour
             if (combineList.Count == 0)
                 continue;
 
-            // ¸Þ½Ã¸¦ ÀÛÀº ´ÜÀ§·Î ºÐÇÒÇØ¼­ Ã³¸®
+            // ï¿½Þ½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ Ã³ï¿½ï¿½
             for (int i = 0; i < combineList.Count; i += maxCombinePerFrame)
             {
                 frameTimer.Restart();
@@ -157,13 +157,13 @@ public class ChunkGenerator : MonoBehaviour
 
                 createdChunkObjects.Add(chunkObj);
 
-                // ¸Þ½Ã °áÇÕ ÈÄ ¹«Á¶°Ç yield
+                // ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ yield
                 yield return null;
             }
         }
 
-        // 3´Ü°è: ÄÝ¶óÀÌ´õ Ãß°¡ (¹èÄ¡·Î Ã³¸®)
-        const int collidersPerFrame = 3; // ÇÁ·¹ÀÓ´ç ÄÝ¶óÀÌ´õ »ý¼º ¼ö
+        // 3ï¿½Ü°ï¿½: ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ß°ï¿½ (ï¿½ï¿½Ä¡ï¿½ï¿½ Ã³ï¿½ï¿½)
+        const int collidersPerFrame = 3; // ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 
         for (int i = 0; i < createdChunkObjects.Count; i += collidersPerFrame)
         {
@@ -182,19 +182,19 @@ public class ChunkGenerator : MonoBehaviour
                 }
             }
 
-            // ÄÝ¶óÀÌ´õ ¹èÄ¡ »ý¼º ÈÄ yield
+            // ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ yield
             yield return null;
         }
         int groundLayer = Mathf.RoundToInt(Mathf.Log(GroundLayer.value, 2));
 
-        // ÀÚ±â ÀÚ½Å Æ÷ÇÔ ¸ðµç ÇÏÀ§ ¿ÀºêÁ§Æ®
+        // ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         Transform[] allChildren = chunkParent.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {
             child.gameObject.layer = groundLayer;
         }
 
-        Debug.Log($"[ChunkGenerator] Ã»Å© {chunkPos.X},{chunkPos.Z} ·»´õ¸µ ¿Ï·á - {blockCombineInstances.Count}°³ Å¸ÀÔ");
+        Debug.Log($"[ChunkGenerator] Ã»Å© {chunkPos.X},{chunkPos.Z} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ - {blockCombineInstances.Count}ï¿½ï¿½ Å¸ï¿½ï¿½");
         onComplete?.Invoke(chunkParent);
     }
     public GameObject GenerateDynamicChunk(ChunkPosition chunkPos, string[,,] chunkData)
@@ -210,7 +210,7 @@ public class ChunkGenerator : MonoBehaviour
         {
             for (int z = 0; z < chunkSize; z++)
             {
-                // chunkData´Â Ã»Å© ·ÎÄÃ ÁÂÇ¥°è¸¦ »ç¿ë
+                // chunkDataï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½è¸¦ ï¿½ï¿½ï¿½
                 if (x >= chunkData.GetLength(0) || z >= chunkData.GetLength(2))
                     continue;
 
@@ -218,7 +218,7 @@ public class ChunkGenerator : MonoBehaviour
 
                 for (int y = worldHeight - 1; y >= 0; y--)
                 {
-                    // chunkData[x, y, z] - Ã»Å© ·ÎÄÃ ÁÂÇ¥ »ç¿ë
+                    // chunkData[x, y, z] - Ã»Å© ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½
                     string blockName = chunkData[x, y, z];
                     if (blockName == null)
                         continue;
@@ -238,7 +238,7 @@ public class ChunkGenerator : MonoBehaviour
 
                     if (shouldDraw)
                     {
-                        // ¿ùµå ÁÂÇ¥·Î º¯È¯ÇÏ¿© À§Ä¡ °è»ê
+                        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï¿ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
                         Vector3 pos = new Vector3(
                             (chunkPos.X * chunkSize + x) * blockOffset.x,
                             y * blockOffset.y,
@@ -265,7 +265,7 @@ public class ChunkGenerator : MonoBehaviour
             }
         }
 
-        // ºí·Ï Å¸ÀÔº°·Î ¸Þ½Ã °áÇÕ ¹× GameObject »ý¼º
+        // ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ôºï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ GameObject ï¿½ï¿½ï¿½ï¿½
         foreach (var kvp in blockCombineInstances)
         {
             string blockName = kvp.Key;
@@ -293,14 +293,14 @@ public class ChunkGenerator : MonoBehaviour
         }
 
         int groundLayer = Mathf.RoundToInt(Mathf.Log(GroundLayer.value, 2));
-        // ÀÚ±â ÀÚ½Å Æ÷ÇÔ ¸ðµç ÇÏÀ§ ¿ÀºêÁ§Æ®
+        // ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         Transform[] allChildren = chunkParent.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {
             child.gameObject.layer = groundLayer;
         }
 
-        Debug.Log($"[ChunkGenerator] Ã»Å© {chunkPos.X},{chunkPos.Z} ·»´õ¸µ ¿Ï·á - {blockCombineInstances.Count}°³ Å¸ÀÔ");
+        Debug.Log($"[ChunkGenerator] Ã»Å© {chunkPos.X},{chunkPos.Z} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ - {blockCombineInstances.Count}ï¿½ï¿½ Å¸ï¿½ï¿½");
 
         return chunkParent;
     }
@@ -331,7 +331,7 @@ public class ChunkGenerator : MonoBehaviour
     {
         if (prefab == null)
         {
-            Debug.LogWarning($"{name} ÇÁ¸®ÆÕÀÌ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning($"{name} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
@@ -372,7 +372,7 @@ public class ChunkGenerator : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[{name}] ÇÁ¸®ÆÕ¿¡¼­ Mesh/MaterialÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning($"[{name}] ï¿½ï¿½ï¿½ï¿½ï¿½Õ¿ï¿½ï¿½ï¿½ Mesh/Materialï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 
@@ -396,12 +396,12 @@ public class ChunkGenerator : MonoBehaviour
             int ny = y + dir.y;
             int nz = z + dir.z;
 
-            // ÇöÀç Ã»Å© ³»ºÎÀÎ °æ¿ì
+            // ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (nx >= 0 && nx < chunkSizeX &&
                 ny >= 0 && ny < chunkSizeY &&
                 nz >= 0 && nz < chunkSizeZ)
             {
-                // ÀÎÁ¢ÇÑ À§Ä¡¿¡ ºí·ÏÀÌ ¾øÀ¸¸é ÇöÀç ºí·ÏÀÌ º¸ÀÓ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (chunkData[nx, ny, nz] == null)
                 {
                     return true;
@@ -409,7 +409,7 @@ public class ChunkGenerator : MonoBehaviour
             }
             else
             {
-                // Ã»Å© °æ°è¸¦ ¹þ¾î³ª´Â °æ¿ì ÀÎÁ¢ Ã»Å© È®ÀÎ
+                // Ã»Å© ï¿½ï¿½è¸¦ ï¿½ï¿½ï¿½î³ªï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã»Å© È®ï¿½ï¿½
                 if (IsAdjacentBlockEmpty(currentChunkPos, x, y, z, dir))
                 {
                     return true;
@@ -422,13 +422,13 @@ public class ChunkGenerator : MonoBehaviour
 
     private bool IsAdjacentBlockEmpty(ChunkPosition currentChunkPos, int x, int y, int z, Vector3Int direction)
     {
-        // ÀÎÁ¢ Ã»Å©ÀÇ À§Ä¡ °è»ê
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
         ChunkPosition adjacentChunkPos = currentChunkPos;
         int adjacentX = x + direction.x;
         int adjacentY = y + direction.y;
         int adjacentZ = z + direction.z;
 
-        // Ã»Å© °æ°è¸¦ ³Ñ¾î°¡´Â °æ¿ì Ã»Å© ÁÂÇ¥ Á¶Á¤
+        // Ã»Å© ï¿½ï¿½è¸¦ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
         if (adjacentX < 0)
         {
             adjacentChunkPos.X -= 1;
@@ -462,8 +462,8 @@ public class ChunkGenerator : MonoBehaviour
             adjacentZ = 0;
         }
 
-        // WorldManager¸¦ ÅëÇØ ÀÎÁ¢ Ã»Å©ÀÇ ºí·Ï Á¤º¸ È®ÀÎ
-        // ÀÎÁ¢ Ã»Å©°¡ ¾ø°Å³ª ÇØ´ç À§Ä¡¿¡ ºí·ÏÀÌ ¾øÀ¸¸é true ¹ÝÈ¯
+        // WorldManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true ï¿½ï¿½È¯
         return !WorldManager.Instance.HasBlockAt(adjacentChunkPos, adjacentX, adjacentY, adjacentZ);
     }
 }

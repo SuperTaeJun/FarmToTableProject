@@ -32,12 +32,12 @@ public class PlayerFarmingAbility : PlayerAbility
             Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(selectedPos);
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
 
-            // ÇöÀç ºí·Ï °¡Á®¿À±â
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Block currentBlock = chunk.GetBlock((int)localPos.x, (int)localPos.y, (int)localPos.z);
 
             if (currentBlock != null && (currentBlock.Type == EBlockType.Dirt || currentBlock.Type == EBlockType.Grass))
             {
-                Vector3 abovePosition = selectedPos + Vector3.up * 0.25f;
+                Vector3 abovePosition = selectedPos + Vector3.up * (ChunkGenerator.Instance.blockOffset.y * 0.5f);
                 WorldManager.Instance.SetBlock(abovePosition, EBlockType.Farmland);
 
                 if(ObjectPoolManager.Instance)
@@ -47,7 +47,7 @@ public class PlayerFarmingAbility : PlayerAbility
     }
     public void OnWaterCrop()
     {
-        Debug.Log("¹°ÁÖ´ÂÇÔ¼ö È£Ãâ");
+        Debug.Log("ï¿½ï¿½ï¿½Ö´ï¿½ï¿½Ô¼ï¿½ È£ï¿½ï¿½");
 
         Vector3 selectedPos = _owner.CurrentSelectedPos;
         string chunkId = WorldManager.GetChunkId(selectedPos);
@@ -57,7 +57,7 @@ public class PlayerFarmingAbility : PlayerAbility
             Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(selectedPos);
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
             _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
-            Debug.Log($"¹°À» ÁÖ¾ú½À´Ï´Ù: {selectedPos}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½: {selectedPos}");
         }
     }
 
@@ -73,7 +73,7 @@ public class PlayerFarmingAbility : PlayerAbility
             _ = CropsManager.Instance.HarvestCrop(chunkId, localPos);
             if (ObjectPoolManager.Instance)
                 ObjectPoolManager.Instance.Get(PoolType.Dust, selectedPos);
-            //ÀÎº¥Åä¸®¶û ¿¬µ¿
+            //ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
 
