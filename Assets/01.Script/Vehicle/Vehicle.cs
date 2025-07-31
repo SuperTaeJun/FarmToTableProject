@@ -106,29 +106,25 @@ public abstract class Vehicle : MonoBehaviour
         horizontalInput = horizontal;
         verticalInput = vertical;
     }
-    
+
     protected void HandleMovement()
     {
-        // 입력 감지
+        // 기존 가속/감속 로직
         if (Mathf.Abs(verticalInput) > 0.1f)
         {
-            // 가속 적용
-            moveVelocity += transform.forward * verticalInput * acceleration * Time.deltaTime;
+            float targetSpeed = verticalInput * maxSpeed;
+            moveVelocity = Vector3.MoveTowards(moveVelocity,
+                transform.forward * targetSpeed,
+                acceleration * Time.deltaTime);
         }
         else
         {
-            // 감속 적용 (관성 감소)
-            moveVelocity = Vector3.Lerp(moveVelocity, Vector3.zero, deceleration * Time.deltaTime);
+            moveVelocity = Vector3.MoveTowards(moveVelocity, Vector3.zero,
+                deceleration * Time.deltaTime);
         }
 
-        // 최대 속도 제한
-        if (moveVelocity.magnitude > maxSpeed)
-        {
-            moveVelocity = moveVelocity.normalized * maxSpeed;
-        }
-
-        // 실제 이동
-        vehicleController.Move(moveVelocity * Time.deltaTime);
+        // 청크 경계 검사 및 이동 적용
+        ApplyMovementWithChunkCheck();
     }
     protected void HandleSteering()
     {
@@ -183,9 +179,50 @@ public abstract class Vehicle : MonoBehaviour
     }
 
 
-    protected virtual void OnPlayerMounted(Player player) { }
-    protected virtual void OnPlayerDismounted(Player player) { }
-    
+    protected virtual void OnPlayerMounted(Player player) 
+    {
+        ObjectPoolManager.Instance.Get(PoolType.Smoke, transform.position);
+
+    }
+    protected virtual void OnPlayerDismounted(Player player) 
+    {
+        ObjectPoolManager.Instance.Get(PoolType.Smoke, transform.position);
+    }
+
+    private void ApplyMovementWithChunkCheck()
+    {
+        Vector3 desiredMove = moveVelocity * Time.deltaTime;
+        Vector3 targetPos = transform.position + desiredMove;
+
+        // 마진 설정 (플레이어와 동일)
+        float chunkMargin = 2f;
+        float chunkSizeX = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.x;
+        float chunkSizeZ = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.z;
+
+        // 이동 방향이 있을 때만 청크 검사
+        if (moveVelocity.magnitude > 0.1f)
+        {
+            Vector3 moveDirection = moveVelocity.normalized;
+            Vector3 marginPos = targetPos + moveDirection * chunkMargin;
+
+            int targetChunkX = Mathf.FloorToInt(marginPos.x / chunkSizeX);
+            int targetChunkZ = Mathf.FloorToInt(marginPos.z / chunkSizeZ);
+            var targetChunkPos = new ChunkPosition(targetChunkX, 0, targetChunkZ);
+
+            if (WorldManager.Instance.HasChunk(targetChunkPos))
+            {
+                // 이동 허용 - 수평 이동 적용
+                Vector3 horizontalMove = new Vector3(desiredMove.x, 0, desiredMove.z);
+                vehicleController.Move(horizontalMove);
+            }
+            else
+            {
+                // 이동 차단 - 수평 이동 없이 속도 초기화
+                moveVelocity = Vector3.zero;
+            }
+        }
+    }
+
     public bool IsOccupied => isOccupied;
     public Player CurrentDriver => currentDriver;
     public EVehicleType VehicleType => vehicleType;

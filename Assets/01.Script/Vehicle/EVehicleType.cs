@@ -2,5 +2,7 @@ public enum EVehicleType
 {
     None,
     Truck,
-    Tractor
+    Tractor,
+    Bike1,
+    Bike2,
 }

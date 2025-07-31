@@ -6,9 +6,11 @@ public class VehicleManager : MonoBehaviour
     public static VehicleManager Instance { get; private set; }
     
     [Header("Vehicle Prefabs")]
-    [SerializeField] private GameObject truckPrefab;
-    [SerializeField] private GameObject tractorPrefab;
-    
+    [SerializeField] private GameObject _truckPrefab;
+    [SerializeField] private GameObject _tractorPrefab;
+    [SerializeField] private GameObject _bikePrefab;
+    [SerializeField] private GameObject _bike2Prefab;
+
     private Dictionary<EVehicleType, GameObject> vehiclePrefabs;
     private List<Vehicle> activeVehicles = new List<Vehicle>();
     
@@ -30,20 +32,24 @@ public class VehicleManager : MonoBehaviour
     {
         vehiclePrefabs = new Dictionary<EVehicleType, GameObject>();
         
-        if (truckPrefab != null)
-            vehiclePrefabs[EVehicleType.Truck] = truckPrefab;
-        if (tractorPrefab != null)
-            vehiclePrefabs[EVehicleType.Tractor] = tractorPrefab;
+        if (_truckPrefab != null)
+            vehiclePrefabs[EVehicleType.Truck] = _truckPrefab;
+        if (_tractorPrefab != null)
+            vehiclePrefabs[EVehicleType.Tractor] = _tractorPrefab;
+        if(_bikePrefab != null)
+            vehiclePrefabs[EVehicleType.Bike1] = _bikePrefab;
+
+        vehiclePrefabs[EVehicleType.Bike2] = _bike2Prefab;
     }
-    
-    public Vehicle SpawnVehicle(EVehicleType vehicleType, Vector3 position, Player player)
+
+    public Vehicle SpawnVehicle(EVehicleType vehicleType, Vector3 position, Player player, Quaternion rotation = default)
     {
         if (!vehiclePrefabs.ContainsKey(vehicleType))
         {
             Debug.LogError($"차량 프리팹을 찾을 수 없음: {vehicleType}");
             return null;
         }
-        
+
         // 기존에 타고 있는 차량이 있다면 하차
         if (player.ModeController.CurrentMode == EPlayerMode.Vehicle)
         {
@@ -53,29 +59,35 @@ public class VehicleManager : MonoBehaviour
                 currentVehicle.DismountPlayer();
             }
         }
-        
+
         // 플레이어 주변에 스냅된 위치에 생성
         Vector3 spawnPosition = SnapToGrid(position);
-        
-        GameObject vehicleObj = Instantiate(vehiclePrefabs[vehicleType], spawnPosition, Quaternion.identity);
+
+        // 회전값이 기본값이면 플레이어 방향으로 설정
+        if (rotation == default(Quaternion))
+        {
+            rotation = player.transform.rotation;
+        }
+
+        GameObject vehicleObj = Instantiate(vehiclePrefabs[vehicleType], spawnPosition, rotation);
         Vehicle vehicle = vehicleObj.GetComponent<Vehicle>();
-        
+
         if (vehicle == null)
         {
             Debug.LogError($"Vehicle 컴포넌트를 찾을 수 없음: {vehicleType}");
             Destroy(vehicleObj);
             return null;
         }
-        
+
         activeVehicles.Add(vehicle);
-        
+
         // 플레이어를 즉시 탑승시킴
         vehicle.MountPlayer(player);
-        
+
         Debug.Log($"{vehicleType} 차량이 생성되어 플레이어가 탑승했습니다.");
         return vehicle;
     }
-    
+
     public void DestroyVehicle(Vehicle vehicle)
     {
         if (vehicle == null) return;
@@ -113,8 +125,8 @@ public class VehicleManager : MonoBehaviour
     
     public void SetVehiclePrefabs(GameObject truck, GameObject tractor)
     {
-        truckPrefab = truck;
-        tractorPrefab = tractor;
+        _truckPrefab = truck;
+        _tractorPrefab = tractor;
         InitializeVehiclePrefabs();
     }
     
