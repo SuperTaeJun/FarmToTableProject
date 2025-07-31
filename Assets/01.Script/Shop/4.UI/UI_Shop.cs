@@ -19,9 +19,8 @@ public class UI_Shop : UI_Popup
     [Header("구매 탭")]
     [SerializeField] private Transform _buyItemsParent;
     [SerializeField] private GameObject _buyItemSlotPrefab;
-    [SerializeField] private Button _allCategoryButton;
     [SerializeField] private Button _seedsCategoryButton;
-    [SerializeField] private Button _materialsCategoryButton;
+    [SerializeField] private Button _vehicleCategoryButton;
     
     [Header("판매 탭")]
     [SerializeField] private Transform _sellItemsParent;
@@ -42,7 +41,7 @@ public class UI_Shop : UI_Popup
     private CurrencyManager _currencyManager;
     private List<UI_ShopItemSlot> _buySlots = new List<UI_ShopItemSlot>();
     private List<UI_ShopItemSlot> _sellSlots = new List<UI_ShopItemSlot>();
-    private EShopCategory _currentCategory = EShopCategory.All;
+    private EShopCategory _currentCategory = EShopCategory.Seeds;
     private bool _isBuyTabActive = true;
     
     // 아이템 선택 관련 변수 (구매/판매 공통)
@@ -69,14 +68,11 @@ public class UI_Shop : UI_Popup
         if (_sellTabButton != null)
             _sellTabButton.onClick.AddListener(() => SwitchTab(false));
             
-        if (_allCategoryButton != null)
-            _allCategoryButton.onClick.AddListener(() => SetCategory(EShopCategory.All));
-            
         if (_seedsCategoryButton != null)
             _seedsCategoryButton.onClick.AddListener(() => SetCategory(EShopCategory.Seeds));
             
-        if (_materialsCategoryButton != null)
-            _materialsCategoryButton.onClick.AddListener(() => SetCategory(EShopCategory.Materials));
+        if (_vehicleCategoryButton != null)
+            _vehicleCategoryButton.onClick.AddListener(() => SetCategory(EShopCategory.Vehicle));
             
         // 아이템 정보 패널 버튼들
         if (_upButton != null)
@@ -105,6 +101,12 @@ public class UI_Shop : UI_Popup
             _currencyManager.OnCurrencyChanged.AddListener(OnCurrencyChanged);
         }
     }
+    public override void Open(System.Action callback = null)
+    {
+        base.Open();
+        OpenShop();
+    }
+
     public override void Close()
     {
         base.Close();

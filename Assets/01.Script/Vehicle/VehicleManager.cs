@@ -18,6 +18,7 @@ public class VehicleManager : MonoBehaviour
     // 해금 시스템
     private Dictionary<EVehicleType, bool> unlockedVehicles = new Dictionary<EVehicleType, bool>();
     public DebugEvent<EVehicleType> OnVehicleUnlocked = new DebugEvent<EVehicleType>();
+    public DebugEvent OnVehicleDataChanged = new DebugEvent();
     
     // 아이템과 차량 타입 매핑
     public Dictionary<EItemType, EVehicleType> ItemToVehicleMap = new Dictionary<EItemType, EVehicleType>
@@ -176,6 +177,7 @@ public class VehicleManager : MonoBehaviour
         {
             unlockedVehicles[vehicleType] = true;
             OnVehicleUnlocked.Invoke(vehicleType);
+            OnVehicleDataChanged.Invoke();
             Debug.Log($"{vehicleType} 차량이 해금되었습니다!");
         }
     }
@@ -201,6 +203,30 @@ public class VehicleManager : MonoBehaviour
         {
             if (kvp.Value)
                 result.Add(kvp.Key);
+        }
+        return result;
+    }
+    
+    public void LoadVehicleUnlockData(List<int> unlockedVehicleTypes)
+    {
+        foreach (int vehicleTypeInt in unlockedVehicleTypes)
+        {
+            EVehicleType vehicleType = (EVehicleType)vehicleTypeInt;
+            if (unlockedVehicles.ContainsKey(vehicleType))
+            {
+                unlockedVehicles[vehicleType] = true;
+                Debug.Log($"{vehicleType} 차량이 언락 상태로 설정되었습니다.");
+            }
+        }
+    }
+    
+    public List<int> GetUnlockedVehicleTypesAsInt()
+    {
+        var result = new List<int>();
+        foreach (var kvp in unlockedVehicles)
+        {
+            if (kvp.Value)
+                result.Add((int)kvp.Key);
         }
         return result;
     }

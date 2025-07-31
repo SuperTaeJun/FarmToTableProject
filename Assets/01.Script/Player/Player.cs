@@ -45,8 +45,8 @@ public class Player : MonoBehaviour
 
     async void Start()
     {
-        // Firebase에서 저장된 위치 로드
-        await LoadPlayerPosition();
+        // Firebase에서 저장된 플레이어 데이터 로드
+        await LoadPlayerData();
 
         // 기존 로컬 저장 데이터도 체크 (호환성)
         if (PlayerDataHolder.Instance.IsSavedData())
@@ -58,6 +58,12 @@ public class Player : MonoBehaviour
         }
 
         InputController.OnChunkPurchaseInput.AddListener(TryGenerateChunk);
+        
+        // VehicleManager 이벤트 등록
+        if (VehicleManager.Instance != null)
+        {
+            VehicleManager.Instance.OnVehicleDataChanged.AddListener(OnVehicleDataChanged);
+        }
     }
 
     void Update()
@@ -66,7 +72,7 @@ public class Player : MonoBehaviour
         _saveTimer += Time.deltaTime;
         if (_saveTimer >= _saveInterval)
         {
-            _ = SavePlayerPosition(); // 비동기 저장 (await 하지 않음)
+            _ = SavePlayerData(); // 비동기 저장 (await 하지 않음)
             _saveTimer = 0f;
         }
 
@@ -74,7 +80,7 @@ public class Player : MonoBehaviour
         {
             PlayerDataHolder.Instance.SavedData(gameObject.transform.position, gameObject.transform.rotation);
             // Firebase에도 저장
-            _ = SavePlayerPosition();
+            _ = SavePlayerData();
             FadeManager.Instance.FadeToScene("CharacterSelectScene");
         }
     }
@@ -174,32 +180,51 @@ public class Player : MonoBehaviour
         }
     }
 
-    public async Task SavePlayerPosition()
+    public async Task SavePlayerData()
     {
-        var playerData = new PlayerDataDto();
-        playerData.SetPosition(transform.position);
-        playerData.SetRotation(transform.rotation);
-        playerData.LastSaved = System.DateTime.UtcNow;
+        var currentData = await _playerRepository.LoadPlayerDataAsync();
+        if (currentData == null)
+        {
+            currentData = new PlayerDataDto();
+        }
 
-        await _playerRepository.SavePlayerDataAsync(playerData);
-        Debug.Log($"플레이어 위치 저장됨: {transform.position}");
+        currentData.SetPosition(transform.position);
+        currentData.SetRotation(transform.rotation);
+        currentData.LastSaved = System.DateTime.UtcNow;
+        
+        // 차량 언락 정보도 함께 저장
+        if (VehicleManager.Instance != null)
+        {
+            currentData.UnlockedVehicleTypes = VehicleManager.Instance.GetUnlockedVehicleTypesAsInt();
+        }
+
+        await _playerRepository.SavePlayerDataAsync(currentData);
+        Debug.Log($"플레이어 데이터 저장됨: {transform.position}");
     }
 
-    public async Task LoadPlayerPosition()
+    public async Task LoadPlayerData()
     {
         var playerData = await _playerRepository.LoadPlayerDataAsync();
         
         if (playerData != null)
         {
+            // 위치 정보 로드
             _characterController.gameObject.SetActive(false);
             transform.position = playerData.GetPosition();
             transform.rotation = playerData.GetRotation();
             _characterController.gameObject.SetActive(true);
             Debug.Log($"플레이어 위치 로드됨: {transform.position}");
+            
+            // 차량 언락 정보를 VehicleManager에 전달
+            if (VehicleManager.Instance != null && playerData.UnlockedVehicleTypes != null)
+            {
+                VehicleManager.Instance.LoadVehicleUnlockData(playerData.UnlockedVehicleTypes);
+                Debug.Log($"차량 언락 정보 로드됨: {playerData.UnlockedVehicleTypes.Count}개");
+            }
         }
         else
         {
-            Debug.Log("저장된 플레이어 위치가 없습니다.");
+            Debug.Log("저장된 플레이어 데이터가 없습니다.");
         }
     }
 
@@ -207,7 +232,7 @@ public class Player : MonoBehaviour
     {
         if (pauseStatus)
         {
-            _ = SavePlayerPosition();
+            _ = SavePlayerData();
         }
     }
 
@@ -215,7 +240,12 @@ public class Player : MonoBehaviour
     {
         if (!hasFocus)
         {
-            _ = SavePlayerPosition();
+            _ = SavePlayerData();
         }
+    }
+    
+    private void OnVehicleDataChanged()
+    {
+        _ = SavePlayerData();
     }
 }

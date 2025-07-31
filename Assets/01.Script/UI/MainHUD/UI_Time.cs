@@ -17,6 +17,6 @@ public class UI_Time : MonoBehaviour
     }
     private void RefreshDayText(int currentDay)
     {
-        _dayText.text = $"{currentDay+1}ÀÏÂ÷";
+        _dayText.text = $"{currentDay+1}ì¼ì°¨";
     }
 }

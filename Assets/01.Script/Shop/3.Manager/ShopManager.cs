@@ -99,7 +99,7 @@ public class ShopManager : MonoBehaviour
         return false;
     }
     
-    public List<ShopItem> GetBuyableItems(EShopCategory category = EShopCategory.All)
+    public List<ShopItem> GetBuyableItems(EShopCategory category)
     {
         if (_shopData == null) return new List<ShopItem>();
         
@@ -108,8 +108,8 @@ public class ShopManager : MonoBehaviour
         return category switch
         {
             EShopCategory.Seeds => allItems.Where(item => IsItemInCategory(item.ItemType, EShopCategory.Seeds)).ToList(),
-            EShopCategory.Materials => allItems.Where(item => IsItemInCategory(item.ItemType, EShopCategory.Materials)).ToList(),
-            _ => allItems
+            EShopCategory.Vehicle => allItems.Where(item => IsItemInCategory(item.ItemType, EShopCategory.Vehicle)).ToList(),
+            _ => new List<ShopItem>()
         };
     }
     public async Task<bool> TrySellItem(EItemType itemType, int quantity = 1)
@@ -192,8 +192,8 @@ public class ShopManager : MonoBehaviour
         return category switch
         {
             EShopCategory.Seeds => itemType.ToString().EndsWith("Seed"),
-            EShopCategory.Materials => itemType == EItemType.Wood || itemType == EItemType.Stone,
-            _ => true
+            EShopCategory.Vehicle => IsVehicleItem(itemType),
+            _ => false
         };
     }
     

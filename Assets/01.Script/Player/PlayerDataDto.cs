@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Firebase.Firestore;
 using UnityEngine;
 
@@ -28,6 +29,9 @@ public class PlayerDataDto
 
     [FirestoreProperty]
     public DateTime LastSaved { get; set; }
+
+    [FirestoreProperty]
+    public List<int> UnlockedVehicleTypes { get; set; } = new List<int>();
 
     public Vector3 GetPosition()
     {
