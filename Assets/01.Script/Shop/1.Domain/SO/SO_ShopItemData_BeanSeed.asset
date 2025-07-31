@@ -18,4 +18,4 @@ MonoBehaviour:
   SellPrice: 0
   CanBuy: 1
   CanSell: 0
-  HasUnlimitedStock: 0
+  HasUnlimitedStock: 1

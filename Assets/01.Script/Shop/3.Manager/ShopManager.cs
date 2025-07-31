@@ -51,6 +51,13 @@ public class ShopManager : MonoBehaviour
             return false;
         }
         
+        // 바이시클 아이템이 이미 해금되어 있는지 확인
+        if (IsVehicleItem(itemType) && IsVehicleAlreadyUnlocked(itemType))
+        {
+            Debug.LogWarning($"'{itemType}' 차량은 이미 해금되어 있습니다.");
+            return false;
+        }
+        
         int totalPrice = shopItem.GetTotalBuyPrice(quantity);
         if (!_currencyManager.CanAfford(ECurrencyType.Money, totalPrice))
         {
@@ -59,7 +66,8 @@ public class ShopManager : MonoBehaviour
             return false;
         }
         
-        if (!_inventoryManager.CanAddItem(itemType, quantity))
+        // 차량 아이템이 아닌 경우에만 인벤토리 공간 확인
+        if (!IsVehicleItem(itemType) && !_inventoryManager.CanAddItem(itemType, quantity))
         {
             Debug.LogWarning("인벤토리 공간이 부족합니다.");
             return false;
@@ -68,8 +76,19 @@ public class ShopManager : MonoBehaviour
         // 구매 실행
         if (shopItem.TryPurchase(quantity))
         {
-            await _inventoryManager.TryAddItem(itemType, quantity);
+            // 차량 아이템이 아닌 경우에만 인벤토리에 추가
+            if (!IsVehicleItem(itemType))
+            {
+                await _inventoryManager.TryAddItem(itemType, quantity);
+            }
+            
             await _currencyManager.TrySpendCurrency(ECurrencyType.Money, totalPrice);
+            
+            // 바이시클 아이템 구매 시 해금 처리
+            if (IsVehicleItem(itemType))
+            {
+                VehicleManager.Instance.UnlockVehicleFromItem(itemType);
+            }
             
             var transaction = new ShopTransaction(ETransactionType.Buy, itemType, quantity, shopItem.BuyPrice, _shopData.shopType);
             OnItemPurchased.Invoke(transaction);
@@ -184,6 +203,20 @@ public class ShopManager : MonoBehaviour
         
         var shopItem = _shopData.GetShopItem(itemType);
         return shopItem?.GetTotalBuyPrice(quantity) ?? 0;
+    }
+    
+    private bool IsVehicleItem(EItemType itemType)
+    {
+        return VehicleManager.Instance.ItemToVehicleMap.ContainsKey(itemType);
+    }
+    
+    private bool IsVehicleAlreadyUnlocked(EItemType itemType)
+    {
+        if (VehicleManager.Instance.ItemToVehicleMap.TryGetValue(itemType, out EVehicleType vehicleType))
+        {
+            return VehicleManager.Instance.IsVehicleUnlocked(vehicleType);
+        }
+        return false;
     }
 
 }

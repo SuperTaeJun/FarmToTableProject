@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class VehicleManager : MonoBehaviour
@@ -14,6 +15,19 @@ public class VehicleManager : MonoBehaviour
     private Dictionary<EVehicleType, GameObject> vehiclePrefabs;
     private List<Vehicle> activeVehicles = new List<Vehicle>();
     
+    // 해금 시스템
+    private Dictionary<EVehicleType, bool> unlockedVehicles = new Dictionary<EVehicleType, bool>();
+    public DebugEvent<EVehicleType> OnVehicleUnlocked = new DebugEvent<EVehicleType>();
+    
+    // 아이템과 차량 타입 매핑
+    public Dictionary<EItemType, EVehicleType> ItemToVehicleMap = new Dictionary<EItemType, EVehicleType>
+    {
+        { EItemType.Bike1, EVehicleType.Bike1 },
+        { EItemType.Bike2, EVehicleType.Bike2 },
+        { EItemType.Tractor, EVehicleType.Tractor },
+        { EItemType.Sedan, EVehicleType.Truck }
+    };
+    
     private void Awake()
     {
         if (Instance == null)
@@ -21,10 +35,23 @@ public class VehicleManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             InitializeVehiclePrefabs();
+            InitializeUnlockSystem();
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+    
+    private void InitializeUnlockSystem()
+    {
+        // 모든 차량을 잠금 상태로 시작
+        foreach (EVehicleType vehicleType in System.Enum.GetValues(typeof(EVehicleType)))
+        {
+            if (vehicleType != EVehicleType.None)
+            {
+                unlockedVehicles[vehicleType] = false;
+            }
         }
     }
     
@@ -42,11 +69,18 @@ public class VehicleManager : MonoBehaviour
         vehiclePrefabs[EVehicleType.Bike2] = _bike2Prefab;
     }
 
-    public Vehicle SpawnVehicle(EVehicleType vehicleType, Vector3 position, Player player, Quaternion rotation = default)
+    public Vehicle SpawnVehicle(EVehicleType vehicleType, Vector3 position, Player player, Quaternion rotation)
     {
         if (!vehiclePrefabs.ContainsKey(vehicleType))
         {
             Debug.LogError($"차량 프리팹을 찾을 수 없음: {vehicleType}");
+            return null;
+        }
+        
+        // 해금 체크
+        if (!IsVehicleUnlocked(vehicleType))
+        {
+            Debug.LogWarning($"{vehicleType} 차량이 해금되지 않았습니다.");
             return null;
         }
 
@@ -60,16 +94,7 @@ public class VehicleManager : MonoBehaviour
             }
         }
 
-        // 플레이어 주변에 스냅된 위치에 생성
-        Vector3 spawnPosition = SnapToGrid(position);
-
-        // 회전값이 기본값이면 플레이어 방향으로 설정
-        if (rotation == default(Quaternion))
-        {
-            rotation = player.transform.rotation;
-        }
-
-        GameObject vehicleObj = Instantiate(vehiclePrefabs[vehicleType], spawnPosition, rotation);
+        GameObject vehicleObj = Instantiate(vehiclePrefabs[vehicleType], position, rotation);
         Vehicle vehicle = vehicleObj.GetComponent<Vehicle>();
 
         if (vehicle == null)
@@ -81,8 +106,7 @@ public class VehicleManager : MonoBehaviour
 
         activeVehicles.Add(vehicle);
 
-        // 플레이어를 즉시 탑승시킴
-        vehicle.MountPlayer(player);
+        player.GetAbility<PlayerVehicleAbility>().MountVehicle(vehicle);
 
         Debug.Log($"{vehicleType} 차량이 생성되어 플레이어가 탑승했습니다.");
         return vehicle;
@@ -138,5 +162,46 @@ public class VehicleManager : MonoBehaviour
     public int GetActiveVehicleCount()
     {
         return activeVehicles.Count;
+    }
+    
+    // 해금 시스템 메서드들
+    public bool IsVehicleUnlocked(EVehicleType vehicleType)
+    {
+        return unlockedVehicles.ContainsKey(vehicleType) && unlockedVehicles[vehicleType];
+    }
+    
+    public void UnlockVehicle(EVehicleType vehicleType)
+    {
+        if (!unlockedVehicles.ContainsKey(vehicleType) || !unlockedVehicles[vehicleType])
+        {
+            unlockedVehicles[vehicleType] = true;
+            OnVehicleUnlocked.Invoke(vehicleType);
+            Debug.Log($"{vehicleType} 차량이 해금되었습니다!");
+        }
+    }
+    
+    public void UnlockVehicleFromItem(EItemType itemType)
+    {
+        EVehicleType vehicleType = GetVehicleTypeFromItem(itemType);
+        if (vehicleType != EVehicleType.None)
+        {
+            UnlockVehicle(vehicleType);
+        }
+    }
+    
+    private EVehicleType GetVehicleTypeFromItem(EItemType itemType)
+    {
+        return ItemToVehicleMap.TryGetValue(itemType, out EVehicleType vehicleType) ? vehicleType : EVehicleType.None;
+    }
+    
+    public List<EVehicleType> GetUnlockedVehicles()
+    {
+        var result = new List<EVehicleType>();
+        foreach (var kvp in unlockedVehicles)
+        {
+            if (kvp.Value)
+                result.Add(kvp.Key);
+        }
+        return result;
     }
 }

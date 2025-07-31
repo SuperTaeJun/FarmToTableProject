@@ -14,7 +14,7 @@ public enum EItemType
     OnionSeed,
     PepperSeed,
     AsparagusSeed,
-    
+
     // 작물류
     Carrot,
     Beet,
@@ -29,8 +29,14 @@ public enum EItemType
     Onion,
     Pepper,
     Asparagus,
-    
+
     // 건축재료
     Wood,
-    Stone
+    Stone,
+
+    // 차량 (해금용)
+    Bike1,
+    Bike2,
+    Tractor,
+    Sedan
 }

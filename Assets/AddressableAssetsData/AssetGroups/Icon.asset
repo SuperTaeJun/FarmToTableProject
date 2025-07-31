@@ -40,6 +40,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3caff7b893153ea42a42ea5c0c67f6bf
+    m_Address: Icon_Tracter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d62850934e8da74db3da99a60ee1661
+    m_Address: Icon_Sedan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4f4a7288f4f915e44a6a4968683dbda0
     m_Address: Icon_PumkinSeed
     m_ReadOnly: 0
@@ -57,6 +67,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63554b00b897f2940a21d0f0d8cd8655
     m_Address: Icon_CornSeed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 684e4726d75e229438c0595be9887fea
+    m_Address: Icon_Bike2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68d0d4769bacec24ca21f983ff64da35
+    m_Address: Icon_Bike1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

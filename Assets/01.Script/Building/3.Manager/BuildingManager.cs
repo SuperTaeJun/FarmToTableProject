@@ -10,12 +10,12 @@ public class BuildingManager : MonoBehaviour
 
     private BuildingRepository _buildingRepository;
     private Dictionary<string, List<Building>> loadedBuildings = new Dictionary<string, List<Building>>();
-    private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // ê±´ë¬¼ ì˜¤ë¸Œì íŠ¸ ìºì‹œ
+    private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // °Ç¹° ¿ÀºêÁ§Æ® Ä³½Ã
 
 
-    [SerializeField] private SO_Building[] buildingData; // SO_Building ë°°ì—´ ë°ì´í„°
+    [SerializeField] private SO_Building[] buildingData; // SO_Building ¹è¿­ µ¥ÀÌÅÍ
 
-    //í”„ë¦¬íŒ¹ë“¤ì„ ë¯¸ë¦¬ ìºì‹±í•´ë‘ 
+    //ÇÁ¸®ÆÕµéÀ» ¹Ì¸® Ä³½ÌÇØµÒ
     private Dictionary<EBuildingType, GameObject> cachedPrefabs = new Dictionary<EBuildingType, GameObject>();
     private Dictionary<EBuildingType, GameObject> cachedPreviewPrefabs = new Dictionary<EBuildingType, GameObject>();
 
@@ -42,18 +42,18 @@ public class BuildingManager : MonoBehaviour
     }
     private async Task LoadAllPrefabs()
     {
-        Debug.Log("ëª¨ë“  Building í”„ë¦¬íŒ¹ ë¡œë“œ ì‹œì‘...");
+        Debug.Log("¸ğµç Building ÇÁ¸®ÆÕ ·Îµå ½ÃÀÛ...");
 
         foreach (var data in buildingData)
         {
-            // ë©”ì¸ í”„ë¦¬íŒ¹ ë¡œë“œ
+            // ¸ŞÀÎ ÇÁ¸®ÆÕ ·Îµå
             if (data.Prefab != null)
             {
                 var prefab = await data.Prefab.LoadAssetAsync<GameObject>().Task;
                 cachedPrefabs[data.Type] = prefab;
             }
 
-            // í”„ë¦¬ë·° í”„ë¦¬íŒ¹ ë¡œë“œ
+            // ÇÁ¸®ºä ÇÁ¸®ÆÕ ·Îµå
             if (data.PreviewPrefab != null)
             {
                 var previewPrefab = await data.PreviewPrefab.LoadAssetAsync<GameObject>().Task;
@@ -61,33 +61,33 @@ public class BuildingManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"í”„ë¦¬íŒ¹ ë¡œë“œ ì™„ë£Œ: {cachedPrefabs.Count}ê°œ");
+        Debug.Log($"ÇÁ¸®ÆÕ ·Îµå ¿Ï·á: {cachedPrefabs.Count}°³");
     }
 
     public async Task LoadAllBuilding()
     {
         var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
-        Debug.Log($"ë¡œë”©ëœ ì²­í¬ ìˆ˜: {loadedChunks?.Count() ?? 0}");
+        Debug.Log($"·ÎµùµÈ Ã»Å© ¼ö: {loadedChunks?.Count() ?? 0}");
 
         if (loadedChunks == null || !loadedChunks.Any())
         {
-            Debug.Log("ë¡œë”©ëœ ì²­í¬ê°€ ì—†ìŠµë‹ˆë‹¤.");
+            Debug.Log("·ÎµùµÈ Ã»Å©°¡ ¾ø½À´Ï´Ù.");
             return;
         }
 
         foreach (var chunkPos in loadedChunks)
         {
             string chunkId = chunkPos.ToChunkId();
-            Debug.Log($"ì²­í¬ ë¡œë”© ì‹œë„: {chunkId}");
+            Debug.Log($"Ã»Å© ·Îµù ½Ãµµ: {chunkId}");
 
             try
             {
                 var buildings = await LoadBuildingsForChunk(chunkId);
-                Debug.Log($"ì²­í¬ {chunkId}ì—ì„œ {buildings.Count}ê°œì˜ ê±´ë¬¼ ë¡œë”©ë¨");
+                Debug.Log($"Ã»Å© {chunkId}¿¡¼­ {buildings.Count}°³ÀÇ °Ç¹° ·ÎµùµÊ");
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"ì²­í¬ {chunkId} ë¡œë”© ì‹¤íŒ¨: {e.Message}");
+                Debug.LogError($"Ã»Å© {chunkId} ·Îµù ½ÇÆĞ: {e.Message}");
             }
         }
     }
@@ -107,7 +107,7 @@ public class BuildingManager : MonoBehaviour
     {
         if (!cachedPrefabs.TryGetValue(building.Type, out GameObject prefab))
         {
-            Debug.LogError($"í”„ë¦¬íŒ¹ì„ ì°¾ì„ ìˆ˜ ì—†ìŒ: {building.Type}");
+            Debug.LogError($"ÇÁ¸®ÆÕÀ» Ã£À» ¼ö ¾øÀ½: {building.Type}");
             return null;
         }
 
@@ -126,12 +126,12 @@ public class BuildingManager : MonoBehaviour
         return previewPrefab;
     }
 
-    // í”„ë¦¬ë·° ì¸ìŠ¤í„´ìŠ¤ ìƒì„±í•´ì„œ ë°˜í™˜
+    // ÇÁ¸®ºä ÀÎ½ºÅÏ½º »ı¼ºÇØ¼­ ¹İÈ¯
     public GameObject CreatePreviewInstance(EBuildingType type)
     {
         if (!cachedPreviewPrefabs.TryGetValue(type, out GameObject previewPrefab))
         {
-            Debug.LogWarning($"í”„ë¦¬ë·° í”„ë¦¬íŒ¹ì„ ì°¾ì„ ìˆ˜ ì—†ìŒ: {type}");
+            Debug.LogWarning($"ÇÁ¸®ºä ÇÁ¸®ÆÕÀ» Ã£À» ¼ö ¾øÀ½: {type}");
             return null;
         }
 
@@ -143,7 +143,7 @@ public class BuildingManager : MonoBehaviour
 
     public Vector3 SnapToGrid(Vector3 position, Vector2Int size)
     {
-        // ê±´ë¬¼ì€ ë°˜ë“œì‹œ ì •í•´ì§„ ê·¸ë¦¬ë“œì— ìœ„ì¹˜
+        // °Ç¹°Àº ¹İµå½Ã Á¤ÇØÁø ±×¸®µå¿¡ À§Ä¡
         return new Vector3(
             Mathf.Round(position.x),
             position.y,
@@ -153,13 +153,13 @@ public class BuildingManager : MonoBehaviour
 
     public bool CanPlaceBuilding(string chunkId, Vector3 worldPosition, Vector2Int size)
     {
-        Debug.Log($"ê±´ë¬¼ ë°°ì¹˜ í™•ì¸ ì‹œì‘ - í¬ê¸°: {size}, ìœ„ì¹˜: {worldPosition}");
+        Debug.Log($"°Ç¹° ¹èÄ¡ È®ÀÎ ½ÃÀÛ - Å©±â: {size}, À§Ä¡: {worldPosition}");
 
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(chunkId);
         Vector3 localPosition = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, chunkPos);
         var buildings = GetLoadedBuildings(chunkId);
 
-        // ì¤‘ì‹¬ ì¢Œí‘œ ê¸°ì¤€ìœ¼ë¡œ í¬ê¸°ë§Œí¼ ì˜ì—­ ê³„ì‚°
+        // Áß½É ÁÂÇ¥ ±âÁØÀ¸·Î Å©±â¸¸Å­ ¿µ¿ª °è»ê
         float halfSizeX = size.x * ChunkGenerator.Instance.blockOffset.x * 0.5f;
         float halfSizeZ = size.y * ChunkGenerator.Instance.blockOffset.z * 0.5f;
 
@@ -169,32 +169,32 @@ public class BuildingManager : MonoBehaviour
             localPosition.z - halfSizeZ + (ChunkGenerator.Instance.blockOffset.z * 0.5f)
         );
 
-        Debug.Log($"ì‹œì‘ ìœ„ì¹˜: {startPosition}, ë¡œì»¬ ìœ„ì¹˜: {localPosition}");
+        Debug.Log($"½ÃÀÛ À§Ä¡: {startPosition}, ·ÎÄÃ À§Ä¡: {localPosition}");
 
-        // ë¨¼ì € ê±´ë¬¼ í¬ê¸°ë§Œí¼ì˜ ì˜ì—­ì´ í‰ì§€ì¸ì§€ í™•ì¸
+        // ¸ÕÀú °Ç¹° Å©±â¸¸Å­ÀÇ ¿µ¿ªÀÌ ÆòÁöÀÎÁö È®ÀÎ
         if (!IsAreaFlat(chunkPos, startPosition, size))
         {
-            Debug.Log("ë°°ì¹˜ ì‹¤íŒ¨ - ê±´ë¬¼ ì˜ì—­ì´ í‰ì§€ê°€ ì•„ë‹˜");
+            Debug.Log("¹èÄ¡ ½ÇÆĞ - °Ç¹° ¿µ¿ªÀÌ ÆòÁö°¡ ¾Æ´Ô");
             return false;
         }
 
-        // ë°°ì¹˜í•˜ë ¤ëŠ” ì˜ì—­ì˜ ê±´ë¬¼ ì¶©ëŒ ì²´í¬
+        // ¹èÄ¡ÇÏ·Á´Â ¿µ¿ªÀÇ °Ç¹° Ãæµ¹ Ã¼Å©
         for (int x = 0; x < size.x; x++)
         {
             for (int z = 0; z < size.y; z++)
             {
                 var checkPos = startPosition + new Vector3(x * ChunkGenerator.Instance.blockOffset.x, 0, z * ChunkGenerator.Instance.blockOffset.z);
 
-                // ë‹¤ë¥¸ ê±´ë¬¼ê³¼ì˜ ì¶©ëŒ í™•ì¸
+                // ´Ù¸¥ °Ç¹°°úÀÇ Ãæµ¹ È®ÀÎ
                 if (IsPositionOccupied(buildings, checkPos))
                 {
-                    Debug.Log($"ë°°ì¹˜ ì‹¤íŒ¨ - ìœ„ì¹˜ ({checkPos.x}, {checkPos.z})ê°€ ì ìœ ë¨");
+                    Debug.Log($"¹èÄ¡ ½ÇÆĞ - À§Ä¡ ({checkPos.x}, {checkPos.z})°¡ Á¡À¯µÊ");
                     return false;
                 }
             }
         }
 
-        Debug.Log("ê±´ë¬¼ ë°°ì¹˜ ê°€ëŠ¥!");
+        Debug.Log("°Ç¹° ¹èÄ¡ °¡´É!");
         return true;
     }
 
@@ -203,7 +203,7 @@ public class BuildingManager : MonoBehaviour
         float baseHeight = -999f;
         bool baseHeightSet = false;
 
-        // ê±´ë¬¼ í¬ê¸°ë§Œí¼ì˜ ëª¨ë“  ê·¸ë¦¬ë“œ ë†’ì´ í™•ì¸
+        // °Ç¹° Å©±â¸¸Å­ÀÇ ¸ğµç ±×¸®µå ³ôÀÌ È®ÀÎ
         for (int x = 0; x < size.x; x++)
         {
             for (int z = 0; z < size.y; z++)
@@ -221,7 +221,7 @@ public class BuildingManager : MonoBehaviour
                 }
                 else if (Mathf.Abs(height - baseHeight) > (ChunkGenerator.Instance.blockOffset.y * 0.5f))
                 {
-                    Debug.Log($"ë†’ì´ ì°¨ì´ ë°œê²¬: ê¸°ì¤€({baseHeight}) vs í˜„ì¬({height}) = {Mathf.Abs(height - baseHeight)}");
+                    Debug.Log($"³ôÀÌ Â÷ÀÌ ¹ß°ß: ±âÁØ({baseHeight}) vs ÇöÀç({height}) = {Mathf.Abs(height - baseHeight)}");
                     return false;
                 }
             }
@@ -239,7 +239,7 @@ public class BuildingManager : MonoBehaviour
 
         foreach (var building in buildings)
         {
-            // ì¤‘ì‹¬ ì¢Œí‘œ ê¸°ì¤€ìœ¼ë¡œ ì˜ì—­ ê³„ì‚°
+            // Áß½É ÁÂÇ¥ ±âÁØÀ¸·Î ¿µ¿ª °è»ê
             Vector3 buildingCenter = building.Position;
             float halfSizeX = building.Size.x * ChunkGenerator.Instance.blockOffset.x * 0.5f;
             float halfSizeZ = building.Size.y * ChunkGenerator.Instance.blockOffset.z * 0.5f;
@@ -260,8 +260,8 @@ public class BuildingManager : MonoBehaviour
 
                     if (occupiedGrid == checkGrid)
                     {
-                        Debug.Log($"ì¶©ëŒ! ì²´í¬:{checkGrid} vs ì ìœ :{occupiedGrid}");
-                        Debug.Log($"ê±´ë¬¼ì¤‘ì‹¬:{buildingCenter}, ì‹œì‘ìœ„ì¹˜:{buildingStart}, í¬ê¸°:{building.Size}");
+                        Debug.Log($"Ãæµ¹! Ã¼Å©:{checkGrid} vs Á¡À¯:{occupiedGrid}");
+                        Debug.Log($"°Ç¹°Áß½É:{buildingCenter}, ½ÃÀÛÀ§Ä¡:{buildingStart}, Å©±â:{building.Size}");
                         return true;
                     }
                 }
@@ -314,7 +314,7 @@ public class BuildingManager : MonoBehaviour
         var buildings = await _buildingRepository.LoadBuildingByChunk(chunkId);
         loadedBuildings[chunkId] = buildings;
 
-        // ë¡œë”©ëœ ê±´ë¬¼ì— ëŒ€í•´ ê²Œì„ì˜¤ë¸Œì íŠ¸ ìƒì„±
+        // ·ÎµùµÈ °Ç¹°¿¡ ´ëÇØ °ÔÀÓ¿ÀºêÁ§Æ® »ı¼º
         foreach (var building in buildings)
         {
             GameObject buildingObj = CreateBuildingGameObject(building);
@@ -345,7 +345,7 @@ public class BuildingManager : MonoBehaviour
 
     public void UnloadChunk(string chunkId)
     {
-        // í•´ë‹¹ ì²­í¬ì˜ ê±´ë¬¼ ì˜¤ë¸Œì íŠ¸ ì‚­ì œ
+        // ÇØ´ç Ã»Å©ÀÇ °Ç¹° ¿ÀºêÁ§Æ® »èÁ¦
         var buildingsToRemove = new List<string>();
         foreach (var kvp in buildingGameObjects)
         {

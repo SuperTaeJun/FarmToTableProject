@@ -35,10 +35,13 @@ public class CurrencyManager : MonoBehaviour
             return;
         }
     }
-    
+
     private async void Start()
     {
         await LoadCurrencies();
+
+        //임시로
+        _currencies[0].SetAmount(99999);
     }
     
     #region 재화 로드/저장
@@ -80,7 +83,7 @@ public class CurrencyManager : MonoBehaviour
     private void InitializeDefaultCurrencies()
     {
         _currencies.Clear();
-        _currencies.Add(new Currency(ECurrencyType.Money, 1000, 999999, false));
+        _currencies.Add(new Currency(ECurrencyType.Money, 2000, 999999, false));
         _currencies.Add(new Currency(ECurrencyType.Gem, 0, 99999, false));
         
         foreach (var currency in _currencies)
