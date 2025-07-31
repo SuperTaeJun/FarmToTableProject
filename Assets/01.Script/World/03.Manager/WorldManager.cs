@@ -630,21 +630,77 @@ public class WorldManager : MonoBehaviour
         return new Vector3(localX, localY, localZ);
     }
 
-    public bool SetBlock(Vector3 worldPosition, EBlockType blockType)
+    //public bool SetBlock(Vector3 worldPosition, EBlockType blockType)
+    //{
+    //    // 월드 좌표에서 청크 찾기
+    //    var chunk = GetChunkAtWorldPosition(worldPosition);
+    //    if (chunk == null)
+    //    {
+    //        Debug.LogWarning($"월드 위치 {worldPosition}에서 청크를 찾을 수 없습니다.");
+    //        return false;
+    //    }
+    //    // 청크 내 로컬 블럭 좌표 계산
+    //    var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
+    //    int blockX = Mathf.FloorToInt(localPos.x);
+    //    int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
+    //    int blockZ = Mathf.FloorToInt(localPos.z);
+    //    var localBlockPos = new BlockPosition(blockX, blockY, blockZ);
+    //    if (!IsValidBlockPosition(localBlockPos))
+    //    {
+    //        Debug.LogWarning($"잘못된 블럭 위치: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
+    //        return false;
+    //    }
+
+    //    var newBlock = new Block(blockType, localBlockPos);
+    //    chunk.SetBlock(newBlock);
+    //    // 청크 다시 빌드
+    //    RebuildChunk(chunk.Position);
+    //    return true;
+    //}
+    public bool SetBlock(Vector3 worldPosition, EBlockType blockType, int size = 1)
     {
-        // 월드 좌표에서 청크 찾기
+        HashSet<ChunkPosition> affectedChunks = new HashSet<ChunkPosition>();
+        bool success = true;
+
+        // size x size 영역만큼 반복하여 블럭 설정
+        for (int x = 0; x < size; x++)
+        {
+            for (int z = 0; z < size; z++)
+            {
+                Vector3 currentWorldPos = worldPosition + new Vector3(x, 0, z);
+
+                // 개별 블럭 설정
+                if (!SetSingleBlock(currentWorldPos, blockType, affectedChunks))
+                {
+                    success = false;
+                }
+            }
+        }
+
+        // 영향받은 청크들만 한번씩 리빌드
+        foreach (var chunkPos in affectedChunks)
+        {
+            RebuildChunk(chunkPos);
+        }
+
+        return success;
+    }
+
+    private bool SetSingleBlock(Vector3 worldPosition, EBlockType blockType, HashSet<ChunkPosition> affectedChunks)
+    {
         var chunk = GetChunkAtWorldPosition(worldPosition);
         if (chunk == null)
         {
             Debug.LogWarning($"월드 위치 {worldPosition}에서 청크를 찾을 수 없습니다.");
             return false;
         }
-        // 청크 내 로컬 블럭 좌표 계산
+
         var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
         int blockX = Mathf.FloorToInt(localPos.x);
         int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
         int blockZ = Mathf.FloorToInt(localPos.z);
         var localBlockPos = new BlockPosition(blockX, blockY, blockZ);
+
         if (!IsValidBlockPosition(localBlockPos))
         {
             Debug.LogWarning($"잘못된 블럭 위치: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
@@ -653,11 +709,12 @@ public class WorldManager : MonoBehaviour
 
         var newBlock = new Block(blockType, localBlockPos);
         chunk.SetBlock(newBlock);
-        // 청크 다시 빌드
-        RebuildChunk(chunk.Position);
+
+        // 영향받은 청크 추가
+        affectedChunks.Add(chunk.Position);
+
         return true;
     }
-
     public EBlockType GetBlockType(Vector3 worldPosition)
     {
         // 월드 좌표에서 청크 찾기

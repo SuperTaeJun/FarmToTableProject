@@ -32,6 +32,8 @@ public class PlayerAnimController : MonoBehaviour
 
             case EPlayerMode.Construction:
                 break;
+            case EPlayerMode.Vehicle:
+                break;
         }
     }
 

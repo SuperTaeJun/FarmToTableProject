@@ -49,7 +49,7 @@ public class PlayerVehicleAbility : PlayerAbility
         // 트랙터 전용 - 경작 토글 (F키)
         if (currentVehicle is Tractor tractor && Input.GetKeyDown(KeyCode.F))
         {
-            tractor.TogglePlowing();
+            tractor.HandlePlowing();
         }
     }
     
@@ -82,6 +82,11 @@ public class PlayerVehicleAbility : PlayerAbility
         if (vehicle == null) return;
         
         currentVehicle = vehicle;
+
+        _owner.CharacterController.enabled = false;
+        _owner.InputController.SetPlayerMoveInputLock(true);
+        _owner.ModeController.SwitchMode(EPlayerMode.Vehicle);
+        _owner.Animator.SetTrigger("Mount");
         vehicle.MountPlayer(_owner);
     }
     
@@ -91,6 +96,11 @@ public class PlayerVehicleAbility : PlayerAbility
         {
             currentVehicle.DismountPlayer();
             currentVehicle = null;
+            _owner.CharacterController.enabled = true;
+            _owner.InputController.SetPlayerMoveInputLock(false);
+            _owner.Animator.SetTrigger("Dismount");
+            _owner.ModeController.SwitchMode(EPlayerMode.BlockEdit);
+
         }
     }
     

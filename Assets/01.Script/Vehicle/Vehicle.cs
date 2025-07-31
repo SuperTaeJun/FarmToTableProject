@@ -1,20 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Vehicle : MonoBehaviour
 {
     [Header("Vehicle Settings")]
     public EVehicleType vehicleType;
-    public float maxSpeed = 3f;
-    public float acceleration = 1.5f;
-    public float brakeForce = 10f;
+    public float acceleration = 5f;
+    public float maxSpeed = 10f;
+    public float deceleration = 5f;
     public float turnSpeed = 100f;
-    
+    public Vector3 moveVelocity = Vector3.zero;
+
+    public float gravity = -9.81f;
+    public float groundCheckDistance = 0.2f;
+    public LayerMask groundLayer;
+
+    public bool isGrounded;
+    public float verticalVelocity = 0f;
+
+    [Header("바퀴 세팅")]
+    [SerializeField] private List<Transform> wheelMeshes; // 바퀴 오브젝트들 (Transform)
+    [SerializeField] private float wheelRadius = 0.3f;
+    [SerializeField] private List<Transform> steeringWheels; // 앞바퀴
+    [SerializeField] private float maxSteerAngle = 30f;
+
     [Header("Player Mount")]
     public Transform playerMountPoint;
     
     protected bool isOccupied = false;
     protected Player currentDriver;
-    protected Rigidbody vehicleRigidbody;
+    protected CharacterController vehicleController;
     
     // 입력 값들
     protected float horizontalInput;
@@ -22,12 +37,8 @@ public abstract class Vehicle : MonoBehaviour
     
     protected virtual void Awake()
     {
-        vehicleRigidbody = GetComponent<Rigidbody>();
-        if (vehicleRigidbody == null)
-        {
-            vehicleRigidbody = gameObject.AddComponent<Rigidbody>();
-        }
-        
+        vehicleController = GetComponent<CharacterController>();
+
         // 플레이어 마운트 포인트 설정
         if (playerMountPoint == null)
         {
@@ -44,6 +55,10 @@ public abstract class Vehicle : MonoBehaviour
         {
             HandleMovement();
             HandleSteering();
+            HandleGravity();
+
+            UpdateWheels();
+            UpdateSteering();
         }
     }
     
@@ -54,28 +69,14 @@ public abstract class Vehicle : MonoBehaviour
         isOccupied = true;
         currentDriver = player;
         
-        // CharacterController 비활성화 (위치 이동을 위해)
-        CharacterController playerController = player.GetComponent<CharacterController>();
-        if (playerController != null)
-        {
-            playerController.enabled = false;
-        }
+
         
         // 플레이어를 차량에 부모로 설정
         player.transform.SetParent(playerMountPoint);
         player.transform.localPosition = Vector3.zero;
         player.transform.localRotation = Quaternion.identity;
         
-        // CharacterController 다시 활성화
-        if (playerController != null)
-        {
-            playerController.enabled = true;
-        }
         
-        // 플레이어 모드를 Vehicle로 변경
-        player.ModeController.SwitchMode(EPlayerMode.Vehicle);
-        player.InputController.SetPlayerMoveInputLock(true);
-
         OnPlayerMounted(player);
     }
     
@@ -83,28 +84,13 @@ public abstract class Vehicle : MonoBehaviour
     {
         if (!isOccupied || currentDriver == null) return;
         
-        // CharacterController 비활성화 (위치 이동을 위해)
-        CharacterController playerController = currentDriver.GetComponent<CharacterController>();
-        if (playerController != null)
-        {
-            playerController.enabled = false;
-        }
-        
+
         // 플레이어를 차량에서 분리
         currentDriver.transform.SetParent(null);
         
-        // 플레이어를 차량 옆으로 이동
-        Vector3 dismountPosition = transform.position + transform.right * 3f * ChunkGenerator.Instance.blockOffset.x;
-        currentDriver.transform.position = dismountPosition;
-        
-        // CharacterController 다시 활성화
-        if (playerController != null)
-        {
-            playerController.enabled = true;
-        }
-        
-        // 플레이어 모드를 기본 모드로 변경
-        currentDriver.ModeController.SwitchMode(EPlayerMode.BlockEdit);
+        //// 플레이어를 차량 옆으로 이동
+        //Vector3 dismountPosition = transform.position + transform.right * 3f * ChunkGenerator.Instance.blockOffset.x;
+        //currentDriver.transform.position = dismountPosition;
         
         OnPlayerDismounted(currentDriver);
         
@@ -121,8 +107,82 @@ public abstract class Vehicle : MonoBehaviour
         verticalInput = vertical;
     }
     
-    protected abstract void HandleMovement();
-    protected abstract void HandleSteering();
+    protected void HandleMovement()
+    {
+        // 입력 감지
+        if (Mathf.Abs(verticalInput) > 0.1f)
+        {
+            // 가속 적용
+            moveVelocity += transform.forward * verticalInput * acceleration * Time.deltaTime;
+        }
+        else
+        {
+            // 감속 적용 (관성 감소)
+            moveVelocity = Vector3.Lerp(moveVelocity, Vector3.zero, deceleration * Time.deltaTime);
+        }
+
+        // 최대 속도 제한
+        if (moveVelocity.magnitude > maxSpeed)
+        {
+            moveVelocity = moveVelocity.normalized * maxSpeed;
+        }
+
+        // 실제 이동
+        vehicleController.Move(moveVelocity * Time.deltaTime);
+    }
+    protected void HandleSteering()
+    {
+        if (Mathf.Abs(horizontalInput) > 0.1f && Mathf.Abs(verticalInput) > 0.1f)
+        {
+            float steerAngle = horizontalInput * turnSpeed * Time.deltaTime;
+            transform.Rotate(0, steerAngle, 0);
+        }
+    }
+
+    protected void HandleGravity()
+    {
+        // 바닥 체크 (간단한 Raycast)
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f; // 바닥에 붙이는 정도로 소폭 유지
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
+        }
+
+        // 위에서 계산한 중력 벡터를 포함한 전체 이동 적용
+        Vector3 gravityMove = new Vector3(0f, verticalVelocity, 0f);
+        vehicleController.Move(gravityMove * Time.deltaTime);
+    }
+    protected void UpdateWheels()
+    {
+        float speed = moveVelocity.magnitude; // 현재 속도
+        float direction = Mathf.Sign(Vector3.Dot(moveVelocity, transform.forward)); // 전진 or 후진
+
+        float rotationAngle = (speed / wheelRadius) * Mathf.Rad2Deg * Time.deltaTime * direction;
+
+        foreach (var wheel in wheelMeshes)
+        {
+            // X축 기준 회전 (굴러가는 표현)
+            wheel.Rotate(Vector3.right, rotationAngle, Space.Self);
+        }
+    }
+    protected void UpdateSteering()
+    {
+        float steerAngle = horizontalInput * maxSteerAngle;
+        foreach (var wheel in steeringWheels)
+        {
+            // 조향 방향 적용 (Y축 회전)
+            Vector3 euler = wheel.localEulerAngles;
+            euler.y = steerAngle;
+            wheel.localEulerAngles = euler;
+        }
+    }
+
+
     protected virtual void OnPlayerMounted(Player player) { }
     protected virtual void OnPlayerDismounted(Player player) { }
     

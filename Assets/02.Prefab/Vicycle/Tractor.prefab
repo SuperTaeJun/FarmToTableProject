@@ -279,7 +279,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.6688063
+  m_Radius: 0.9
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1962440899652299106
 GameObject:
@@ -387,7 +387,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.8845587
+  m_Radius: 1.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2910848755293578430
 GameObject:
@@ -581,7 +581,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.6688063
+  m_Radius: 0.9
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3595173306028971325
 GameObject:
@@ -608,7 +608,7 @@ Transform:
   m_GameObject: {fileID: 3595173306028971325}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.016, z: -0.353}
+  m_LocalPosition: {x: 0, y: 0.85, z: -0.353}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -720,7 +720,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.8845587
+  m_Radius: 1.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7479474908317246216
 GameObject:
@@ -735,7 +735,7 @@ GameObject:
   - component: {fileID: 1744108034386868912}
   - component: {fileID: 7607041658801088623}
   - component: {fileID: 4574786206568259920}
-  - component: {fileID: 3685155062759500704}
+  - component: {fileID: 1064959615724720918}
   m_Layer: 0
   m_Name: Tractor
   m_TagString: Untagged
@@ -753,7 +753,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7932.5645, y: 0.050278187, z: 837.2817}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2061496069953444012}
@@ -854,43 +854,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 2
-  maxSpeed: 10
   acceleration: 5
-  brakeForce: 10
+  maxSpeed: 10
+  deceleration: 5
   turnSpeed: 100
+  moveVelocity: {x: 0, y: 0, z: 0}
+  gravity: -9.81
+  groundCheckDistance: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isGrounded: 0
+  verticalVelocity: 0
+  wheelMeshes:
+  - {fileID: 7416692936044096970}
+  - {fileID: 5942910206099530785}
+  - {fileID: 1795310468890551319}
+  - {fileID: 6800801448191103095}
+  wheelRadius: 1
+  steeringWheels:
+  - {fileID: 7416692936044096970}
+  - {fileID: 5942910206099530785}
+  maxSteerAngle: 30
   playerMountPoint: {fileID: 1631289614919925412}
   plowingSpeed: 2
   plowingWidth: 3
   farmlandLayer:
     serializedVersion: 2
     m_Bits: 64
---- !u!54 &3685155062759500704
-Rigidbody:
+--- !u!143 &1064959615724720918
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7479474908317246216}
-  serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2.5
+  m_Radius: 4
+  m_SlopeLimit: 45
+  m_StepOffset: 0.5
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 3.5, z: 0}
 --- !u!1 &7661701083602516771
 GameObject:
   m_ObjectHideFlags: 0

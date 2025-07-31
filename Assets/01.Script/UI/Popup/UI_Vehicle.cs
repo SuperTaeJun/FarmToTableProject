@@ -32,8 +32,8 @@ public class UI_Vehicle : UI_Popup
         
         // 플레이어 위치에서 차량 생성
         Vector3 spawnPosition = player.transform.position + player.transform.forward * 5f;
-        
         Vehicle vehicle = VehicleManager.Instance.SpawnVehicle(vehicleType, spawnPosition, player);
+        player.GetAbility<PlayerVehicleAbility>().MountVehicle(vehicle);
         
         if (vehicle != null)
         {
