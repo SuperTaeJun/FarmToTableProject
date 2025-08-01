@@ -46,10 +46,10 @@ public class PlayerVehicleAbility : PlayerAbility
             DismountVehicle();
         }
         
-        // 트랙터 전용 - 경작 토글 (F키)
-        if (currentVehicle is Tractor tractor && Input.GetKeyDown(KeyCode.F))
+        // 트랙터 전용 - V키로 농사 작업
+        if (currentVehicle is Tractor tractor && Input.GetKeyDown(KeyCode.V))
         {
-            tractor.HandlePlowing();
+            tractor.HandleFarming();
         }
     }
     

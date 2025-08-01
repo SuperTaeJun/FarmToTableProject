@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd1d6cab391e3d42b9d284685f5ee88, type: 3}
   m_Name: SO_ItemData_Tractor
   m_EditorClassIdentifier: 
-  Type: 30
+  Type: 31
   ItemName: "\uD2B8\uB809\uD130"
   Description: "\uADC0\uC5EC\uC6C0"
   Icon:
-    m_AssetGUID: 3caff7b893153ea42a42ea5c0c67f6bf
+    m_AssetGUID: 80d844a02e7c4704b9b42fbf8f9ce755
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

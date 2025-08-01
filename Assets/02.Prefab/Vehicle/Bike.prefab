@@ -14721,7 +14721,7 @@ Transform:
   m_GameObject: {fileID: 7594353545664805592}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.501442, y: 0, z: 101.33583}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14791,7 +14791,6 @@ MonoBehaviour:
   - {fileID: 4970783951482536055}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 8580375633271797516}
-  movementParticleObject: {fileID: 1418784246677463012}
   minSpeedForParticles: 0.5
 --- !u!1 &8791545247936897640
 GameObject:
@@ -14889,11 +14888,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e27e84fa0d9e714cbfb50f11e29deca, type: 3}
---- !u!1 &1418784246677463012 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 336629999044148561, guid: 8e27e84fa0d9e714cbfb50f11e29deca, type: 3}
-  m_PrefabInstance: {fileID: 1665060766654751413}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3421577452592472368 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4062415512702272389, guid: 8e27e84fa0d9e714cbfb50f11e29deca, type: 3}

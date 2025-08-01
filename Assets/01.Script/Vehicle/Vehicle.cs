@@ -39,7 +39,8 @@ public abstract class Vehicle : MonoBehaviour
     // 입력 값들
     protected float horizontalInput;
     protected float verticalInput;
-    
+
+    protected bool isLockMovement = false;
     protected virtual void Awake()
     {
         vehicleController = GetComponent<CharacterController>();
@@ -112,6 +113,8 @@ public abstract class Vehicle : MonoBehaviour
 
     protected void HandleMovement()
     {
+        if (isLockMovement) return;
+
         // 기존 가속/감속 로직
         if (Mathf.Abs(verticalInput) > 0.1f)
         {
@@ -131,6 +134,8 @@ public abstract class Vehicle : MonoBehaviour
     }
     protected void HandleSteering()
     {
+        if (isLockMovement) return;
+
         if (Mathf.Abs(horizontalInput) > 0.1f && Mathf.Abs(verticalInput) > 0.1f)
         {
             float steerAngle = horizontalInput * turnSpeed * Time.deltaTime;

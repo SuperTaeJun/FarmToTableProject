@@ -95,7 +95,7 @@ Transform:
   m_GameObject: {fileID: 326174500505319216}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -338,9 +338,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1712333402230237907}
-  - component: {fileID: 4691091785817313380}
+  - component: {fileID: 2320484772598785890}
+  - component: {fileID: 6021145136033782681}
   m_Layer: 0
-  m_Name: Halley
+  m_Name: Sedan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,7 +356,7 @@ Transform:
   m_GameObject: {fileID: 6193747972577514202}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.541245, y: 0, z: 112.45235}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -364,33 +365,68 @@ Transform:
   - {fileID: 5634656537865573977}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4691091785817313380
-Rigidbody:
+--- !u!114 &2320484772598785890
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6193747972577514202}
-  serializedVersion: 4
-  m_Mass: 1000
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9222ed73add994cac2aba71e97fa51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicleType: 1
+  acceleration: 5
+  maxSpeed: 10
+  deceleration: 5
+  turnSpeed: 100
+  moveVelocity: {x: 0, y: 0, z: 0}
+  gravity: -9.81
+  groundCheckDistance: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isGrounded: 0
+  verticalVelocity: 0
+  wheelMeshes:
+  - {fileID: 6717909352098851620}
+  - {fileID: 5072840546294819179}
+  - {fileID: 8483556803570965771}
+  - {fileID: 4184201707662669221}
+  wheelRadius: 0.3
+  steeringWheels:
+  - {fileID: 6717909352098851620}
+  - {fileID: 5072840546294819179}
+  maxSteerAngle: 30
+  playerMountPoint: {fileID: 5634656537865573977}
+  minSpeedForParticles: 2
+--- !u!143 &6021145136033782681
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6193747972577514202}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1
+  m_Radius: 1.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &6473128388363676324
 GameObject:
   m_ObjectHideFlags: 0

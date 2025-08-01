@@ -37,6 +37,10 @@ public enum EItemType
     // 차량 (해금용)
     Bike1,
     Bike2,
+    Bike3,
     Tractor,
-    Sedan
+    Sedan,
+    Cart,
+    Bicycle,
+    RacingCar
 }

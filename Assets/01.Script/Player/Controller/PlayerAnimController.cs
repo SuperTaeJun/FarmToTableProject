@@ -63,7 +63,7 @@ public class PlayerAnimController : MonoBehaviour
                 break;
             case ECropGrowthStage.Seed:
                 Debug.Log("씨앗 단계에서는 물을 줄 수 없습니다.");
-                return;
+                break;
             case ECropGrowthStage.Vegetative:
             case ECropGrowthStage.Mature:
                 // 이미 물을 준 상태인지 확인

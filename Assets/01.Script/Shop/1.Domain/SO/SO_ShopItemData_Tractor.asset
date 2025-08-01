@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01f70cdb4e249c345b8516eca750ba91, type: 3}
-  m_Name: SO_ShopItemData_Bike1
+  m_Name: SO_ShopItemData_Tractor
   m_EditorClassIdentifier: 
-  Type: 28
+  Type: 31
   Stock: 99
   BuyPrice: 100
   SellPrice: 0

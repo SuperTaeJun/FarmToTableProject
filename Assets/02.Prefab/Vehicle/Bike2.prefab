@@ -5203,7 +5203,7 @@ Transform:
   m_GameObject: {fileID: 4346851474126254382}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38.36, y: 0, z: 101.52823}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5248,7 +5248,6 @@ MonoBehaviour:
   - {fileID: 7514130396222768170}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 5034004685498521380}
-  movementParticleObject: {fileID: 4993566287731710196}
   minSpeedForParticles: 0.5
 --- !u!143 &683506679318925297
 CharacterController:

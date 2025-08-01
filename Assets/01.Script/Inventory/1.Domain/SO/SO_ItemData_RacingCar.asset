@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dd1d6cab391e3d42b9d284685f5ee88, type: 3}
-  m_Name: SO_ItemData_Bike1
+  m_Name: SO_ItemData_RacingCar
   m_EditorClassIdentifier: 
-  Type: 28
-  ItemName: "\uBC14\uC774\uD06C1"
+  Type: 35
+  ItemName: "\uB808\uC774\uC2F1\uCE74"
   Description: "\uADC0\uC5EC\uC6C0"
   Icon:
-    m_AssetGUID: 1ff36d05e45862d4bb99c2e917a7ce13
+    m_AssetGUID: 26b4d397e7b35e64cba7128c88329f45
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

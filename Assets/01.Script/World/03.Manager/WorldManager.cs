@@ -13,10 +13,10 @@ public class WorldManager : MonoBehaviour
     public ChunkGenerator dynamicGenerator;
 
     [Header("World Settings")]
-    public int worldWidth = 5;  // Ã»Å© ´ÜÀ§
+    public int worldWidth = 5;  // Ã»Å© ï¿½ï¿½ï¿½ï¿½
     public int worldDepth = 5;
 
-    // ·Îµù ÁøÇà»óÈ² ÀÌº¥Æ®
+    // ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½È² ï¿½Ìºï¿½Æ®
     public event Action<float> OnLoadingProgress;
     public event Action OnLoadingComplete;
 
@@ -28,7 +28,7 @@ public class WorldManager : MonoBehaviour
     private Dictionary<ChunkPosition, GameObject> _chunkObjects = new Dictionary<ChunkPosition, GameObject>();
     public IEnumerable<ChunkPosition> LoadedChunkPositions => _loadedChunks.Keys;
 
-    // ¸Þ½Ã ¾÷µ¥ÀÌÆ®°¡ ÇÊ¿äÇÑ Ã»Å©µéÀ» °ü¸®ÇÏ´Â Å¥
+    // ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Å¥
     private HashSet<ChunkPosition> _chunksNeedMeshUpdate = new HashSet<ChunkPosition>();
     private bool _isUpdatingMeshes = false;
 
@@ -92,7 +92,7 @@ public class WorldManager : MonoBehaviour
             if (_loadedChunks.ContainsKey(chunkPos))
             {
                 RebuildChunkWithNeighborCheck(chunkPos);
-                yield return null; // ÇÁ·¹ÀÓ ºÐ»ê
+                yield return null; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð»ï¿½
             }
         }
 
@@ -113,7 +113,7 @@ public class WorldManager : MonoBehaviour
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if (player == null)
         {
-            Debug.LogWarning("ÇÃ·¹ÀÌ¾î ¸øÃ£À½");
+            Debug.LogWarning("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ã£ï¿½ï¿½");
             return;
         }
 
@@ -129,12 +129,12 @@ public class WorldManager : MonoBehaviour
 
         Vector3 playerPosition = new Vector3(
             worldCenterX,
-            groundHeight + 1f, // Áö¸é¿¡¼­ 2À¯´Ö À§
+            groundHeight + 1f, // ï¿½ï¿½ï¿½é¿¡ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
             worldCenterZ
         );
 
         player.SetPositionForCharacterController(playerPosition);
-        Debug.Log($"[WorldManager] ÇÃ·¹ÀÌ¾î¸¦ ¿ùµå Áß¾Ó¿¡ ¹èÄ¡: {playerPosition}");
+        Debug.Log($"[WorldManager] ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½Ä¡: {playerPosition}");
     }
 
     private float FindGroundHeight(int chunkX, int chunkZ, int localX, int localZ)
@@ -143,22 +143,22 @@ public class WorldManager : MonoBehaviour
 
         if (!_loadedChunks.TryGetValue(chunkPos, out var chunk))
         {
-            // Ã»Å©°¡ ·ÎµåµÇÁö ¾ÊÀº °æ¿ì ±âº» ³ôÀÌ ¹ÝÈ¯
+            // Ã»Å©ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
             return dynamicGenerator.worldHeight * 0.5f * dynamicGenerator.blockOffset.y;
         }
 
-        // À§¿¡¼­ºÎÅÍ ¾Æ·¡·Î Å½»öÇÏ¿© Ã¹ ¹øÂ° ½ÇÁ¦ ºí·Ï Ã£±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½Ï¿ï¿½ Ã¹ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
         for (int y = dynamicGenerator.worldHeight - 1; y >= 0; y--)
         {
             var block = chunk.GetBlock(localX, y, localZ);
             if (block != null && block.Type != EBlockType.Air)
             {
-                // ½ÇÁ¦ ºí·ÏÀÇ »ó´Ü À§Ä¡ ¹ÝÈ¯
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½È¯
                 return (y + 1) * dynamicGenerator.blockOffset.y;
             }
         }
 
-        // ½ÇÁ¦ ºí·ÏÀÌ ¾ø´Â °æ¿ì ±âº» ³ôÀÌ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½
         return dynamicGenerator.blockOffset.y;
     }
 
@@ -190,7 +190,7 @@ public class WorldManager : MonoBehaviour
 
     public async Task LoadWorldFromFirebase()
     {
-        Debug.Log("[WorldManager] Firebase¿¡¼­ ¿ùµå ·Îµù ½ÃÀÛ!");
+        Debug.Log("[WorldManager] Firebaseï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½!");
 
         ClearExistingWorld();
 
@@ -198,7 +198,7 @@ public class WorldManager : MonoBehaviour
 
         if (chunkPositions.Count == 0)
         {
-            Debug.Log("[WorldManager] DB¿¡ Ã»Å© ¾øÀ½. ±âº» ¿ùµå »ý¼º.");
+            Debug.Log("[WorldManager] DBï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½. ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.");
 
             for (int cx = 0; cx < worldWidth; cx++)
             {
@@ -228,40 +228,40 @@ public class WorldManager : MonoBehaviour
             await Task.Yield();
         }
 
-        Debug.Log("[WorldManager] Firebase ¿ùµå ·Îµù ¿Ï·á!");
+        Debug.Log("[WorldManager] Firebase ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½Ï·ï¿½!");
 
         OnLoadingComplete?.Invoke();
     }
 
     private async Task LoadChunkFromFirebase(ChunkPosition pos)
     {
-        // Firebase¿¡¼­ Ã»Å© µ¥ÀÌÅÍ ·Îµå
+        // Firebaseï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         Chunk firebaseChunk = await _repo.LoadChunkAsync(pos);
 
         if (firebaseChunk == null)
         {
-            Debug.Log($"[WorldManager] Firebase¿¡ Ã»Å© ¾øÀ½, »õ·Î »ý¼º: {pos.X},{pos.Z}");
+            Debug.Log($"[WorldManager] Firebaseï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {pos.X},{pos.Z}");
             firebaseChunk = GenerateDynamicChunk(pos);
 
-            // »õ·Î »ý¼ºÇÑ Ã»Å©¸¦ Firebase¿¡ ÀúÀå
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ Firebaseï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             await _repo.SaveChunkAsync(firebaseChunk);
         }
         else
         {
-            Debug.Log($"[WorldManager] Firebase¿¡¼­ Ã»Å© ·Îµå ¿Ï·á: {pos.X},{pos.Z}");
+            Debug.Log($"[WorldManager] Firebaseï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½Îµï¿½ ï¿½Ï·ï¿½: {pos.X},{pos.Z}");
         }
 
-        // ¸Þ¸ð¸®¿¡ ·Îµå
+        // ï¿½Þ¸ð¸®¿ï¿½ ï¿½Îµï¿½
         _loadedChunks[pos] = firebaseChunk;
 
-        // µ¿ÀûÀ¸·Î ¾À¿¡ ·»´õ¸µ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         await BuildChunkInScene(pos, firebaseChunk);
 
-        // ÀÎÁ¢ Ã»Å©µéÀÇ ¸Þ½Ã ¾÷µ¥ÀÌÆ® ¿¹¾à
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         ScheduleAdjacentChunkMeshUpdates(pos);
     }
 
-    // ÀÎÁ¢ Ã»Å©µéÀÇ ¸Þ½Ã ¾÷µ¥ÀÌÆ®¸¦ ¿¹¾àÇÏ´Â ¸Þ¼­µå
+    // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     private void ScheduleAdjacentChunkMeshUpdates(ChunkPosition newChunkPos)
     {
         ChunkPosition[] adjacentPositions = {
@@ -295,7 +295,7 @@ public class WorldManager : MonoBehaviour
 
                 int height = GetDynamicHeight(worldX, worldZ);
 
-                // ÀüÃ¼ ³ôÀÌ¿¡ ´ëÇØ ºí·° »ý¼º
+                // ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½Ì¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 for (int y = 0; y < dynamicGenerator.worldHeight; y++)
                 {
                     var blockPos = new BlockPosition(x, y, z);
@@ -303,12 +303,12 @@ public class WorldManager : MonoBehaviour
 
                     if (y < height)
                     {
-                        // ÁöÇü ³ôÀÌ ÀÌÇÏ´Â ½ÇÁ¦ ºí·°
+                        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                         blockType = (y == height - 1) ? EBlockType.Grass : EBlockType.Dirt;
                     }
                     else
                     {
-                        // ÁöÇü ³ôÀÌ ÀÌ»óÀº Air ºí·°
+                        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ Air ï¿½ï¿½ï¿½ï¿½
                         blockType = EBlockType.Air;
                     }
 
@@ -334,11 +334,11 @@ public class WorldManager : MonoBehaviour
 
     private async Task BuildChunkInScene(ChunkPosition pos, Chunk chunk)
     {
-        // Chunk µ¥ÀÌÅÍ¸¦ ¿ùµå µ¥ÀÌÅÍ·Î º¯È¯
+        // Chunk ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ ï¿½ï¿½È¯
         string[,,] chunkWorldData = ConvertChunkToWorldData(chunk);
         var tcs = new TaskCompletionSource<bool>();
 
-        //ÃÖÀûÈ­ ¹öÀü
+        //ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
         StartCoroutine(dynamicGenerator.GenerateDynamicChunkCoroutine
 (
     pos,
@@ -347,38 +347,38 @@ public class WorldManager : MonoBehaviour
     chunkObject => { _chunkObjects[pos] = chunkObject; tcs.SetResult(true); }
 ));
 
-        ////ÃÖÀûÈ­ Àü ¹öÀü
-        //// DynamicChunkGenerator·Î µ¿Àû ·»´õ¸µ
+        ////ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //// DynamicChunkGeneratorï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         //GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(pos, chunkWorldData);
 
 
-        //// Ã»Å© ¿ÀºêÁ§Æ® µî·Ï
+        //// Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
         //chunkObjects[pos] = chunkObject;
 
         await tcs.Task;
-        //await Task.Yield(); // ÇÁ·¹ÀÓ ºÐ»ê
+        //await Task.Yield(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð»ï¿½
     }
 
-    // ÀÎÁ¢ Ã»Å© Á¤º¸¸¦ °í·ÁÇÑ Ã»Å© Àçºôµå
+    // ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½
     private void RebuildChunkWithNeighborCheck(ChunkPosition chunkPos)
     {
         if (!_loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
             return;
 
-        // ±âÁ¸ Ã»Å© ¿ÀºêÁ§Æ® »èÁ¦
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         if (_chunkObjects.TryGetValue(chunkPos, out GameObject oldChunkObject))
         {
             Destroy(oldChunkObject);
             _chunkObjects.Remove(chunkPos);
         }
 
-        // ÀÎÁ¢ Ã»Å© Á¤º¸¸¦ °í·ÁÇÑ ¿ùµå µ¥ÀÌÅÍ »ý¼º
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         string[,,] chunkWorldData = ConvertChunkToWorldDataWithNeighbors(chunk);
         GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(chunkPos, chunkWorldData);
         _chunkObjects[chunkPos] = chunkObject;
     }
 
-    // ÀÎÁ¢ Ã»Å© Á¤º¸¸¦ °í·ÁÇÑ ¿ùµå µ¥ÀÌÅÍ º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     private string[,,] ConvertChunkToWorldDataWithNeighbors(Chunk chunk)
     {
         int chunkSize = Chunk.ChunkSize;
@@ -393,7 +393,7 @@ public class WorldManager : MonoBehaviour
                     var block = chunk.GetBlock(x, y, z);
                     if (block != null && block.Type != EBlockType.Air)
                     {
-                        // ÀÌ ºí·ÏÀÌ ·»´õ¸µµÇ¾î¾ß ÇÏ´ÂÁö È®ÀÎ
+                        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                         if (IsBlockVisibleWithNeighbors(chunk.Position, x, y, z))
                         {
                             worldData[x, y, z] = block.Type.ToString();
@@ -406,7 +406,7 @@ public class WorldManager : MonoBehaviour
         return worldData;
     }
 
-    // ÀÎÁ¢ Ã»Å©¸¦ °í·ÁÇÑ ºí·Ï °¡½Ã¼º Ã¼Å©
+    // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¼ï¿½ Ã¼Å©
     private bool IsBlockVisibleWithNeighbors(ChunkPosition chunkPos, int x, int y, int z)
     {
         Vector3Int[] directions = {
@@ -424,17 +424,17 @@ public class WorldManager : MonoBehaviour
             int adjacentY = y + dir.y;
             int adjacentZ = z + dir.z;
 
-            // ÀÎÁ¢ À§Ä¡¿¡ ºí·ÏÀÌ ÀÖ´ÂÁö È®ÀÎ (Ã»Å© °æ°è °í·Á)
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ (Ã»Å© ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
             if (!HasBlockAtPosition(chunkPos, adjacentX, adjacentY, adjacentZ))
             {
-                return true; // ÀÎÁ¢ À§Ä¡°¡ ºñ¾îÀÖÀ¸¸é ÀÌ ¸éÀ» ±×¸²
+                return true; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½
             }
         }
 
-        return false; // ¸ðµç ¸éÀÌ ¸·ÇôÀÖÀ½
+        return false; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
-    // Ã»Å© °æ°è¸¦ ³Ñ³ªµå´Â ºí·Ï Á¸Àç ¿©ºÎ È®ÀÎ
+    // Ã»Å© ï¿½ï¿½è¸¦ ï¿½Ñ³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     private bool HasBlockAtPosition(ChunkPosition baseChunkPos, int x, int y, int z)
     {
         ChunkPosition targetChunkPos = baseChunkPos;
@@ -442,7 +442,7 @@ public class WorldManager : MonoBehaviour
         int localY = y;
         int localZ = z;
 
-        // Ã»Å© °æ°è¸¦ ³Ñ¾î°¡´Â °æ¿ì ÁÂÇ¥ Á¶Á¤
+        // Ã»Å© ï¿½ï¿½è¸¦ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
         if (x < 0)
         {
             targetChunkPos = new ChunkPosition(baseChunkPos.X - 1, baseChunkPos.Y, baseChunkPos.Z);
@@ -493,7 +493,7 @@ public class WorldManager : MonoBehaviour
                     var block = chunk.GetBlock(x, y, z);
                     if (block != null)
                     {
-                        // Air ºí·°Àº ·»´õ¸µÇÏÁö ¾ÊÀ½ (null·Î µÎ±â)
+                        // Air ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (nullï¿½ï¿½ ï¿½Î±ï¿½)
                         if (block.Type != EBlockType.Air)
                         {
                             worldData[x, y, z] = block.Type == EBlockType.Grass ? "Grass" : "Dirt";
@@ -508,7 +508,7 @@ public class WorldManager : MonoBehaviour
 
     private void ClearExistingWorld()
     {
-        // ±âÁ¸ Ã»Å© ¿ÀºêÁ§Æ®µé »èÁ¦
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (var kvp in _chunkObjects)
         {
             if (kvp.Value != null)
@@ -520,7 +520,7 @@ public class WorldManager : MonoBehaviour
         _chunkObjects.Clear();
         _loadedChunks.Clear();
 
-        Debug.Log("[WorldManager] ±âÁ¸ ¿ùµå Á¤¸® ¿Ï·á");
+        Debug.Log("[WorldManager] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½");
     }
 
     public bool HasChunk(ChunkPosition pos)
@@ -537,7 +537,7 @@ public class WorldManager : MonoBehaviour
         await _repo.SaveChunkAsync(_loadedChunks[pos]);
         await ForageManager.Instance.GenerateForagesInChunk(pos);
 
-        // ÀÎÁ¢ Ã»Å©µéÀÇ ¸Þ½Ã ¾÷µ¥ÀÌÆ® ¿¹¾à
+        // ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         ScheduleAdjacentChunkMeshUpdates(pos);
     }
 
@@ -575,19 +575,19 @@ public class WorldManager : MonoBehaviour
         float chunkWorldSizeX = chunkSizeX * blockOffsetX;
         float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
 
-        // Ã»Å©ÀÇ ¿ùµå ½ÃÀÛ ÁÂÇ¥
+        // Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
         float chunkWorldStartX = chunkPos.X * chunkWorldSizeX;
         float chunkWorldStartZ = chunkPos.Z * chunkWorldSizeZ;
 
-        // ·ÎÄÃ ÁÂÇ¥¸¦ ¿ùµå ÁÂÇ¥·Î º¯È¯
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½È¯
         float worldX = chunkWorldStartX + (localPosition.x * blockOffsetX);
-        float worldY = localPosition.y; // Y´Â º¯È¯ ºÒÇÊ¿ä
+        float worldY = localPosition.y; // Yï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½Ê¿ï¿½
         float worldZ = chunkWorldStartZ + (localPosition.z * blockOffsetZ);
 
         return new Vector3(worldX, worldY, worldZ);
     }
 
-    // Ã»Å© id·Îµµ °¡´ÉÇÏ°Ô ¿À¹ö¶óÀÌµå
+    // Ã»Å© idï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½
     public Vector3 GetWorldPositionFromChunkLocal(string chunkId, Vector3 localPosition)
     {
         var chunkPos = GetChunkPositionFromId(chunkId);
@@ -621,58 +621,32 @@ public class WorldManager : MonoBehaviour
         float chunkWorldSizeX = chunkSizeX * blockOffsetX;
         float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
 
-        // Ã»Å©ÀÇ ¿ùµå ½ÃÀÛ ÁÂÇ¥
+        // Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
         float chunkWorldStartX = chunkPos.X * chunkWorldSizeX;
         float chunkWorldStartZ = chunkPos.Z * chunkWorldSizeZ;
 
-        // ¿ùµå ÁÂÇ¥¿¡¼­ Ã»Å© ·ÎÄÃ ÁÂÇ¥·Î º¯È¯
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½È¯
         float localX = (worldPosition.x - chunkWorldStartX) / blockOffsetX;
         float localY = worldPosition.y;
         float localZ = (worldPosition.z - chunkWorldStartZ) / blockOffsetZ;
 
         return new Vector3(localX, localY, localZ);
     }
-
-    //public bool SetBlock(Vector3 worldPosition, EBlockType blockType)
-    //{
-    //    // ¿ùµå ÁÂÇ¥¿¡¼­ Ã»Å© Ã£±â
-    //    var chunk = GetChunkAtWorldPosition(worldPosition);
-    //    if (chunk == null)
-    //    {
-    //        Debug.LogWarning($"¿ùµå À§Ä¡ {worldPosition}¿¡¼­ Ã»Å©¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-    //        return false;
-    //    }
-    //    // Ã»Å© ³» ·ÎÄÃ ºí·° ÁÂÇ¥ °è»ê
-    //    var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
-    //    int blockX = Mathf.FloorToInt(localPos.x);
-    //    int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
-    //    int blockZ = Mathf.FloorToInt(localPos.z);
-    //    var localBlockPos = new BlockPosition(blockX, blockY, blockZ);
-    //    if (!IsValidBlockPosition(localBlockPos))
-    //    {
-    //        Debug.LogWarning($"Àß¸øµÈ ºí·° À§Ä¡: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
-    //        return false;
-    //    }
-
-    //    var newBlock = new Block(blockType, localBlockPos);
-    //    chunk.SetBlock(newBlock);
-    //    // Ã»Å© ´Ù½Ã ºôµå
-    //    RebuildChunk(chunk.Position);
-    //    return true;
-    //}
     public bool SetBlock(Vector3 worldPosition, EBlockType blockType, int size = 1)
     {
         HashSet<ChunkPosition> affectedChunks = new HashSet<ChunkPosition>();
         bool success = true;
 
-        // size x size ¿µ¿ª¸¸Å­ ¹Ýº¹ÇÏ¿© ºí·° ¼³Á¤
-        for (int x = 0; x < size; x++)
+        // ì¤‘ì‹¬ ê¸°ì¤€ìœ¼ë¡œ size x size ì˜ì—­ ê³„ì‚° (ë¸”ë¡ ì˜¤í”„ì…‹ ì ìš©)
+        int halfSize = size / 2;
+        Vector3 blockOffset = dynamicGenerator.blockOffset;
+        
+        for (int x = -halfSize; x <= halfSize; x++)
         {
-            for (int z = 0; z < size; z++)
+            for (int z = -halfSize; z <= halfSize; z++)
             {
-                Vector3 currentWorldPos = worldPosition + new Vector3(x, 0, z);
+                Vector3 currentWorldPos = worldPosition + new Vector3(x * blockOffset.x, 0, z * blockOffset.z);
 
-                // °³º° ºí·° ¼³Á¤
                 if (!SetSingleBlock(currentWorldPos, blockType, affectedChunks))
                 {
                     success = false;
@@ -680,7 +654,6 @@ public class WorldManager : MonoBehaviour
             }
         }
 
-        // ¿µÇâ¹ÞÀº Ã»Å©µé¸¸ ÇÑ¹ø¾¿ ¸®ºôµå
         foreach (var chunkPos in affectedChunks)
         {
             RebuildChunk(chunkPos);
@@ -694,7 +667,7 @@ public class WorldManager : MonoBehaviour
         var chunk = GetChunkAtWorldPosition(worldPosition);
         if (chunk == null)
         {
-            Debug.LogWarning($"¿ùµå À§Ä¡ {worldPosition}¿¡¼­ Ã»Å©¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ {worldPosition}ï¿½ï¿½ï¿½ï¿½ Ã»Å©ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return false;
         }
 
@@ -706,24 +679,24 @@ public class WorldManager : MonoBehaviour
 
         if (!IsValidBlockPosition(localBlockPos))
         {
-            Debug.LogWarning($"Àß¸øµÈ ºí·° À§Ä¡: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
+            Debug.LogWarning($"ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
             return false;
         }
 
         var newBlock = new Block(blockType, localBlockPos);
         chunk.SetBlock(newBlock);
 
-        // ¿µÇâ¹ÞÀº Ã»Å© Ãß°¡
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã»Å© ï¿½ß°ï¿½
         affectedChunks.Add(chunk.Position);
 
         return true;
     }
     public EBlockType GetBlockType(Vector3 worldPosition)
     {
-        // ¿ùµå ÁÂÇ¥¿¡¼­ Ã»Å© Ã£±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ Ã»Å© Ã£ï¿½ï¿½
         var chunk = GetChunkAtWorldPosition(worldPosition);
 
-        // Ã»Å© ³» ·ÎÄÃ ºí·° ÁÂÇ¥ °è»ê
+        // Ã»Å© ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½
         var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
         int blockX = Mathf.FloorToInt(localPos.x);
         int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
@@ -749,10 +722,10 @@ public class WorldManager : MonoBehaviour
 
     public bool HasBlockAt(ChunkPosition chunkPos, int x, int y, int z)
     {
-        // Ã»Å©°¡ ·ÎµåµÇ¾î ÀÖ´ÂÁö È®ÀÎ
+        // Ã»Å©ï¿½ï¿½ ï¿½Îµï¿½Ç¾ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (!_loadedChunks.ContainsKey(chunkPos))
         {
-            return false; // Ã»Å©°¡ ¾øÀ¸¸é ºí·Ïµµ ¾øÀ½
+            return false; // Ã»Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
         var chunk = _loadedChunks[chunkPos];

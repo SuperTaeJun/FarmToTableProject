@@ -110,8 +110,6 @@ public class CropsManager : MonoBehaviour
         Chunk currentChunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPos);
         Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(worldPos, currentChunk.Position);
         string cropKey = GetCropKey(chunkId, localPos);
-
-        // �̹� �ش� ��ġ�� �۹��� �ִ��� Ȯ��
         if (_crops.ContainsKey(cropKey))
         {
             return;

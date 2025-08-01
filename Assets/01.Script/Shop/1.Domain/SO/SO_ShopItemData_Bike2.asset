@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 29
   Stock: 99
-  BuyPrice: 2000
+  BuyPrice: 100
   SellPrice: 0
   CanBuy: 1
   CanSell: 0
