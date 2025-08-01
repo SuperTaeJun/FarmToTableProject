@@ -10,7 +10,7 @@ public class CropsManager : MonoBehaviour
     private CropRepository _repo;
     private Dictionary<string, Crop> _crops = new Dictionary<string, Crop>();
     public Dictionary<string, Crop> Crops => _crops;
-    
+
     // Addressables 캐시
     private Dictionary<ECropType, GameObject> _cachedCropPrefabs = new Dictionary<ECropType, GameObject>();
 
@@ -46,7 +46,7 @@ public class CropsManager : MonoBehaviour
         _repo = new CropRepository();
         InitializeCropDataDict();
     }
-    
+
     private void InitializeCropDataDict()
     {
         _cropDataDict.Clear();
@@ -69,7 +69,7 @@ public class CropsManager : MonoBehaviour
     {
         // 먼저 프리팩을 로딩
         await PreloadAllCropPrefabs();
-        
+
         // 그 다음 크롭 데이터 로딩
         var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
         foreach (var chunkPos in loadedChunks)
@@ -125,7 +125,7 @@ public class CropsManager : MonoBehaviour
             Debug.LogError($"농작물 프리팹을 찾을 수 없습니다: {cropType}");
             return;
         }
-        
+
         GameObject cropObject = GameObject.Instantiate(prefab, gameObject.transform);
         cropObject.transform.position = worldPos;
         await _repo.SaveSingleCrop(newCrop);
@@ -178,16 +178,16 @@ public class CropsManager : MonoBehaviour
     {
         InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f); // 1�и��� ���� ������Ʈ
     }
-    
+
     public SO_Crop GetCropData(ECropType cropType)
     {
         return _cropDataDict.TryGetValue(cropType, out SO_Crop cropData) ? cropData : null;
     }
-    
+
     private async Task PreloadAllCropPrefabs()
     {
         Debug.Log("농작물 프리팹 사전 로딩 시작...");
-        
+
         foreach (ECropType cropType in System.Enum.GetValues(typeof(ECropType)))
         {
             try
@@ -195,7 +195,7 @@ public class CropsManager : MonoBehaviour
                 string address = $"Crop_{cropType}";
                 var handle = Addressables.LoadAssetAsync<GameObject>(address);
                 GameObject prefab = await handle.Task;
-                
+
                 if (prefab != null)
                 {
                     _cachedCropPrefabs[cropType] = prefab;
@@ -211,10 +211,10 @@ public class CropsManager : MonoBehaviour
                 Debug.LogError($"농작물 프리팹 로드 실패: {cropType} - {e.Message}");
             }
         }
-        
+
         Debug.Log($"농작물 프리팹 사전 로딩 완료: {_cachedCropPrefabs.Count}개");
     }
-    
+
     private GameObject GetCropPrefab(ECropType cropType)
     {
         return _cachedCropPrefabs.TryGetValue(cropType, out GameObject prefab) ? prefab : null;
@@ -244,11 +244,11 @@ public class CropsManager : MonoBehaviour
                 Debug.LogWarning($"Crop data not found for type: {crop.Type}");
                 continue;
             }
-            
+
             // GameTimeManager의 시간을 기반으로 성장률 계산
-            float gameHoursPerSecond = GameTimeManager.Instance != null ? 
+            float gameHoursPerSecond = GameTimeManager.Instance != null ?
                 24f / GameTimeManager.Instance.secondsPerDay : 1f / 3600f;
-            
+
             float growthRatePerSecond = gameHoursPerSecond / cropData.GrowthTimeInHours;
             crop.UpdateGrowthWithCropData(growthRatePerSecond * 5f, cropData); // 5초마다 업데이트하므로 5를 곱함
             cropsToUpdate.Add(crop);
@@ -294,22 +294,17 @@ public class CropsManager : MonoBehaviour
             return;
         }
 
-        // ���� �ܰ質 ��Ȯ �ܰ迡���� ���� �� �� ����
-        if (crop.GrowthStage == ECropGrowthStage.Seed ||
-            crop.GrowthStage == ECropGrowthStage.Harvest)
+        if (crop.GrowthStage == ECropGrowthStage.Seed || crop.GrowthStage == ECropGrowthStage.Harvest)
         {
-            Debug.Log("�� �ܰ迡���� ���� �� �� �����ϴ�.");
             return;
         }
 
-        // �̹� ���� �־����� Ȯ��
         if (crop.IsWateredForCurrentStage())
         {
-            Debug.Log("�̹� �� �ܰ迡�� ���� �־����ϴ�.");
             return;
         }
 
-        crop.WaterCurrentStage(); // ���� �ܰ迡 �� �ֱ�
+        crop.WaterCurrentStage();
         await _repo.WaterCrop(chunkId, localPosition);
         OnCropWatered.Invoke(crop);
     }
@@ -323,15 +318,12 @@ public class CropsManager : MonoBehaviour
         CancelInvoke(nameof(UpdateCropGrowth));
     }
 
-    //�ܺ� ���� �޼���
     public Crop GetCropAtWorldPosition(Vector3 worldPosition)
     {
-        // ���� �������� ûũ ID�� ���� ���������� ��ȯ
         string chunkId = WorldManager.GetChunkId(worldPosition);
         Chunk currentChunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPosition);
         Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(worldPosition, currentChunk.Position);
 
-        // ���� GetCrop �޼��� ���
         return GetCrop(chunkId, localPos);
     }
 

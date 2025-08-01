@@ -122,12 +122,6 @@ public class BuildingManager : MonoBehaviour
         return buildingObj;
     }
 
-    public GameObject GetPreviewPrefab(EBuildingType type)
-    {
-        cachedPreviewPrefabs.TryGetValue(type, out GameObject previewPrefab);
-        return previewPrefab;
-    }
-
     public GameObject CreatePreviewInstance(EBuildingType type)
     {
         if (!cachedPreviewPrefabs.TryGetValue(type, out GameObject previewPrefab))
@@ -216,19 +210,16 @@ public class BuildingManager : MonoBehaviour
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(chunkId);
         Vector3 worldPosition = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, centerPosition);
         
-        // 건물 크기에 맞는 박스 사이즈 계산
         Vector3 boxSize = new Vector3(
             size.x * ChunkGenerator.Instance.blockOffset.x,
             2f, // 높이는 고정값
             size.y * ChunkGenerator.Instance.blockOffset.z
         );
         
-        // 박스 오버랩으로 한 번에 검사 (성능 최적화)
         Collider[] overlapping = Physics.OverlapBox(worldPosition, boxSize * 0.5f, Quaternion.identity);
         
         foreach (var collider in overlapping)
         {
-            // BuildingObject 컴포넌트가 있는 오브젝트인지 확인
             if (collider.GetComponent<BuildingObject>() != null)
             {
                 return true;
@@ -309,27 +300,6 @@ public class BuildingManager : MonoBehaviour
     public List<Building> GetLoadedBuildings(string chunkId)
     {
         return loadedBuildings.ContainsKey(chunkId) ? loadedBuildings[chunkId] : new List<Building>();
-    }
-
-    public void UnloadChunk(string chunkId)
-    {
-        // 해당 청크의 빌딩 게임오브젝트 삭제
-        var buildingsToRemove = new List<string>();
-        foreach (var kvp in buildingGameObjects)
-        {
-            if (kvp.Key.StartsWith(chunkId))
-            {
-                Destroy(kvp.Value);
-                buildingsToRemove.Add(kvp.Key);
-            }
-        }
-
-        foreach (var buildingId in buildingsToRemove)
-        {
-            buildingGameObjects.Remove(buildingId);
-        }
-
-        loadedBuildings.Remove(chunkId);
     }
 
     public SO_Building GetBuildingInfo(EBuildingType type)

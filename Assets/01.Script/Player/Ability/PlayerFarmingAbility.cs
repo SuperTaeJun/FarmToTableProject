@@ -32,7 +32,6 @@ public class PlayerFarmingAbility : PlayerAbility
             Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(selectedPos);
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
 
-            // ���� ���� ��������
             Block currentBlock = chunk.GetBlock((int)localPos.x, (int)localPos.y, (int)localPos.z);
 
             if (currentBlock != null && (currentBlock.Type == EBlockType.Dirt || currentBlock.Type == EBlockType.Grass))
@@ -47,9 +46,10 @@ public class PlayerFarmingAbility : PlayerAbility
     }
     public void OnWaterCrop()
     {
-        Debug.Log("���ִ��Լ� ȣ��");
-
         Vector3 selectedPos = _owner.CurrentSelectedPos;
+
+        ObjectPoolManager.Instance.Get(PoolType.CropWater, selectedPos);
+
         string chunkId = WorldManager.GetChunkId(selectedPos);
 
         if (CropsManager.Instance != null)
@@ -57,7 +57,6 @@ public class PlayerFarmingAbility : PlayerAbility
             Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(selectedPos);
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
             _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
-            Debug.Log($"���� �־����ϴ�: {selectedPos}");
         }
     }
 

@@ -70,7 +70,6 @@ public class Crop
         }
     }
 
-    // �ܰ躰 �� �ֱ� �ý���
     public void WaterCurrentStage()
     {
         switch (GrowthStage)

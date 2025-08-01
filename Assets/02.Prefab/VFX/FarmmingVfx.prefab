@@ -9372,7 +9372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff61a031bf5af14b837a223fc78279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolType: 1
+  poolType: 2
   particles: {fileID: 4955258683721189727}
   customDuration: 0
 --- !u!1 &5785571900578968187

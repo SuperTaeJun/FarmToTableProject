@@ -863,7 +863,7 @@ MonoBehaviour:
   groundCheckDistance: 0.2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   isGrounded: 0
   verticalVelocity: 0
   wheelMeshes:
@@ -877,6 +877,8 @@ MonoBehaviour:
   - {fileID: 5942910206099530785}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 1631289614919925412}
+  movementParticleObject: {fileID: 0}
+  minSpeedForParticles: 2
   plowingSpeed: 2
   plowingWidth: 3
   farmlandLayer:

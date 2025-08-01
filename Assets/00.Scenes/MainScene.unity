@@ -15297,19 +15297,22 @@ MonoBehaviour:
     prefab: {fileID: 8656522925564163052, guid: 76f0f284ab449bb4fb3e7a3630a062ef, type: 3}
     poolSize: 60
   - poolType: 1
-    prefab: {fileID: 9127653965126434405, guid: e27e6d29ed6013f4ab03e7c7e8ceeac9, type: 3}
+    prefab: {fileID: 8498581756902869048, guid: 9ff443d8ffadc884283ebdb0aff126fa, type: 3}
     poolSize: 20
   - poolType: 2
     prefab: {fileID: 3262632954152592542, guid: fc1679f44b85319429384c7cfca8be87, type: 3}
     poolSize: 20
   - poolType: 3
     prefab: {fileID: 395031058680739610, guid: 941d713fa1468a142bdfdc5f514c09b0, type: 3}
-    poolSize: 20
+    poolSize: 3
   - poolType: 4
     prefab: {fileID: 395031058680739610, guid: 6b8b0ea0b28c4874386cf566f3c3d91e, type: 3}
-    poolSize: 20
+    poolSize: 3
   - poolType: 5
     prefab: {fileID: 395031058680739610, guid: d3c6ceea4be96094aa8ab974f2ef5bda, type: 3}
+    poolSize: 3
+  - poolType: 6
+    prefab: {fileID: 7100892537102872886, guid: 74077ad9a92c8f84b95b989aa49a3bfa, type: 3}
     poolSize: 20
 --- !u!4 &1455252551
 Transform:

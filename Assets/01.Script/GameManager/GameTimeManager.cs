@@ -71,7 +71,7 @@ public class GameTimeManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             _repository = new GameTimeRepository();
         }
         else
@@ -88,6 +88,8 @@ public class GameTimeManager : MonoBehaviour
         previousDay = CurrentDay;
         previousHour = CurrentHour;
         previousMinute = CurrentMinute;
+
+        PlayTimeBasedBGM(CurrentHour);
 
         OnDayChanged?.Invoke(previousDay);
         OnTimeChanged?.Invoke(CurrentHour, CurrentMinute);
@@ -124,6 +126,10 @@ public class GameTimeManager : MonoBehaviour
         if (currentHour != previousHour)
         {
             previousHour = currentHour;
+            if ((previousHour < 12 && CurrentHour >= 12) || (previousHour >= 12 && CurrentHour < 12))
+            {
+                PlayTimeBasedBGM(CurrentHour);
+            }
         }
 
         // 날짜 변화 체크
@@ -207,6 +213,18 @@ public class GameTimeManager : MonoBehaviour
         if (Instance == this)
         {
             Instance = null;
+        }
+    }
+
+    private void PlayTimeBasedBGM(int hour)
+    {
+        if (hour >= 12)
+        {
+            SoundManager.Instance.PlayBGM(BGMType.Pm);
+        }
+        else
+        {
+            SoundManager.Instance.PlayBGM(BGMType.Am);
         }
     }
 }

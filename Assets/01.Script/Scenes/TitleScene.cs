@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +10,10 @@ public class TitleScene : MonoBehaviour
     private void Awake()
     {
         NewGameButton.onClick.AddListener(() => OnNewGameButtonClicked());
+    }
+    private void Start()
+    {
+        SoundManager.Instance.PlayBGM(BGMType.Title);
     }
 
     private void OnNewGameButtonClicked()

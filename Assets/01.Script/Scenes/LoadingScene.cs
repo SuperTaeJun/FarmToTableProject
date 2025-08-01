@@ -10,6 +10,8 @@ public class LoadingScene : MonoBehaviour
 
     private async void Start()
     {
+        SoundManager.Instance.PlayBGM(BGMType.Loading);
+
         try
         {
             // 최소 로딩 시간

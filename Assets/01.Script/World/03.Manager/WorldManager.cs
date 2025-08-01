@@ -22,15 +22,15 @@ public class WorldManager : MonoBehaviour
 
     private WorldRepository _repo;
 
-    private Dictionary<ChunkPosition, Chunk> loadedChunks = new Dictionary<ChunkPosition, Chunk>();
-    public Dictionary<ChunkPosition, Chunk> LoadedChunks => loadedChunks;
+    private Dictionary<ChunkPosition, Chunk> _loadedChunks = new Dictionary<ChunkPosition, Chunk>();
+    public Dictionary<ChunkPosition, Chunk> LoadedChunks => _loadedChunks;
 
-    private Dictionary<ChunkPosition, GameObject> chunkObjects = new Dictionary<ChunkPosition, GameObject>();
-    public IEnumerable<ChunkPosition> LoadedChunkPositions => loadedChunks.Keys;
+    private Dictionary<ChunkPosition, GameObject> _chunkObjects = new Dictionary<ChunkPosition, GameObject>();
+    public IEnumerable<ChunkPosition> LoadedChunkPositions => _loadedChunks.Keys;
 
     // 메시 업데이트가 필요한 청크들을 관리하는 큐
-    private HashSet<ChunkPosition> chunksNeedingMeshUpdate = new HashSet<ChunkPosition>();
-    private bool isUpdatingMeshes = false;
+    private HashSet<ChunkPosition> _chunksNeedMeshUpdate = new HashSet<ChunkPosition>();
+    private bool _isUpdatingMeshes = false;
 
     public static string GetChunkId(Vector3 worldPosition)
     {
@@ -54,7 +54,10 @@ public class WorldManager : MonoBehaviour
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
+    private void Start()
+    {
+        SoundManager.Instance.PlayBGM(BGMType.Loading);
+    }
     private void Update()
     {
         ProcessMeshUpdates();
@@ -71,7 +74,7 @@ public class WorldManager : MonoBehaviour
 
     private void ProcessMeshUpdates()
     {
-        if (chunksNeedingMeshUpdate.Count > 0 && !isUpdatingMeshes)
+        if (_chunksNeedMeshUpdate.Count > 0 && !_isUpdatingMeshes)
         {
             StartCoroutine(UpdateChunkMeshes());
         }
@@ -79,21 +82,21 @@ public class WorldManager : MonoBehaviour
 
     private IEnumerator UpdateChunkMeshes()
     {
-        isUpdatingMeshes = true;
+        _isUpdatingMeshes = true;
 
-        var chunksToUpdate = new List<ChunkPosition>(chunksNeedingMeshUpdate);
-        chunksNeedingMeshUpdate.Clear();
+        var chunksToUpdate = new List<ChunkPosition>(_chunksNeedMeshUpdate);
+        _chunksNeedMeshUpdate.Clear();
 
         foreach (var chunkPos in chunksToUpdate)
         {
-            if (loadedChunks.ContainsKey(chunkPos))
+            if (_loadedChunks.ContainsKey(chunkPos))
             {
                 RebuildChunkWithNeighborCheck(chunkPos);
                 yield return null; // 프레임 분산
             }
         }
 
-        isUpdatingMeshes = false;
+        _isUpdatingMeshes = false;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -138,7 +141,7 @@ public class WorldManager : MonoBehaviour
     {
         var chunkPos = new ChunkPosition(chunkX, 0, chunkZ);
 
-        if (!loadedChunks.TryGetValue(chunkPos, out var chunk))
+        if (!_loadedChunks.TryGetValue(chunkPos, out var chunk))
         {
             // 청크가 로드되지 않은 경우 기본 높이 반환
             return dynamicGenerator.worldHeight * 0.5f * dynamicGenerator.blockOffset.y;
@@ -249,7 +252,7 @@ public class WorldManager : MonoBehaviour
         }
 
         // 메모리에 로드
-        loadedChunks[pos] = firebaseChunk;
+        _loadedChunks[pos] = firebaseChunk;
 
         // 동적으로 씬에 렌더링
         await BuildChunkInScene(pos, firebaseChunk);
@@ -272,9 +275,9 @@ public class WorldManager : MonoBehaviour
 
         foreach (var adjacentPos in adjacentPositions)
         {
-            if (loadedChunks.ContainsKey(adjacentPos))
+            if (_loadedChunks.ContainsKey(adjacentPos))
             {
-                chunksNeedingMeshUpdate.Add(adjacentPos);
+                _chunksNeedMeshUpdate.Add(adjacentPos);
             }
         }
     }
@@ -341,7 +344,7 @@ public class WorldManager : MonoBehaviour
     pos,
     chunkWorldData,
     this.transform,
-    chunkObject => { chunkObjects[pos] = chunkObject; tcs.SetResult(true); }
+    chunkObject => { _chunkObjects[pos] = chunkObject; tcs.SetResult(true); }
 ));
 
         ////최적화 전 버전
@@ -359,20 +362,20 @@ public class WorldManager : MonoBehaviour
     // 인접 청크 정보를 고려한 청크 재빌드
     private void RebuildChunkWithNeighborCheck(ChunkPosition chunkPos)
     {
-        if (!loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
+        if (!_loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
             return;
 
         // 기존 청크 오브젝트 삭제
-        if (chunkObjects.TryGetValue(chunkPos, out GameObject oldChunkObject))
+        if (_chunkObjects.TryGetValue(chunkPos, out GameObject oldChunkObject))
         {
             Destroy(oldChunkObject);
-            chunkObjects.Remove(chunkPos);
+            _chunkObjects.Remove(chunkPos);
         }
 
         // 인접 청크 정보를 고려한 월드 데이터 생성
         string[,,] chunkWorldData = ConvertChunkToWorldDataWithNeighbors(chunk);
         GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(chunkPos, chunkWorldData);
-        chunkObjects[chunkPos] = chunkObject;
+        _chunkObjects[chunkPos] = chunkObject;
     }
 
     // 인접 청크 정보를 고려한 월드 데이터 변환
@@ -506,7 +509,7 @@ public class WorldManager : MonoBehaviour
     private void ClearExistingWorld()
     {
         // 기존 청크 오브젝트들 삭제
-        foreach (var kvp in chunkObjects)
+        foreach (var kvp in _chunkObjects)
         {
             if (kvp.Value != null)
             {
@@ -514,24 +517,24 @@ public class WorldManager : MonoBehaviour
             }
         }
 
-        chunkObjects.Clear();
-        loadedChunks.Clear();
+        _chunkObjects.Clear();
+        _loadedChunks.Clear();
 
         Debug.Log("[WorldManager] 기존 월드 정리 완료");
     }
 
     public bool HasChunk(ChunkPosition pos)
     {
-        return loadedChunks.ContainsKey(pos);
+        return _loadedChunks.ContainsKey(pos);
     }
 
     public async void GenerateAndBuildChunk(ChunkPosition pos)
     {
         var newChunk = GenerateDynamicChunk(pos);
-        loadedChunks[pos] = newChunk;
+        _loadedChunks[pos] = newChunk;
 
         await BuildChunkInScene(pos, newChunk);
-        await _repo.SaveChunkAsync(loadedChunks[pos]);
+        await _repo.SaveChunkAsync(_loadedChunks[pos]);
         await ForageManager.Instance.GenerateForagesInChunk(pos);
 
         // 인접 청크들의 메시 업데이트 예약
@@ -554,7 +557,7 @@ public class WorldManager : MonoBehaviour
 
         var chunkPos = new ChunkPosition(chunkX, 0, chunkZ);
 
-        if (loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
+        if (_loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
         {
             return chunk;
         }
@@ -747,12 +750,12 @@ public class WorldManager : MonoBehaviour
     public bool HasBlockAt(ChunkPosition chunkPos, int x, int y, int z)
     {
         // 청크가 로드되어 있는지 확인
-        if (!loadedChunks.ContainsKey(chunkPos))
+        if (!_loadedChunks.ContainsKey(chunkPos))
         {
             return false; // 청크가 없으면 블록도 없음
         }
 
-        var chunk = loadedChunks[chunkPos];
+        var chunk = _loadedChunks[chunkPos];
         var block = chunk.GetBlock(x, y, z);
         return block != null && block.Type != EBlockType.Air;
     }

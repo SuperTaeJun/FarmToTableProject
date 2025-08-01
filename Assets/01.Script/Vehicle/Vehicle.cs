@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Vehicle : MonoBehaviour
 {
-    [Header("Vehicle Settings")]
+    [Header("차량 세팅")]
     public EVehicleType vehicleType;
     public float acceleration = 5f;
     public float maxSpeed = 10f;
@@ -18,15 +18,20 @@ public abstract class Vehicle : MonoBehaviour
     public bool isGrounded;
     public float verticalVelocity = 0f;
 
+    
+
     [Header("바퀴 세팅")]
     [SerializeField] private List<Transform> wheelMeshes; // 바퀴 오브젝트들 (Transform)
     [SerializeField] private float wheelRadius = 0.3f;
     [SerializeField] private List<Transform> steeringWheels; // 앞바퀴
     [SerializeField] private float maxSteerAngle = 30f;
 
-    [Header("Player Mount")]
+    [Header("Player 탑승위치")]
     public Transform playerMountPoint;
-    
+
+    [Header("파티클 시스템")]
+    [SerializeField] private float minSpeedForParticles = 2f; // 파티클 재생 최소 속도
+
     protected bool isOccupied = false;
     protected Player currentDriver;
     protected CharacterController vehicleController;
@@ -39,6 +44,8 @@ public abstract class Vehicle : MonoBehaviour
     {
         vehicleController = GetComponent<CharacterController>();
 
+
+
         // 플레이어 마운트 포인트 설정
         if (playerMountPoint == null)
         {
@@ -48,7 +55,9 @@ public abstract class Vehicle : MonoBehaviour
             playerMountPoint = mountPoint.transform;
         }
     }
-    
+    private void Start()
+    {
+    }
     protected virtual void Update()
     {
         if (isOccupied)
@@ -59,6 +68,7 @@ public abstract class Vehicle : MonoBehaviour
 
             UpdateWheels();
             UpdateSteering();
+            UpdateMovementParticles();
         }
     }
     
@@ -68,8 +78,6 @@ public abstract class Vehicle : MonoBehaviour
         
         isOccupied = true;
         currentDriver = player;
-        
-
         
         // 플레이어를 차량에 부모로 설정
         player.transform.SetParent(playerMountPoint);
@@ -83,14 +91,9 @@ public abstract class Vehicle : MonoBehaviour
     public virtual void DismountPlayer()
     {
         if (!isOccupied || currentDriver == null) return;
-        
 
         // 플레이어를 차량에서 분리
         currentDriver.transform.SetParent(null);
-        
-        //// 플레이어를 차량 옆으로 이동
-        //Vector3 dismountPosition = transform.position + transform.right * 3f * ChunkGenerator.Instance.blockOffset.x;
-        //currentDriver.transform.position = dismountPosition;
         
         OnPlayerDismounted(currentDriver);
         
@@ -177,6 +180,20 @@ public abstract class Vehicle : MonoBehaviour
             wheel.localEulerAngles = euler;
         }
     }
+    protected void UpdateMovementParticles()
+    {
+        float currentSpeed = moveVelocity.magnitude;
+
+        if (currentSpeed >= minSpeedForParticles)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
 
 
     protected virtual void OnPlayerMounted(Player player) 

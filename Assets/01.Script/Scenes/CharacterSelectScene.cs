@@ -7,10 +7,12 @@ public class CharacterSelectScene : MonoBehaviour
 
     void Start()
     {
+        SoundManager.Instance.PlayBGM(BGMType.Clothing);
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        GameObject.Instantiate(CustomCharacterPrefab, _spawnTransform);
+        Instantiate(CustomCharacterPrefab, _spawnTransform);
     }
 
     void Update()

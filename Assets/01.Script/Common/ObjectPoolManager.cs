@@ -8,7 +8,8 @@ public enum PoolType
     Spark,
     SmokeS,
     SomkeM,
-    SomkeL
+    SomkeL,
+    CropWater
 }
 
 public class ObjectPoolManager : MonoBehaviour
