@@ -121,7 +121,6 @@ public class PlayerBuildAbility : PlayerAbility
 
         SO_Building buildingInfo = BuildingManager.Instance.GetBuildingInfo(_selectedType);
 
-        // ������ ��ġ ���
         Vector3 snappedPos = BuildingManager.Instance.SnapToGrid(_owner.CurrentSelectedPos, buildingInfo.Size);
 
         _previewInstance.transform.position = snappedPos;

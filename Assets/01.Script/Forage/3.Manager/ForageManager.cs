@@ -12,7 +12,7 @@ public class ForageManager : MonoBehaviour
     private List<ForageObject> _forages;
     public List<ForageObject> Forages => _forages;
 
-    [Header("Ã¤Áı¹° ÇÁ¸®ÆÕ")]
+    [Header("Ã¤ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private ForageObject _treePrefab;
     [SerializeField] private ForageObject _stonePrefab;
 
@@ -38,8 +38,7 @@ public class ForageManager : MonoBehaviour
 
     private async void Start()
     {
-        // ¿¹½Ã È£Ãâ
-        await LoadAllForages();
+        // LoadAllForages()ëŠ” WorldLoadingSceneì—ì„œ í˜¸ì¶œë¨
     }
     public async Task GenerateAndSaveAllChunks()
     {
@@ -190,7 +189,7 @@ public class ForageManager : MonoBehaviour
 
                 Debug.Log($"[ForageManager] Forage removed from domain list: {domain.Type}");
 
-                // Áï½Ã Firebase ¹İ¿µ
+                // ï¿½ï¿½ï¿½ Firebase ï¿½İ¿ï¿½
                 await SaveForages(obj.ChunkId);
             }
         }

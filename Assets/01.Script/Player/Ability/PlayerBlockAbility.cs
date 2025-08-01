@@ -84,7 +84,7 @@ public class PlayerBlockAbility : PlayerAbility
         {
 
             if (ObjectPoolManager.Instance)
-                ObjectPoolManager.Instance.Get(PoolType.Smoke, worldPosition);
+                ObjectPoolManager.Instance.Get(PoolType.SmokeS, worldPosition);
 
             _isDestroyMode = false;
         }
@@ -105,7 +105,7 @@ public class PlayerBlockAbility : PlayerAbility
         if (success)
         {
             if (ObjectPoolManager.Instance)
-                ObjectPoolManager.Instance.Get(PoolType.Smoke, worldPosition);
+                ObjectPoolManager.Instance.Get(PoolType.SmokeS, worldPosition);
             _isDestroyMode = true;
         }
     }

@@ -42,6 +42,7 @@ public class CurrencyManager : MonoBehaviour
 
         //임시로
         _currencies[0].SetAmount(99999);
+        OnCurrencyChanged.Invoke(ECurrencyType.Money, 0,_currencies[0].Amount);
     }
     
     #region 재화 로드/저장

@@ -37,8 +37,6 @@ public class UI_Shop : UI_Popup
     [SerializeField] private TextMeshProUGUI _totalPriceText;
     [SerializeField] private TextMeshProUGUI _actionButtonText;
 
-    private ShopManager _shopManager;
-    private CurrencyManager _currencyManager;
     private List<UI_ShopItemSlot> _buySlots = new List<UI_ShopItemSlot>();
     private List<UI_ShopItemSlot> _sellSlots = new List<UI_ShopItemSlot>();
     private EShopCategory _currentCategory = EShopCategory.Seeds;
@@ -87,18 +85,15 @@ public class UI_Shop : UI_Popup
     
     private void Start()
     {
-        _shopManager = ShopManager.Instance;
-        _currencyManager = CurrencyManager.Instance;
-        
-        if (_shopManager != null)
+        if (ShopManager.Instance != null)
         {
-            _shopManager.OnItemPurchased.AddListener(OnItemPurchased);
-            _shopManager.OnItemSold.AddListener(OnItemSold);
+            ShopManager.Instance.OnItemPurchased.AddListener(OnItemPurchased);
+            ShopManager.Instance.OnItemSold.AddListener(OnItemSold);
         }
         
-        if (_currencyManager != null)
+        if (CurrencyManager.Instance != null)
         {
-            _currencyManager.OnCurrencyChanged.AddListener(OnCurrencyChanged);
+            CurrencyManager.Instance.OnCurrencyChanged.AddListener(OnCurrencyChanged);
         }
     }
     public override void Open(System.Action callback = null)
@@ -120,7 +115,7 @@ public class UI_Shop : UI_Popup
 
     public void OpenShop()
     {
-        if (_shopManager == null || _shopManager.ShopData == null)
+        if (ShopManager.Instance == null || ShopManager.Instance.ShopData == null)
         {
             Debug.LogError("ShopManager 또는 ShopData가 설정되지 않았습니다.");
             return;
@@ -133,9 +128,9 @@ public class UI_Shop : UI_Popup
     
     private void UpdateShopInfo()
     {
-        if (_shopNameText != null && _shopManager.ShopData != null)
+        if (_shopNameText != null && ShopManager.Instance.ShopData != null)
         {
-            _shopNameText.text = _shopManager.ShopData.shopName;
+            _shopNameText.text = ShopManager.Instance.ShopData.shopName;
         }
     }
     
@@ -197,9 +192,9 @@ public class UI_Shop : UI_Popup
     {
         ClearBuySlots();
         
-        if (_shopManager == null) return;
+        if (ShopManager.Instance == null) return;
         
-        var buyableItems = _shopManager.GetBuyableItems(_currentCategory);
+        var buyableItems = ShopManager.Instance.GetBuyableItems(_currentCategory);
         
         foreach (var shopItem in buyableItems)
         {
@@ -211,9 +206,9 @@ public class UI_Shop : UI_Popup
     {
         ClearSellSlots();
         
-        if (_shopManager == null) return;
+        if (ShopManager.Instance == null) return;
         
-        var sellableItems = _shopManager.GetSellableItems();
+        var sellableItems = ShopManager.Instance.GetSellableItems();
         
         foreach (var inventoryItem in sellableItems)
         {
@@ -244,7 +239,7 @@ public class UI_Shop : UI_Popup
         
         if (slot != null)
         {
-            int sellPrice = _shopManager.GetSellPrice(inventoryItem.ItemType);
+            int sellPrice = ShopManager.Instance.GetSellPrice(inventoryItem.ItemType);
             slot.SetupSellSlot(inventoryItem, sellPrice, OnSellItemSelected);
             _sellSlots.Add(slot);
         }
@@ -273,7 +268,7 @@ public class UI_Shop : UI_Popup
     private void OnBuyItemSelected(EItemType itemType, int maxQuantity)
     {
         // 구매 아이템 선택 시 정보 패널에 표시
-        var shopItem = _shopManager.ShopData?.GetShopItem(itemType);
+        var shopItem = ShopManager.Instance.ShopData?.GetShopItem(itemType);
         if (shopItem != null)
         {
             int buyPrice = shopItem.BuyPrice;
@@ -284,7 +279,7 @@ public class UI_Shop : UI_Popup
     private void OnSellItemSelected(EItemType itemType, int maxQuantity)
     {
         // 판매 아이템 선택 시 정보 패널에 표시
-        int sellPrice = _shopManager.GetSellPrice(itemType, 1);
+        int sellPrice = ShopManager.Instance.GetSellPrice(itemType, 1);
         SetupItemInfo(itemType, maxQuantity, sellPrice, false);
     }
     
@@ -310,24 +305,24 @@ public class UI_Shop : UI_Popup
     
     private void UpdateMoneyDisplay()
     {
-        if (_playerMoneyText != null && _currencyManager != null)
+        if (_playerMoneyText != null && CurrencyManager.Instance != null)
         {
-            int money = _currencyManager.GetCurrencyAmount(ECurrencyType.Money);
+            int money = CurrencyManager.Instance.GetCurrencyAmount(ECurrencyType.Money);
             _playerMoneyText.text = $"{money:N0}원";
         }
     }
     
     private void OnDestroy()
     {
-        if (_shopManager != null)
+        if (ShopManager.Instance != null)
         {
-            _shopManager.OnItemPurchased.RemoveListener(OnItemPurchased);
-            _shopManager.OnItemSold.RemoveListener(OnItemSold);
+            ShopManager.Instance.OnItemPurchased.RemoveListener(OnItemPurchased);
+            ShopManager.Instance.OnItemSold.RemoveListener(OnItemSold);
         }
         
-        if (_currencyManager != null)
+        if (CurrencyManager.Instance != null)
         {
-            _currencyManager.OnCurrencyChanged.RemoveListener(OnCurrencyChanged);
+            CurrencyManager.Instance.OnCurrencyChanged.RemoveListener(OnCurrencyChanged);
         }
         
         if (_closeButton != null)
@@ -403,7 +398,7 @@ public class UI_Shop : UI_Popup
             {
                 // 구매 가능 여부 체크
                 int totalPrice = _unitPrice * _selectedQuantity;
-                bool canAfford = _shopManager.CanAfford(totalPrice);
+                bool canAfford = ShopManager.Instance.CanAfford(totalPrice);
                 bool hasSpace = InventoryManager.Instance?.CanAddItem(_selectedItemType, _selectedQuantity) ?? false;
                 _actionButton.interactable = canAfford && hasSpace && _selectedQuantity > 0;
             }
@@ -451,11 +446,11 @@ public class UI_Shop : UI_Popup
         bool success;
         if (_isBuyMode)
         {
-            success = await _shopManager.TryBuyItem(_selectedItemType, _selectedQuantity);
+            success = await ShopManager.Instance.TryBuyItem(_selectedItemType, _selectedQuantity);
         }
         else
         {
-            success = await _shopManager.TrySellItem(_selectedItemType, _selectedQuantity);
+            success = await ShopManager.Instance.TrySellItem(_selectedItemType, _selectedQuantity);
         }
         
         if (success)

@@ -6,7 +6,9 @@ public enum PoolType
     FootStep,
     Dust,
     Spark,
-    Smoke
+    SmokeS,
+    SomkeM,
+    SomkeL
 }
 
 public class ObjectPoolManager : MonoBehaviour

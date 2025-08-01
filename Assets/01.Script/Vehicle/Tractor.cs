@@ -18,7 +18,7 @@ public class Tractor : Vehicle
     public void HandlePlowing()
     {
         WorldManager.Instance.SetBlock(transform.position, EBlockType.Farmland,4);
-        ObjectPoolManager.Instance.Get(PoolType.Smoke);
+        ObjectPoolManager.Instance.Get(PoolType.SmokeS);
 
     }
     

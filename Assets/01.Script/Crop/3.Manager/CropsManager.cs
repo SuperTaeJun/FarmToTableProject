@@ -61,13 +61,16 @@ public class CropsManager : MonoBehaviour
 
     private async void Start()
     {
-        await PreloadAllCropPrefabs();
-        await LoadAllCrops();
+        // 프리팩 로딩은 LoadAllCrops()에서 처리됨
         StartGrowthUpdate();
     }
 
-    private async Task LoadAllCrops()
+    public async Task LoadAllCrops()
     {
+        // 먼저 프리팩을 로딩
+        await PreloadAllCropPrefabs();
+        
+        // 그 다음 크롭 데이터 로딩
         var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
         foreach (var chunkPos in loadedChunks)
         {

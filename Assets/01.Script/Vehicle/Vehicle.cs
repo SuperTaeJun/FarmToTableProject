@@ -181,12 +181,12 @@ public abstract class Vehicle : MonoBehaviour
 
     protected virtual void OnPlayerMounted(Player player) 
     {
-        ObjectPoolManager.Instance.Get(PoolType.Smoke, transform.position);
+        ObjectPoolManager.Instance.Get(PoolType.SmokeS, transform.position);
 
     }
     protected virtual void OnPlayerDismounted(Player player) 
     {
-        ObjectPoolManager.Instance.Get(PoolType.Smoke, transform.position);
+        ObjectPoolManager.Instance.Get(PoolType.SmokeS, transform.position);
     }
 
     private void ApplyMovementWithChunkCheck()

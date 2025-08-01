@@ -41,7 +41,7 @@ public class PlayerFarmingAbility : PlayerAbility
                 WorldManager.Instance.SetBlock(abovePosition, EBlockType.Farmland);
 
                 if(ObjectPoolManager.Instance)
-                    ObjectPoolManager.Instance.Get(PoolType.Smoke, selectedPos);
+                    ObjectPoolManager.Instance.Get(PoolType.SmokeS, selectedPos);
             }
         }
     }

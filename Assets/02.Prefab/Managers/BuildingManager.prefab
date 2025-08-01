@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2450270112476466273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2311701444585205259}
+  - component: {fileID: 7869082879563696492}
+  m_Layer: 0
+  m_Name: BuildingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2311701444585205259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450270112476466273}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7869082879563696492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450270112476466273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12dab6e33d53184f9e45eaa8bb58c23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingData:
+  - {fileID: 11400000, guid: 9ab4fa93c170e7e4c808adbdf80f0dfc, type: 2}
+  - {fileID: 11400000, guid: 1219904d1b73d4948bc47b887c9db514, type: 2}
+  - {fileID: 11400000, guid: ea8579b5cf29f8f4c8e5c8cfd2040bf6, type: 2}
+  - {fileID: 11400000, guid: 8aa5f3dd25282804a9dfa2aaa443880f, type: 2}
+  - {fileID: 11400000, guid: a22606ac26312ee4e9d9a5f304db745c, type: 2}
+  - {fileID: 11400000, guid: f228ad91f69539a4b9aa17628851c845, type: 2}
+  - {fileID: 11400000, guid: f4d8bd581fdc11545a9e979b9073e288, type: 2}
+  - {fileID: 11400000, guid: 2dfdd1724858ba2499b0992b16cf749d, type: 2}
+  - {fileID: 11400000, guid: 4be9e68574ab5a14195465b48d812b37, type: 2}

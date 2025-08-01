@@ -2,25 +2,25 @@ using UnityEngine;
 
 public class PlayerSelectAbility : PlayerAbility
 {
-    [Header("�׸��� ����")]
+    [Header("그리드 설정")]
     public float cellSize = 1f;
-    public LayerMask groundLayer; // Ground ���̾�
+    public LayerMask groundLayer; // Ground 레이어
     public bool snapToGrid = true;
 
-    [Header("���� ����")]
+    [Header("라인 렌더링")]
     public Material lineMaterial;
     public Color lineColor = Color.white;
     public Color selectedColor = Color.green;
     public float lineWidth = 0.05f;
 
-    [Header("���� ����")]
-    public float maxSelectDistance = 1f; // ĳ���ͷκ��� �ִ� ���� �Ÿ�
-    public float forwardDistance = 0.5f; // ĳ���� ���� �Ÿ�
+    [Header("선택 범위")]
+    public float maxSelectDistance = 1f; // 캐릭터로부터의 최대 선택 거리
+    public float forwardDistance = 0.5f; // 캐릭터 앞쪽 거리
 
     private LineRenderer currentLineRenderer;
     private Vector3 lastGridPosition = Vector3.zero;
     private bool isValidPosition = false;
-    
+
     // 동적 그리드 크기 시스템
     private Vector2Int currentGridSize = Vector2Int.one;
     private bool isDynamicSizeMode = false;
@@ -42,7 +42,7 @@ public class PlayerSelectAbility : PlayerAbility
         lineObject.transform.SetParent(transform);
         currentLineRenderer = lineObject.AddComponent<LineRenderer>();
 
-        // LineRenderer ����
+        // LineRenderer 설정
         currentLineRenderer.material = lineMaterial;
         currentLineRenderer.startColor = lineColor;
         currentLineRenderer.endColor = lineColor;
@@ -52,24 +52,24 @@ public class PlayerSelectAbility : PlayerAbility
         currentLineRenderer.useWorldSpace = true;
         currentLineRenderer.loop = false;
 
-        // ó������ ��Ȱ��ȭ
+        // 초기에 비활성화
         currentLineRenderer.enabled = false;
     }
 
     void UpdateForwardBlockPosition()
     {
-        // ĳ������ ���� ���� ���
+        // 캐릭터 기준 앞 방향 위치 계산
         Vector3 forwardDirection = transform.forward;
-        Vector3 startPosition = transform.position + Vector3.up * 5f; // ĳ���� ���� ����
+        Vector3 startPosition = transform.position + Vector3.up * 5f; // 캐릭터 위에서 시작
         Vector3 forwardPosition = startPosition + forwardDirection * forwardDistance;
 
-        // ���� �������� �Ʒ��� ����ĳ��Ʈ
+        // 땅을 향해 아래로 레이캐스트
         RaycastHit hit;
         if (Physics.Raycast(forwardPosition, Vector3.down, out hit, 10f, groundLayer))
         {
             Vector3 gridPosition = WorldToGrid(hit.point);
 
-            // ĳ���ͷκ����� �Ÿ� üũ
+            // 캐릭터로부터의 거리 체크
             float distanceFromPlayer = Vector3.Distance(transform.position, gridPosition);
             if (distanceFromPlayer <= maxSelectDistance)
             {
@@ -80,7 +80,7 @@ public class PlayerSelectAbility : PlayerAbility
                     {
                         CheckAndSetBuildingSize(gridPosition);
                     }
-                    
+
                     UpdateGridLines(gridPosition);
                     lastGridPosition = gridPosition;
                     _owner.CurrentSelectedPos = gridPosition;
@@ -102,7 +102,7 @@ public class PlayerSelectAbility : PlayerAbility
     {
         if (!snapToGrid) return worldPosition;
 
-        // �ٴ� �׸���� Y���� �״�� �ΰ� X, Z�ุ ����
+        // 그리드 기준으로 Y는 유지하고 X, Z만 스냅
         float snappedX = Mathf.Round(worldPosition.x / (cellSize * ChunkGenerator.Instance.blockOffset.x)) * (cellSize * ChunkGenerator.Instance.blockOffset.x);
         float snappedZ = Mathf.Round(worldPosition.z / (cellSize * ChunkGenerator.Instance.blockOffset.z)) * (cellSize * ChunkGenerator.Instance.blockOffset.z);
         return new Vector3(snappedX, worldPosition.y, snappedZ);
@@ -112,7 +112,7 @@ public class PlayerSelectAbility : PlayerAbility
     {
         if (currentLineRenderer == null) return;
 
-        // 유효 위치에 있을때는 초록색, 아니면 기본 색상
+        // 유효 위치에 있을 때는 초록색, 아닐 때는 기본 색상
         Color currentColor = isValidPosition ? selectedColor : lineColor;
         currentLineRenderer.startColor = currentColor;
         currentLineRenderer.endColor = currentColor;
@@ -132,7 +132,7 @@ public class PlayerSelectAbility : PlayerAbility
     void DrawSingleCellGrid(Vector3 centerPosition)
     {
         float halfSize = cellSize * ChunkGenerator.Instance.blockOffset.x * 0.5f;
-        float offset = 0.02f; // 바닥에서 살짝 위로올림
+        float offset = 0.02f; // 바닥에서 살짝 위로 올림
         Vector3 offsetPos = centerPosition + Vector3.up * offset;
 
         Vector3[] corners = new Vector3[5];
@@ -148,18 +148,17 @@ public class PlayerSelectAbility : PlayerAbility
     void DrawMultiCellGrid(Vector3 centerPosition)
     {
         float offset = 0.02f;
-        
+
         // 건물이 있을 때는 건물의 중심점을 사용, 없을 때는 선택된 위치 사용
         Vector3 gridCenter = (buildingCenterPosition != Vector3.zero) ? buildingCenterPosition : centerPosition;
         Vector3 offsetPos = gridCenter + Vector3.up * offset;
-        
+
         // 그리드 크기에 따른 전체 크기 계산
         float totalWidth = currentGridSize.x * cellSize * ChunkGenerator.Instance.blockOffset.x;
         float totalHeight = currentGridSize.y * cellSize * ChunkGenerator.Instance.blockOffset.z;
-        float halfWidth = totalWidth * ChunkGenerator.Instance.blockOffset.x * 0.5f;
-        float halfHeight = totalHeight * ChunkGenerator.Instance.blockOffset.z * 0.5f;
+        float halfWidth = totalWidth * 0.5f;
+        float halfHeight = totalHeight * 0.5f;
 
-        // 외곽 테두리만 그리기 (성능 최적화)
         Vector3[] corners = new Vector3[5];
         corners[0] = offsetPos + new Vector3(-halfWidth, 0, -halfHeight);
         corners[1] = offsetPos + new Vector3(halfWidth, 0, -halfHeight);
@@ -187,7 +186,7 @@ public class PlayerSelectAbility : PlayerAbility
         currentGridSize = size;
         isDynamicSizeMode = size != Vector2Int.one;
         UpdatePositionCount();
-        
+
         // 즉시 그리드 라인 업데이트
         if (lastGridPosition != Vector3.zero && currentLineRenderer != null)
         {
@@ -238,28 +237,27 @@ public class PlayerSelectAbility : PlayerAbility
         if (BuildingManager.Instance != null)
         {
             Vector2Int? buildingSize = BuildingManager.Instance.GetBuildingSizeAtPosition(position, cellSize * ChunkGenerator.Instance.blockOffset.x * 0.5f);
-            
+
             if (buildingSize.HasValue)
             {
                 // 건물이 있는 경우
                 // 건물의 중심점은 position을 그리드에 맞춰서 사용
                 buildingCenterPosition = WorldToGrid(position);
-                
+
                 // 현재 그리드 크기와 다르면 업데이트
                 if (currentGridSize != buildingSize.Value)
                 {
                     SetGridSize(buildingSize.Value);
                 }
-                
+
                 return;
             }
         }
-        
+
         // 건물이 없으면 1x1로 리셋
         if (currentGridSize != Vector2Int.one || buildingCenterPosition != Vector3.zero)
         {
             ResetToSingleCell();
         }
     }
-
 }

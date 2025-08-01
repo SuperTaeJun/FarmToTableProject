@@ -6345,60 +6345,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654766079}
   m_CullTransparentMesh: 1
---- !u!1 &664638004
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 664638006}
-  - component: {fileID: 664638005}
-  m_Layer: 0
-  m_Name: BuildingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &664638005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664638004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b12dab6e33d53184f9e45eaa8bb58c23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingData:
-  - {fileID: 11400000, guid: 9ab4fa93c170e7e4c808adbdf80f0dfc, type: 2}
-  - {fileID: 11400000, guid: 1219904d1b73d4948bc47b887c9db514, type: 2}
-  - {fileID: 11400000, guid: ea8579b5cf29f8f4c8e5c8cfd2040bf6, type: 2}
-  - {fileID: 11400000, guid: 8aa5f3dd25282804a9dfa2aaa443880f, type: 2}
-  - {fileID: 11400000, guid: a22606ac26312ee4e9d9a5f304db745c, type: 2}
-  - {fileID: 11400000, guid: f228ad91f69539a4b9aa17628851c845, type: 2}
-  - {fileID: 11400000, guid: f4d8bd581fdc11545a9e979b9073e288, type: 2}
-  - {fileID: 11400000, guid: 2dfdd1724858ba2499b0992b16cf749d, type: 2}
-  - {fileID: 11400000, guid: 4be9e68574ab5a14195465b48d812b37, type: 2}
---- !u!4 &664638006
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664638004}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &668254611
 GameObject:
   m_ObjectHideFlags: 0
@@ -7167,7 +7113,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 480, y: -745}
+  m_AnchoredPosition: {x: 755, y: -745}
   m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &713268217
@@ -15359,6 +15305,12 @@ MonoBehaviour:
   - poolType: 3
     prefab: {fileID: 395031058680739610, guid: 941d713fa1468a142bdfdc5f514c09b0, type: 3}
     poolSize: 20
+  - poolType: 4
+    prefab: {fileID: 395031058680739610, guid: 6b8b0ea0b28c4874386cf566f3c3d91e, type: 3}
+    poolSize: 20
+  - poolType: 5
+    prefab: {fileID: 395031058680739610, guid: d3c6ceea4be96094aa8ab974f2ef5bda, type: 3}
+    poolSize: 20
 --- !u!4 &1455252551
 Transform:
   m_ObjectHideFlags: 0
@@ -19317,7 +19269,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855558557}
   m_CullTransparentMesh: 1
---- !u!1 &1858222631
+--- !u!1 &1855986859
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19325,48 +19277,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1858222633}
-  - component: {fileID: 1858222632}
+  - component: {fileID: 1855986861}
+  - component: {fileID: 1855986860}
   m_Layer: 0
-  m_Name: CropManager
+  m_Name: VechicleManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1858222632
+--- !u!114 &1855986860
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858222631}
+  m_GameObject: {fileID: 1855986859}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33f92eae42672aa45a6e2025dc92bc96, type: 3}
+  m_Script: {fileID: 11500000, guid: b068759034f01434ba12d6d5e268e87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cropDataList:
-  - {fileID: 11400000, guid: 5e8af6c3437746442b751cff81d7512d, type: 2}
-  - {fileID: 11400000, guid: 1d5c5f5086a60e844b7564141076bf03, type: 2}
-  - {fileID: 11400000, guid: 06fb85d35d9068c468a5316080d3f59b, type: 2}
-  - {fileID: 11400000, guid: aae772b654d2df1479d34c13ec91e90f, type: 2}
-  - {fileID: 11400000, guid: 8845df734e07007448b1cc1522166c26, type: 2}
-  - {fileID: 11400000, guid: 51d698085b52e944eae35b4e6b51843c, type: 2}
-  - {fileID: 11400000, guid: e4192264db892d54da9456508afae4b2, type: 2}
-  - {fileID: 11400000, guid: 48c4e7e1bad3f8142884babf314a3c83, type: 2}
-  - {fileID: 11400000, guid: 95a579f1ba7936e4e9e06362d9ab6ada, type: 2}
-  - {fileID: 11400000, guid: dcaf527dac655ea43b0e7dc63561ff4f, type: 2}
-  - {fileID: 11400000, guid: c11372303be386d4c99bbd92b2fa403d, type: 2}
-  - {fileID: 11400000, guid: 041721f86285b6a4e929783733614df5, type: 2}
-  - {fileID: 11400000, guid: 2867c8194e708904792e8f921cb0281a, type: 2}
---- !u!4 &1858222633
+  _truckPrefab: {fileID: 5107110939339600377, guid: 1e3a891b9b39e7947a246f53a8ede45a, type: 3}
+  _tractorPrefab: {fileID: 7479474908317246216, guid: d701c87db809b6e408f802c3835ffcad, type: 3}
+  _bikePrefab: {fileID: 7594353545664805592, guid: 6b462c5eea8f1c34a8fa270732ac1e37, type: 3}
+  _bike2Prefab: {fileID: 4346851474126254382, guid: b1cec567acce4584e96f86625d4482ef, type: 3}
+--- !u!4 &1855986861
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1858222631}
+  m_GameObject: {fileID: 1855986859}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -20031,52 +19973,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hoverSize: 1.1
---- !u!1 &1955622378
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1955622379}
-  - component: {fileID: 1955622380}
-  m_Layer: 0
-  m_Name: ForageManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1955622379
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955622378}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1955622380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955622378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8fd8945f5df514ead0fa41379b6e72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _treePrefab: {fileID: 4697829525143497981, guid: 1a41fef188806d34cac329d90469ceba, type: 3}
-  _stonePrefab: {fileID: 6744943211910813730, guid: 93ae363f5f11b044da0b67e1f2f6ea0b, type: 3}
 --- !u!1 &1981317416
 GameObject:
   m_ObjectHideFlags: 0
@@ -22710,22 +22606,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855925339600209262, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
-      propertyPath: _bikePrefab
-      value: 
-      objectReference: {fileID: 7594353545664805592, guid: 6b462c5eea8f1c34a8fa270732ac1e37, type: 3}
-    - target: {fileID: 1855925339600209262, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
-      propertyPath: _bike2Prefab
-      value: 
-      objectReference: {fileID: 4346851474126254382, guid: b1cec567acce4584e96f86625d4482ef, type: 3}
-    - target: {fileID: 1855925339600209262, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
-      propertyPath: _truckPrefab
-      value: 
-      objectReference: {fileID: 5107110939339600377, guid: 1e3a891b9b39e7947a246f53a8ede45a, type: 3}
-    - target: {fileID: 1855925339600209262, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
-      propertyPath: _tractorPrefab
-      value: 
-      objectReference: {fileID: 7479474908317246216, guid: d701c87db809b6e408f802c3835ffcad, type: 3}
     - target: {fileID: 3712571652736934096, guid: 8dd7f7e653cb927498e36e04b0e0b9eb, type: 3}
       propertyPath: m_Name
       value: Player
@@ -22744,16 +22624,14 @@ SceneRoots:
   - {fileID: 170903625}
   - {fileID: 752504759}
   - {fileID: 1556885457}
-  - {fileID: 1955622379}
   - {fileID: 1446795380}
   - {fileID: 267516870}
   - {fileID: 1696559398}
-  - {fileID: 1858222633}
   - {fileID: 235472221}
   - {fileID: 1455252551}
-  - {fileID: 664638006}
   - {fileID: 1357822323}
   - {fileID: 1888361679}
   - {fileID: 1177599819}
   - {fileID: 9016097718854174198}
   - {fileID: 1395145070}
+  - {fileID: 1855986861}
