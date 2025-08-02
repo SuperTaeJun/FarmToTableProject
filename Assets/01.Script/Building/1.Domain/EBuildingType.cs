@@ -13,5 +13,7 @@ public enum EBuildingType
     Store,
     Closet,
     Shelter,
+    Home,
+    Pashion,
     None
 }

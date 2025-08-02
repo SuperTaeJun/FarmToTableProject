@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: SO_Building_Table
   m_EditorClassIdentifier: 
   Type: 2
+  Category: 1
+  BuildingName: "\uD14C\uC774\uBE14"
   Prefab:
     m_AssetGUID: 8aa41ad24b1f38f478c371164b8de9d5
     m_SubObjectName: 
@@ -25,5 +27,11 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Size: {x: 1, y: 1}
+  UISprite:
+    m_AssetGUID: 1e48534ef99c5154f8330173b8c9ebf2
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  Size: {x: 2, y: 3}
   Cost: 0

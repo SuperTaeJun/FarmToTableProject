@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: SO_Building_Fence
   m_EditorClassIdentifier: 
   Type: 0
+  Category: 1
+  BuildingName: "\uC6B8\uD0C0\uB9AC"
   Prefab:
     m_AssetGUID: ceb3c2f7244a192438059f43598e0ab4
     m_SubObjectName: 
@@ -21,6 +23,12 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   PreviewPrefab:
     m_AssetGUID: 06174f00d0b49574dae3b0596d385b98
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  UISprite:
+    m_AssetGUID: 64283645f49f39a409662c4c9835778e
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

@@ -12,11 +12,16 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, List<Building>> loadedBuildings = new Dictionary<string, List<Building>>();
     private Dictionary<string, GameObject> buildingGameObjects = new Dictionary<string, GameObject>(); // 빌딩 게임오브젝트 캐시
 
+    // 상호작용 이벤트
+    public DebugEvent<BuildingObject> OnBuildingEnterRange = new DebugEvent<BuildingObject>();
+    public DebugEvent<BuildingObject> OnBuildingExitRange = new DebugEvent<BuildingObject>();
+
     [SerializeField] private SO_Building[] buildingData; // SO_Building 배열 데이터
 
     // 빌딩 타입별 프리팹 캐시
     private Dictionary<EBuildingType, GameObject> cachedPrefabs = new Dictionary<EBuildingType, GameObject>();
     private Dictionary<EBuildingType, GameObject> cachedPreviewPrefabs = new Dictionary<EBuildingType, GameObject>();
+    private Dictionary<EBuildingType, Sprite> cachedUISprites = new Dictionary<EBuildingType, Sprite>();
 
     private void Awake()
     {
@@ -40,7 +45,7 @@ public class BuildingManager : MonoBehaviour
 
     private async Task LoadAllPrefabs()
     {
-        Debug.Log("모든 Building 프리팹 로드 시작...");
+        Debug.Log("모든 Building 에셋 로드 시작...");
 
         foreach (var data in buildingData)
         {
@@ -57,9 +62,16 @@ public class BuildingManager : MonoBehaviour
                 var previewPrefab = await data.PreviewPrefab.LoadAssetAsync<GameObject>().Task;
                 cachedPreviewPrefabs[data.Type] = previewPrefab;
             }
+
+            // UI 스프라이트 로드
+            if (data.UISprite != null)
+            {
+                var uiSprite = await data.UISprite.LoadAssetAsync<Sprite>().Task;
+                cachedUISprites[data.Type] = uiSprite;
+            }
         }
 
-        Debug.Log($"프리팹 로드 완료: {cachedPrefabs.Count}개");
+        Debug.Log($"에셋 로드 완료: 프리팹 {cachedPrefabs.Count}개, UI 스프라이트 {cachedUISprites.Count}개");
     }
 
     public async Task LoadAllBuilding()
@@ -332,4 +344,15 @@ public class BuildingManager : MonoBehaviour
 
         return null;
     }
+
+    public Sprite GetBuildingUISprite(EBuildingType type)
+    {
+        return cachedUISprites.TryGetValue(type, out Sprite sprite) ? sprite : null;
+    }
+
+    public SO_Building[] GetAllBuildingData()
+    {
+        return buildingData;
+    }
+
 }

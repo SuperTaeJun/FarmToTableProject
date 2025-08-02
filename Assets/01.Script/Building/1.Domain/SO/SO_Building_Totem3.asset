@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: SO_Building_Totem3
   m_EditorClassIdentifier: 
   Type: 6
+  Category: 1
+  BuildingName: "\uD1A0\uD15C3"
   Prefab:
     m_AssetGUID: 1eef80bb9633c2a44a843933a0819916
     m_SubObjectName: 
@@ -21,6 +23,12 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   PreviewPrefab:
     m_AssetGUID: 7822c5df1d643894cb51d5b2707c7680
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  UISprite:
+    m_AssetGUID: 042d46b09e04d924e812bf31cd4b72f9
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

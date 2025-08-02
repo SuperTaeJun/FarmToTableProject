@@ -5,7 +5,8 @@ public enum EPlayerNotificationType
 {
     Chunk,
     LackOfMoney,
-    LackOfSeed
+    LackOfSeed,
+    BuildingInteraction
 }
 public class PlayerNotificationAbility : PlayerAbility
 {
@@ -18,29 +19,32 @@ public class PlayerNotificationAbility : PlayerAbility
     {
         _dialogBox.SetActive(false);
     }
-    public void ActiveDialogBox(EPlayerNotificationType type)
-    {
-        _dialogBox.SetActive(true);
-        switch (type)
-        {
-            case EPlayerNotificationType.Chunk:
-                _dialogText.text = "<Color=red>F</Color>¸¦ ´­·¯\n¶¥À» ±¸¸ÅÇÒ±î...";
-                break;
-            case EPlayerNotificationType.LackOfMoney:
-                _dialogText.text = "<Color=red>µ·</Color>ÀÌ ºÎÁ·ÇÑ°Å °°¾Æ...";
-                SetAutoHide(2f);
-                break;
-            case EPlayerNotificationType.LackOfSeed:
-                _dialogText.text = "<Color=red>¾¾¾Ñ</Color>ÀÌ ºÎÁ·ÇÑ°Å °°¾Æ...";
-                SetAutoHide(2f);
-                break;
-        }
+public void ActiveDialogBox(EPlayerNotificationType type)
+{
+    _dialogBox.SetActive(true);
 
+    switch (type)
+    {
+        case EPlayerNotificationType.Chunk:
+            _dialogText.text = "<color=red>F</color>ë¥¼ ëˆŒëŸ¬\n ë•…ì„ êµ¬ë§¤ í• ê¹Œ?";
+            break;
+        case EPlayerNotificationType.LackOfMoney:
+            _dialogText.text = "<color=red>ëˆ</color>ì´ ë¶€ì¡±í•´ì„œ êµ¬ë§¤í•  ìˆ˜ ì—†ì–´...";
+            SetAutoHide(2f);
+            break;
+        case EPlayerNotificationType.LackOfSeed:
+            _dialogText.text = "<color=red>ì”¨ì•—</color>ì´ ë¶€ì¡±í•´ì„œ ì‹¬ì„ ìˆ˜ ì—†ì–´...";
+            SetAutoHide(2f);
+            break;
+        case EPlayerNotificationType.BuildingInteraction:
+            _dialogText.text = "<color=red>F</color>ë¥¼ ëˆŒëŸ¬ì„œ\n ìƒí˜¸ì‘ìš©í•˜ê¸°";
+            break;
     }
+}
+
 
     private void SetAutoHide(float time)
     {
-        // ±âÁ¸ ÄÚ·çÆ¾ÀÌ µ¹°í ÀÖÀ¸¸é Áß´ÜÇÏ°í ´Ù½Ã ½ÃÀÛ
         if (_autoHideCoroutine != null)
             StopCoroutine(_autoHideCoroutine);
 

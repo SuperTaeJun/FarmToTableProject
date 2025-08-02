@@ -8,6 +8,7 @@ public class PlayerInputController : MonoBehaviour
     public DebugEvent<EPlayerMode> OnLeftMouseInput = new DebugEvent<EPlayerMode>();
     public DebugEvent OnWateringInput = new DebugEvent();
     public DebugEvent<EPlayerMode> OnModeChangeInput = new DebugEvent<EPlayerMode>();
+    public DebugEvent OnBuildingInteractionInput = new DebugEvent();
 
     private bool _isCursorLocked = true;
     private bool _playerMoveInputLock = false;
@@ -19,7 +20,7 @@ public class PlayerInputController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    private void Start() // �Ǵ� ������ �ʱ�ȭ ��ġ
+    private void Start()
     {
         PopupManager.Instance.OnPopupStateChanged += OnPopupStateChanged;
     }
@@ -43,14 +44,10 @@ public class PlayerInputController : MonoBehaviour
         HandleLeftMouseInput();
         HandleMouseCursor();
         HandleInteractionInput();
-        HandleModeChangeInput(); // ��� ���� �Է� �߰�
+        HandleModeChangeInput();
         HandleOptionPopupInput();
 
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            PopupManager.Instance.Open(EPopupType.UI_ShopPopup);
-        }
-          if(Input.GetKeyDown(KeyCode.F3))
+        if(Input.GetKeyDown(KeyCode.F3))
         {
             PopupManager.Instance.Open(EPopupType.UI_Vehicle);
         }
@@ -150,6 +147,7 @@ public class PlayerInputController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
+            OnBuildingInteractionInput.Invoke();
             OnChunkPurchaseInput.Invoke();
         }
     }

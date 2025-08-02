@@ -64,7 +64,10 @@ public class PopupManager : MonoBehaviour
 
     public void PopUpClose(Action callBack = null)
     {
-        _openPopups.Pop();
-        OnPopupStateChanged?.Invoke(_openPopups.Count > 0); // �˾� ���� �˸�
+        if (_openPopups.Count > 0)
+        {
+            _openPopups.Pop();
+            OnPopupStateChanged?.Invoke(_openPopups.Count > 0); // �˾� ���� �˸�
+        }
     }
 }

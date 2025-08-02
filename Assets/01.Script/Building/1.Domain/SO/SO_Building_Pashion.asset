@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
+  m_Name: SO_Building_Pashion
+  m_EditorClassIdentifier: 
+  Type: 12
+  Category: 0
+  BuildingName: "\uC637\uAC00\uAC8C"
+  Prefab:
+    m_AssetGUID: 0908845462118dd46a66a218a51198ba
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  PreviewPrefab:
+    m_AssetGUID: a635a12c266c5da4ea52613c20a98131
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  UISprite:
+    m_AssetGUID: 3bde04ede59a7ab4ba6bc7c7dfa87040
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  Size: {x: 2, y: 2}
+  Cost: 0

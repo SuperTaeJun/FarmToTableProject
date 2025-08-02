@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     private float _saveTimer;
 
     public Vector3 CurrentSelectedPos = Vector3.zero;
+    private BuildingObject _currentInteractableBuilding;
     private void Awake()
     {
         _modeController = GetComponent<PlayerModeController>();
@@ -58,6 +59,14 @@ public class Player : MonoBehaviour
         }
 
         InputController.OnChunkPurchaseInput.AddListener(TryGenerateChunk);
+        InputController.OnBuildingInteractionInput.AddListener(TryInteractWithBuilding);
+        
+        // BuildingManager 이벤트 구독
+        if (BuildingManager.Instance != null)
+        {
+            BuildingManager.Instance.OnBuildingEnterRange.AddListener(OnBuildingEnterRange);
+            BuildingManager.Instance.OnBuildingExitRange.AddListener(OnBuildingExitRange);
+        }
         
         // VehicleManager 이벤트 등록
         if (VehicleManager.Instance != null)
@@ -76,13 +85,6 @@ public class Player : MonoBehaviour
             _saveTimer = 0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            PlayerDataHolder.Instance.SavedData(gameObject.transform.position, gameObject.transform.rotation);
-            // Firebase에도 저장
-            _ = SavePlayerData();
-            FadeManager.Instance.FadeToScene("CharacterSelectScene");
-        }
     }
     public T GetAbility<T>() where T : PlayerAbility
     {
@@ -247,5 +249,28 @@ public class Player : MonoBehaviour
     private void OnVehicleDataChanged()
     {
         _ = SavePlayerData();
+    }
+
+    private void OnBuildingEnterRange(BuildingObject building)
+    {
+        _currentInteractableBuilding = building;
+        GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.BuildingInteraction);
+    }
+
+    private void OnBuildingExitRange(BuildingObject building)
+    {
+        if (_currentInteractableBuilding == building)
+        {
+            _currentInteractableBuilding = null;
+            GetAbility<PlayerNotificationAbility>()?.DisActiveDialogBox();
+        }
+    }
+
+    private void TryInteractWithBuilding()
+    {
+        if (_currentInteractableBuilding != null && _currentInteractableBuilding.CanInteract())
+        {
+            _currentInteractableBuilding.Interact();
+        }
     }
 }

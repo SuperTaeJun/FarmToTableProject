@@ -14,30 +14,20 @@ public class Crop
     public bool IsWatered { get; private set; }
     public float GrowthProgress { get; private set; }
 
-    // �� �ܰ躰 �� �ֱ� ���� �߰�
     public bool IsWateredForVegetative { get; private set; }
     public bool IsWateredForMature { get; private set; }
 
-    public Crop(ECropType type, string chunkId, Vector3 position)
+    public Crop(ECropType type, string chunkId, Vector3 position, ICurrentGameTimeProvider timeProvider)
     {
         Type = type;
         ChunkId = chunkId;
         Position = position;
         GrowthStage = ECropGrowthStage.Seed;
-        
-        // 현재 게임 시간으로 심은 시간 설정
-        if (GameTimeManager.Instance != null)
-        {
-            PlantedDay = GameTimeManager.Instance.CurrentDay;
-            PlantedHour = GameTimeManager.Instance.CurrentHour;
-        }
-        else
-        {
-            PlantedDay = 0;
-            PlantedHour = 0;
-        }
-        
-        LastWateredDay = -1; // 한 번도 물 안 준 상태
+
+        PlantedDay = timeProvider.CurrentDay;
+        PlantedHour = timeProvider.CurrentHour;
+
+        LastWateredDay = -1;
         LastWateredHour = -1;
         IsWatered = false;
         GrowthProgress = 0f;
@@ -45,6 +35,7 @@ public class Crop
         IsWateredForMature = false;
     }
 
+    // 로딩용 생성자
     public Crop(ECropType type, string chunkId, Vector3 position, ECropGrowthStage stage, int plantedDay, int plantedHour, int lastWateredDay, int lastWateredHour, bool isWatered, float growthProgress, bool isWateredForVegetative = false, bool isWateredForMature = false)
     {
         Type = type;
@@ -60,17 +51,15 @@ public class Crop
         IsWateredForVegetative = isWateredForVegetative;
         IsWateredForMature = isWateredForMature;
     }
-    public void Water()
+
+    public void Water(ICurrentGameTimeProvider timeProvider)
     {
         IsWatered = true;
-        if (GameTimeManager.Instance != null)
-        {
-            LastWateredDay = GameTimeManager.Instance.CurrentDay;
-            LastWateredHour = GameTimeManager.Instance.CurrentHour;
-        }
+        LastWateredDay = timeProvider.CurrentDay;
+        LastWateredHour = timeProvider.CurrentHour;
     }
 
-    public void WaterCurrentStage()
+    public void WaterCurrentStage(ICurrentGameTimeProvider timeProvider)
     {
         switch (GrowthStage)
         {
@@ -83,24 +72,21 @@ public class Crop
         }
 
         IsWatered = true;
-        if (GameTimeManager.Instance != null)
-        {
-            LastWateredDay = GameTimeManager.Instance.CurrentDay;
-            LastWateredHour = GameTimeManager.Instance.CurrentHour;
-        }
+        LastWateredDay = timeProvider.CurrentDay;
+        LastWateredHour = timeProvider.CurrentHour;
     }
+
     public bool IsWateredForCurrentStage()
     {
         switch (GrowthStage)
         {
             case ECropGrowthStage.Seed:
-                return true; // ������ �� �ʿ� ����
+            case ECropGrowthStage.Harvest:
+                return true;
             case ECropGrowthStage.Vegetative:
                 return IsWateredForVegetative;
             case ECropGrowthStage.Mature:
                 return IsWateredForMature;
-            case ECropGrowthStage.Harvest:
-                return true; // ��Ȯ�� �� �ʿ� ����
             default:
                 return false;
         }
@@ -112,7 +98,7 @@ public class Crop
         {
             case ECropGrowthStage.Seed:
             case ECropGrowthStage.Harvest:
-                return false; // ���Ѱ� ��Ȯ �ܰ�� ���� �� �� ����
+                return false;
             case ECropGrowthStage.Vegetative:
                 return !IsWateredForVegetative;
             case ECropGrowthStage.Mature:
@@ -124,16 +110,12 @@ public class Crop
 
     public void UpdateGrowth(float deltaProgress)
     {
-        var previousStage = GrowthStage;
         GrowthProgress = Mathf.Clamp01(GrowthProgress + deltaProgress);
         UpdateGrowthStage();
-
-        // �ܰ谡 ����Ǿ��� �� �� ���� �ʱ�ȭ�� ���� ���� (�̹� �� ���� ����)
     }
-    
+
     public void UpdateGrowthWithCropData(float deltaProgress, SO_Crop cropData)
     {
-        var previousStage = GrowthStage;
         GrowthProgress = Mathf.Clamp01(GrowthProgress + deltaProgress);
         UpdateGrowthStageWithCropData(cropData);
     }
@@ -149,7 +131,7 @@ public class Crop
         else
             GrowthStage = ECropGrowthStage.Seed;
     }
-    
+
     private void UpdateGrowthStageWithCropData(SO_Crop cropData)
     {
         if (GrowthProgress >= cropData.HarvestStageRatio)

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class GameTimeManager : MonoBehaviour
+public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
 {
     public static GameTimeManager Instance { get; private set; }
 
@@ -226,5 +226,27 @@ public class GameTimeManager : MonoBehaviour
         {
             SoundManager.Instance.PlayBGM(BGMType.Am);
         }
+    }
+
+    public void GoToNextDayMorning()
+    {
+        int nextDay = CurrentDay + 1;
+        int targetHour = 8;
+        int targetMinute = 0;
+        
+        SetGameTime(nextDay, targetHour, targetMinute);
+        
+        previousDay = CurrentDay;
+        previousHour = CurrentHour;
+        previousMinute = CurrentMinute;
+        
+        PlayTimeBasedBGM(CurrentHour);
+        
+        OnDayChanged?.Invoke(CurrentDay);
+        OnTimeChanged?.Invoke(CurrentHour, CurrentMinute);
+        
+        _ = SaveGameTime();
+        
+        Debug.Log($"다음날 아침으로 이동: Day {CurrentDay}, {CurrentHour:D2}:{CurrentMinute:D2}");
     }
 }

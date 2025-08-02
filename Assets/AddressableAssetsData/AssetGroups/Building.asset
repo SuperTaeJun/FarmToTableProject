@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Building
   m_EditorClassIdentifier: 
   m_GroupName: Building
-  m_GUID: bae069d377881364d9faf88991ca471d
+  m_GUID: 0841c836c61cab640b049211bc117a1d
   m_SerializeEntries:
   - m_GUID: 06174f00d0b49574dae3b0596d385b98
     m_Address: Prefab_Preview_Fence
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0908845462118dd46a66a218a51198ba
+    m_Address: Prefab_Pashion
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -30,11 +35,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1eef80bb9633c2a44a843933a0819916
-    m_Address: Prefab_Totem3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ceee534c26c01c4e8df860fdc6857c9
     m_Address: Prefab_Preview_Totem1
     m_ReadOnly: 0
@@ -45,13 +45,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a96895da9f10734bbb5bc1fbd27a58f
-    m_Address: Prefab_Totem1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 66d0146c7008620478136153284b7843
-    m_Address: Prefab_LetterBox
+  - m_GUID: 6cf3d12de3512e5488575ddba3777088
+    m_Address: Prefab_Store
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -60,18 +55,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7882f6211f585e047b59c9e2db21fe64
-    m_Address: Prefab_Totem2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7cff8eff26a54b54388a459e9c2d303a
     m_Address: Prefab_Preview_LetterBox
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8aa41ad24b1f38f478c371164b8de9d5
-    m_Address: Prefab_Table1
+  - m_GUID: 96ff1d3e4d7aebc4eace3135740bb2f5
+    m_Address: Prefab_Home
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -80,23 +70,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b0af38c5a59d1b1439da3a2e5e1b0d45
-    m_Address: Prefab_Shelter
+  - m_GUID: 99843b60acc24064e97a06a978629a69
+    m_Address: Preview_Pashion
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ceb3c2f7244a192438059f43598e0ab4
-    m_Address: Prefab_Fence
+  - m_GUID: 9b101168298d6454a876c0ba3ebe5ec8
+    m_Address: Prefab_Preview_Shelter
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: da802d18acf91e04a95402345c0a84a3
-    m_Address: Prefab_Table2
+  - m_GUID: a635a12c266c5da4ea52613c20a98131
+    m_Address: Preview_Home
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: eb19ba0c9d5b8dd47afd3a145f4345e8
-    m_Address: Prefab_Totem4
+  - m_GUID: b2d6ebde5b839a94b9732c9e343e482c
+    m_Address: Preview_Store
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -104,5 +94,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 20bc0848db085a142876aced9fef9442, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 02373177ac9e95946bd3c67eb473b0ac, type: 2}
-    - {fileID: 11400000, guid: 3b148792c5eb5e54bad26e8e827efbaa, type: 2}
+    - {fileID: 11400000, guid: fd4da6024f84ff64183ab07c4b76a1d9, type: 2}
+    - {fileID: 11400000, guid: 0f853b616bf6f4745b3753224f3f93e3, type: 2}
