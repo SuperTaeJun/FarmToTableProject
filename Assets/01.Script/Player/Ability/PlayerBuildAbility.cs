@@ -82,6 +82,7 @@ public class PlayerBuildAbility : PlayerAbility
         if (success)
         {
             Debug.Log("건물 배치 성공!");
+            SoundManager.Instance.PlaySFX(SFXType.Build);
         }
         else
         {

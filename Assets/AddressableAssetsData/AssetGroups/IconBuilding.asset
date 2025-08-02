@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b6dd0fe84bdb83498a82fefd30a34e6
+    m_Address: Assets/04.Image/Icon/Building/House_1Room_Yellow.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1e48534ef99c5154f8330173b8c9ebf2
     m_Address: Icon_Table1
     m_ReadOnly: 0
@@ -65,6 +70,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c9d35e2e11c64844830549ecb48eda5
+    m_Address: Assets/04.Image/Icon/Building/Latern_Path.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 64283645f49f39a409662c4c9835778e
     m_Address: Icon_Fence
     m_ReadOnly: 0
@@ -72,6 +82,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a39c5f779b2520746b3fa76f71d4e4df
     m_Address: Icon_Table2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9e3e125f1c95a445a46e94cc1f8a8c5
+    m_Address: Assets/04.Image/Icon/Building/Fashion_Shop.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -92,6 +107,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e561268a5ffb9194e82b1318be3e3f73
     m_Address: Icon_Totem1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcde8e48ee11e4c4fb2651ada32868bf
+    m_Address: Assets/04.Image/Icon/Building/Hypermarket_Shop.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -6,6 +6,7 @@ public class UI_TouchBounce : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 {
     [SerializeField] float _hoverSize = 1.2f;
 
+
     private RectTransform _rectTransform;
     private void Awake()
     {
@@ -19,11 +20,13 @@ public class UI_TouchBounce : MonoBehaviour, IPointerDownHandler, IPointerEnterH
     public void OnPointerDown(PointerEventData eventData)
     {
         ButtonDown(_rectTransform);
+        SoundManager.Instance.PlaySFX(SFXType.ButtonPressed);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         ButtonHoverEnter(_rectTransform);
+        SoundManager.Instance.PlaySFX(SFXType.ButtonHover);
     }
 
     public void OnPointerExit(PointerEventData eventData)

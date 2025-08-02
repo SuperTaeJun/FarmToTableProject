@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 25
   ItemName: "\uC544\uC2A4\uD30C\uB77C\uAC70\uC2A4"
-  Description: "\uADC0\uC5EC\uC6C0"
+  Description: "\uC2E0\uC120\uD55C \uC544\uC2A4\uD30C\uB77C\uAC70\uC2A4"
   Icon:
     m_AssetGUID: 8d042dc3aa573824c902a6b5d7430d7a
     m_SubObjectName: 

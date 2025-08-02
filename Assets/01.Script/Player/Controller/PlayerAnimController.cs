@@ -90,30 +90,23 @@ public class PlayerAnimController : MonoBehaviour
 
         if (effect != null)
         {
-            // 기존 회전값 가져오기
-            Vector3 currentEuler = effect.transform.eulerAngles;
-            float yRotation = currentEuler.y; // 기본값
 
-            // _owner(플레이어)의 이동방향 가져오기
-            Vector3 playerMoveDirection = _owner.gameObject.transform.forward; // 또는 적절한 메서드명
+            Vector3 currentEuler = effect.transform.eulerAngles;
+            float yRotation = currentEuler.y;
+
+            Vector3 playerMoveDirection = _owner.gameObject.transform.forward; 
 
             if (playerMoveDirection.magnitude > 0.1f)
             {
                 // 이동방향의 반대
                 Vector3 oppositeDirection = -playerMoveDirection;
-                oppositeDirection.y = 0; // 수평 방향만
+                oppositeDirection.y = 0; 
 
-                // Y축 회전값 계산
                 yRotation = Mathf.Atan2(oppositeDirection.x, oppositeDirection.z) * Mathf.Rad2Deg;
             }
-
-            // X, Z축은 기존값 유지하고 Y축만 변경
             effect.transform.rotation = Quaternion.Euler(currentEuler.x, yRotation, currentEuler.z);
-            //Vector3 effectPosition = transform.position;
-
-            //GameObject effect =ObjectPoolManager.Instance.Get(PoolType.FootStep, effectPosition);
-
         }
+        SoundManager.Instance.PlaySFX(SFXType.Step);
     }
     private void OnCultivateAnim()
     {

@@ -1937,7 +1937,7 @@ MonoBehaviour:
   dayColor: {r: 1, g: 0.80784315, b: 0.60784316, a: 1}
   nightColor: {r: 0, g: 0, b: 0, a: 1}
   dayAmbientColor: {r: 1, g: 1, b: 1, a: 1}
-  nightAmbientColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  nightAmbientColor: {r: 0.10188681, g: 0.10188681, b: 0.10188681, a: 1}
   dayFogColor: {r: 0.39215687, g: 0.8039216, b: 0.9372549, a: 1}
   nightFogColor: {r: 0.27058825, g: 0.29803923, b: 0.37254903, a: 1}
 --- !u!1 &181602430
@@ -9857,7 +9857,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1 ~ 4
+  m_text: 1 ~ 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0a89e5754ae5de049a0a40ee3602a96c, type: 2}
   m_sharedMaterial: {fileID: 3518183201511850040, guid: 0a89e5754ae5de049a0a40ee3602a96c, type: 2}
@@ -11201,7 +11201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: P
+  m_text: F3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0a89e5754ae5de049a0a40ee3602a96c, type: 2}
   m_sharedMaterial: {fileID: 3518183201511850040, guid: 0a89e5754ae5de049a0a40ee3602a96c, type: 2}
@@ -15982,7 +15982,7 @@ GameObject:
   - component: {fileID: 1633530364}
   - component: {fileID: 1633530367}
   m_Layer: 5
-  m_Name: AchiveMentIconButton
+  m_Name: BuildingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16005,7 +16005,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 878.7002, y: -449.1001}
+  m_AnchoredPosition: {x: 879.83, y: -450.70013}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1633530364
@@ -16065,14 +16065,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.86415094, g: 0.86415094, b: 0.86415094, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f20033313695c4d1386e03db7c0ef313, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 32b639b461ed6424eaacb0b92b1e8dc1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -17353,7 +17353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: B
+  m_text: F2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0a89e5754ae5de049a0a40ee3602a96c, type: 2}
   m_sharedMaterial: {fileID: 3518183201511850040, guid: 0a89e5754ae5de049a0a40ee3602a96c, type: 2}

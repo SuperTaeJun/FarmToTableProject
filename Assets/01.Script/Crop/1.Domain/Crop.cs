@@ -34,7 +34,6 @@ public class Crop
         IsWateredForVegetative = false;
         IsWateredForMature = false;
     }
-
     // 로딩용 생성자
     public Crop(ECropType type, string chunkId, Vector3 position, ECropGrowthStage stage, int plantedDay, int plantedHour, int lastWateredDay, int lastWateredHour, bool isWatered, float growthProgress, bool isWateredForVegetative = false, bool isWateredForMature = false)
     {

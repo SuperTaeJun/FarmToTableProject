@@ -21,6 +21,7 @@ public class PlayerFarmingAbility : PlayerAbility
             if (ObjectPoolManager.Instance)
                 ObjectPoolManager.Instance.Get(PoolType.Spark, selectedPos);
         }
+        SoundManager.Instance.PlaySFX(SFXType.Seed);
     }
     public void OnCultivate()
     {
@@ -43,6 +44,7 @@ public class PlayerFarmingAbility : PlayerAbility
                     ObjectPoolManager.Instance.Get(PoolType.SmokeS, selectedPos);
             }
         }
+        SoundManager.Instance.PlaySFX(SFXType.Cultivate);
     }
     public void OnWaterCrop()
     {
@@ -58,6 +60,7 @@ public class PlayerFarmingAbility : PlayerAbility
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
             _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
         }
+        SoundManager.Instance.PlaySFX(SFXType.Watering);
     }
 
     public void OnHarvestCrop()
@@ -72,8 +75,8 @@ public class PlayerFarmingAbility : PlayerAbility
             _ = CropsManager.Instance.HarvestCrop(chunkId, localPos);
             if (ObjectPoolManager.Instance)
                 ObjectPoolManager.Instance.Get(PoolType.Dust, selectedPos);
-            //�κ��丮�� ����
         }
+        SoundManager.Instance.PlaySFX(SFXType.Harvest);
     }
 
 }

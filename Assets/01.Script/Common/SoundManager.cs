@@ -8,11 +8,19 @@ public enum BGMType
     Pm,
     Store,
     Loading,
-    Clothing
+    Clothing,
 }
 
 public enum SFXType
 {
+    ButtonHover,
+    ButtonPressed,
+    Cultivate,
+    Watering,
+    Harvest,
+    Seed,
+    Build,
+    Step,
 }
 
 [System.Serializable]

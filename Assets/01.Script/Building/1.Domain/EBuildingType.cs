@@ -15,5 +15,6 @@ public enum EBuildingType
     Shelter,
     Home,
     Pashion,
+    LightingProp,
     None
 }

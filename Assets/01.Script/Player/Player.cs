@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
             return ability as T;
         }
 
-        throw new Exception($"�����Ƽ {type.Name}�� {gameObject.name}���� ã�� �� �����ϴ�.");
+        throw new Exception($"어빌리티 {type.Name}을(를) {gameObject.name}에서 찾을 수 없습니다.");
     }
     public void SetPositionForCharacterController(Vector3 newPos)
     {

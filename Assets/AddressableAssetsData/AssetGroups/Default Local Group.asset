@@ -14,7 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: fabf2358eafcb1f4a920c8b0e994d4cd
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: c7ac79ddc7e915a43b2f17208dce3b52
+    m_Address: Assets/02.Prefab/Building/Preview_Prefab_LightingProp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff42dcb733659614181dfa308c8c862f
+    m_Address: Assets/02.Prefab/Building/Prefab_LightingProp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 20bc0848db085a142876aced9fef9442, type: 2}
   m_SchemaSet:
