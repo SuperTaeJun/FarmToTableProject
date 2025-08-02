@@ -13,10 +13,10 @@ public class WorldManager : MonoBehaviour
     public ChunkGenerator dynamicGenerator;
 
     [Header("World Settings")]
-    public int worldWidth = 5;  // ûũ ����
+    public int worldWidth = 5;  // 청크 개수
     public int worldDepth = 5;
 
-    // �ε� �����Ȳ �̺�Ʈ
+    // 로딩 진행상황 이벤트
     public event Action<float> OnLoadingProgress;
     public event Action OnLoadingComplete;
 
@@ -26,9 +26,7 @@ public class WorldManager : MonoBehaviour
     public Dictionary<ChunkPosition, Chunk> LoadedChunks => _loadedChunks;
 
     private Dictionary<ChunkPosition, GameObject> _chunkObjects = new Dictionary<ChunkPosition, GameObject>();
-    public IEnumerable<ChunkPosition> LoadedChunkPositions => _loadedChunks.Keys;
 
-    // �޽� ������Ʈ�� �ʿ��� ûũ���� �����ϴ� ť
     private HashSet<ChunkPosition> _chunksNeedMeshUpdate = new HashSet<ChunkPosition>();
     private bool _isUpdatingMeshes = false;
 
@@ -92,7 +90,7 @@ public class WorldManager : MonoBehaviour
             if (_loadedChunks.ContainsKey(chunkPos))
             {
                 RebuildChunkWithNeighborCheck(chunkPos);
-                yield return null; // ������ �л�
+                yield return null; // 프레임 양보
             }
         }
 
@@ -113,7 +111,7 @@ public class WorldManager : MonoBehaviour
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if (player == null)
         {
-            Debug.LogWarning("�÷��̾� ��ã��");
+            Debug.LogWarning("플레이어 못찾음");
             return;
         }
 
@@ -129,12 +127,12 @@ public class WorldManager : MonoBehaviour
 
         Vector3 playerPosition = new Vector3(
             worldCenterX,
-            groundHeight + 1f, // ���鿡�� 2���� ��
+            groundHeight + 1f, // 땅에서 2블록 위
             worldCenterZ
         );
 
         player.SetPositionForCharacterController(playerPosition);
-        Debug.Log($"[WorldManager] �÷��̾ ���� �߾ӿ� ��ġ: {playerPosition}");
+        Debug.Log($"[WorldManager] 플레이어 월드 중앙에 배치: {playerPosition}");
     }
 
     private float FindGroundHeight(int chunkX, int chunkZ, int localX, int localZ)
@@ -143,22 +141,18 @@ public class WorldManager : MonoBehaviour
 
         if (!_loadedChunks.TryGetValue(chunkPos, out var chunk))
         {
-            // ûũ�� �ε���� ���� ��� �⺻ ���� ��ȯ
             return dynamicGenerator.worldHeight * 0.5f * dynamicGenerator.blockOffset.y;
         }
 
-        // ���������� �Ʒ��� Ž���Ͽ� ù ��° ���� ���� ã��
         for (int y = dynamicGenerator.worldHeight - 1; y >= 0; y--)
         {
             var block = chunk.GetBlock(localX, y, localZ);
             if (block != null && block.Type != EBlockType.Air)
             {
-                // ���� ������ ��� ��ġ ��ȯ
                 return (y + 1) * dynamicGenerator.blockOffset.y;
             }
         }
 
-        // ���� ������ ���� ��� �⺻ ����
         return dynamicGenerator.blockOffset.y;
     }
 
@@ -190,15 +184,13 @@ public class WorldManager : MonoBehaviour
 
     public async Task LoadWorldFromFirebase()
     {
-        Debug.Log("[WorldManager] Firebase���� ���� �ε� ����!");
-
         ClearExistingWorld();
 
         var chunkPositions = await _repo.GetAllChunkPositionsFromFirebase();
 
         if (chunkPositions.Count == 0)
         {
-            Debug.Log("[WorldManager] DB�� ûũ ����. �⺻ ���� ����.");
+            Debug.Log("[WorldManager] 기본 월드 생성.");
 
             for (int cx = 0; cx < worldWidth; cx++)
             {
@@ -227,50 +219,46 @@ public class WorldManager : MonoBehaviour
 
             await Task.Yield();
         }
-
-        Debug.Log("[WorldManager] Firebase ���� �ε� �Ϸ�!");
-
         OnLoadingComplete?.Invoke();
     }
 
     private async Task LoadChunkFromFirebase(ChunkPosition pos)
     {
-        // Firebase���� ûũ ������ �ε�
+        // Firebase에서 청크 데이터 로딩
         Chunk firebaseChunk = await _repo.LoadChunkAsync(pos);
 
         if (firebaseChunk == null)
         {
-            Debug.Log($"[WorldManager] Firebase�� ûũ ����, ���� ����: {pos.X},{pos.Z}");
+            Debug.Log($"[WorldManager] Firebase에 청크 없음, 신규 생성: {pos.X},{pos.Z}");
             firebaseChunk = GenerateDynamicChunk(pos);
 
-            // ���� ������ ûũ�� Firebase�� ����
+            // 신규 생성된 청크를 Firebase에 저장
             await _repo.SaveChunkAsync(firebaseChunk);
         }
         else
         {
-            Debug.Log($"[WorldManager] Firebase���� ûũ �ε� �Ϸ�: {pos.X},{pos.Z}");
+            Debug.Log($"[WorldManager] Firebase에서 청크 로딩 완료: {pos.X},{pos.Z}");
         }
 
-        // �޸𸮿� �ε�
+        // 메모리에 로딩
         _loadedChunks[pos] = firebaseChunk;
 
-        // �������� ���� ������
+        // 게임오브젝트 형태 생성
         await BuildChunkInScene(pos, firebaseChunk);
 
-        // ���� ûũ���� �޽� ������Ʈ ����
-        ScheduleAdjacentChunkMeshUpdates(pos);
+        AdjacentChunkMeshUpdates(pos);
     }
 
-    // ���� ûũ���� �޽� ������Ʈ�� �����ϴ� �޼���
-    private void ScheduleAdjacentChunkMeshUpdates(ChunkPosition newChunkPos)
+    // 인접 청크들의 메시 업데이트를 예약하는 메서드
+    private void AdjacentChunkMeshUpdates(ChunkPosition newChunkPos)
     {
         ChunkPosition[] adjacentPositions = {
-            new ChunkPosition(newChunkPos.X - 1, newChunkPos.Y, newChunkPos.Z), // Left
-            new ChunkPosition(newChunkPos.X + 1, newChunkPos.Y, newChunkPos.Z), // Right
-            new ChunkPosition(newChunkPos.X, newChunkPos.Y - 1, newChunkPos.Z), // Down
-            new ChunkPosition(newChunkPos.X, newChunkPos.Y + 1, newChunkPos.Z), // Up
-            new ChunkPosition(newChunkPos.X, newChunkPos.Y, newChunkPos.Z - 1), // Back
-            new ChunkPosition(newChunkPos.X, newChunkPos.Y, newChunkPos.Z + 1)  // Forward
+            new ChunkPosition(newChunkPos.X - 1, newChunkPos.Y, newChunkPos.Z), // 좌
+            new ChunkPosition(newChunkPos.X + 1, newChunkPos.Y, newChunkPos.Z), // 우
+            new ChunkPosition(newChunkPos.X, newChunkPos.Y - 1, newChunkPos.Z), // 밑
+            new ChunkPosition(newChunkPos.X, newChunkPos.Y + 1, newChunkPos.Z), // 위
+            new ChunkPosition(newChunkPos.X, newChunkPos.Y, newChunkPos.Z - 1), // 뒤
+            new ChunkPosition(newChunkPos.X, newChunkPos.Y, newChunkPos.Z + 1)  // 앞
         };
 
         foreach (var adjacentPos in adjacentPositions)
@@ -295,7 +283,7 @@ public class WorldManager : MonoBehaviour
 
                 int height = GetDynamicHeight(worldX, worldZ);
 
-                // ��ü ���̿� ���� ���� ����
+                // 전체 높이에 대해 블록 생성
                 for (int y = 0; y < dynamicGenerator.worldHeight; y++)
                 {
                     var blockPos = new BlockPosition(x, y, z);
@@ -303,12 +291,10 @@ public class WorldManager : MonoBehaviour
 
                     if (y < height)
                     {
-                        // ���� ���� ���ϴ� ���� ����
                         blockType = (y == height - 1) ? EBlockType.Grass : EBlockType.Dirt;
                     }
                     else
                     {
-                        // ���� ���� �̻��� Air ����
                         blockType = EBlockType.Air;
                     }
 
@@ -334,11 +320,10 @@ public class WorldManager : MonoBehaviour
 
     private async Task BuildChunkInScene(ChunkPosition pos, Chunk chunk)
     {
-        // Chunk �����͸� ���� �����ͷ� ��ȯ
+        // Chunk 데이터를 월드 데이터로 변환
         string[,,] chunkWorldData = ConvertChunkToWorldData(chunk);
         var tcs = new TaskCompletionSource<bool>();
 
-        //����ȭ ����
         StartCoroutine(dynamicGenerator.GenerateDynamicChunkCoroutine
 (
     pos,
@@ -347,38 +332,29 @@ public class WorldManager : MonoBehaviour
     chunkObject => { _chunkObjects[pos] = chunkObject; tcs.SetResult(true); }
 ));
 
-        ////����ȭ �� ����
-        //// DynamicChunkGenerator�� ���� ������
-        //GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(pos, chunkWorldData);
-
-
-        //// ûũ ������Ʈ ���
-        //chunkObjects[pos] = chunkObject;
-
         await tcs.Task;
-        //await Task.Yield(); // ������ �л�
     }
 
-    // ���� ûũ ������ ������ ûũ �����
+    // 인접 청크 정보를 고려한 청크 재빌드
     private void RebuildChunkWithNeighborCheck(ChunkPosition chunkPos)
     {
         if (!_loadedChunks.TryGetValue(chunkPos, out Chunk chunk))
             return;
 
-        // ���� ûũ ������Ʈ ����
+        // 기존 청크 오브젝트 제거
         if (_chunkObjects.TryGetValue(chunkPos, out GameObject oldChunkObject))
         {
             Destroy(oldChunkObject);
             _chunkObjects.Remove(chunkPos);
         }
 
-        // ���� ûũ ������ ������ ���� ������ ����
+        // 인접 청크 정보를 고려한 월드 데이터 생성
         string[,,] chunkWorldData = ConvertChunkToWorldDataWithNeighbors(chunk);
         GameObject chunkObject = dynamicGenerator.GenerateDynamicChunk(chunkPos, chunkWorldData);
         _chunkObjects[chunkPos] = chunkObject;
     }
 
-    // ���� ûũ ������ ������ ���� ������ ��ȯ
+    // 인접 청크 정보를 고려한 월드 데이터 변환
     private string[,,] ConvertChunkToWorldDataWithNeighbors(Chunk chunk)
     {
         int chunkSize = Chunk.ChunkSize;
@@ -393,7 +369,7 @@ public class WorldManager : MonoBehaviour
                     var block = chunk.GetBlock(x, y, z);
                     if (block != null && block.Type != EBlockType.Air)
                     {
-                        // �� ������ �������Ǿ�� �ϴ��� Ȯ��
+                        // 이 블록이 렌더링되어야 하는지 확인
                         if (IsBlockVisibleWithNeighbors(chunk.Position, x, y, z))
                         {
                             worldData[x, y, z] = block.Type.ToString();
@@ -406,7 +382,7 @@ public class WorldManager : MonoBehaviour
         return worldData;
     }
 
-    // ���� ûũ�� ������ ���� ���ü� üũ
+    // 인접 청크를 고려한 블록 가시성 체크
     private bool IsBlockVisibleWithNeighbors(ChunkPosition chunkPos, int x, int y, int z)
     {
         Vector3Int[] directions = {
@@ -424,17 +400,16 @@ public class WorldManager : MonoBehaviour
             int adjacentY = y + dir.y;
             int adjacentZ = z + dir.z;
 
-            // ���� ��ġ�� ������ �ִ��� Ȯ�� (ûũ ��� ����)
+            // 인접 위치에 블록이 있는지 확인 (청크 경계 포함)
             if (!HasBlockAtPosition(chunkPos, adjacentX, adjacentY, adjacentZ))
             {
-                return true; // ���� ��ġ�� ��������� �� ���� �׸�
+                return true; // 인접 위치에 블록없으면 이 블록 그려야함
             }
         }
 
-        return false; // ��� ���� ��������
+        return false; // 모든 면이 막혀있음
     }
 
-    // ûũ ��踦 �ѳ���� ���� ���� ���� Ȯ��
     private bool HasBlockAtPosition(ChunkPosition baseChunkPos, int x, int y, int z)
     {
         ChunkPosition targetChunkPos = baseChunkPos;
@@ -442,7 +417,7 @@ public class WorldManager : MonoBehaviour
         int localY = y;
         int localZ = z;
 
-        // ûũ ��踦 �Ѿ�� ��� ��ǥ ����
+        // 청크 경계를 넘어간 경우 좌표 변환
         if (x < 0)
         {
             targetChunkPos = new ChunkPosition(baseChunkPos.X - 1, baseChunkPos.Y, baseChunkPos.Z);
@@ -493,7 +468,7 @@ public class WorldManager : MonoBehaviour
                     var block = chunk.GetBlock(x, y, z);
                     if (block != null)
                     {
-                        // Air ������ ���������� ���� (null�� �α�)
+                        // Air 블록은 렌더링하지 않음 (null로 표기)
                         if (block.Type != EBlockType.Air)
                         {
                             worldData[x, y, z] = block.Type == EBlockType.Grass ? "Grass" : "Dirt";
@@ -508,7 +483,7 @@ public class WorldManager : MonoBehaviour
 
     private void ClearExistingWorld()
     {
-        // ���� ûũ ������Ʈ�� ����
+        // 기존 청크 오브젝트들 삭제
         foreach (var kvp in _chunkObjects)
         {
             if (kvp.Value != null)
@@ -520,7 +495,7 @@ public class WorldManager : MonoBehaviour
         _chunkObjects.Clear();
         _loadedChunks.Clear();
 
-        Debug.Log("[WorldManager] ���� ���� ���� �Ϸ�");
+        Debug.Log("[WorldManager] 기존 월드 정리 완료");
     }
 
     public bool HasChunk(ChunkPosition pos)
@@ -537,8 +512,7 @@ public class WorldManager : MonoBehaviour
         await _repo.SaveChunkAsync(_loadedChunks[pos]);
         await ForageManager.Instance.GenerateForagesInChunk(pos);
 
-        // ���� ûũ���� �޽� ������Ʈ ����
-        ScheduleAdjacentChunkMeshUpdates(pos);
+        AdjacentChunkMeshUpdates(pos);
     }
 
     public Chunk GetChunkAtWorldPosition(Vector3 worldPosition)
@@ -575,19 +549,18 @@ public class WorldManager : MonoBehaviour
         float chunkWorldSizeX = chunkSizeX * blockOffsetX;
         float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
 
-        // ûũ�� ���� ���� ��ǥ
+        // 청크의 월드 시작 좌표
         float chunkWorldStartX = chunkPos.X * chunkWorldSizeX;
         float chunkWorldStartZ = chunkPos.Z * chunkWorldSizeZ;
 
-        // ���� ��ǥ�� ���� ��ǥ�� ��ȯ
+        // 로컬 좌표를 월드 좌표로 변환
         float worldX = chunkWorldStartX + (localPosition.x * blockOffsetX);
-        float worldY = localPosition.y; // Y�� ��ȯ ���ʿ�
+        float worldY = localPosition.y;
         float worldZ = chunkWorldStartZ + (localPosition.z * blockOffsetZ);
 
         return new Vector3(worldX, worldY, worldZ);
     }
 
-    // ûũ id�ε� �����ϰ� �������̵�
     public Vector3 GetWorldPositionFromChunkLocal(string chunkId, Vector3 localPosition)
     {
         var chunkPos = GetChunkPositionFromId(chunkId);
@@ -621,11 +594,11 @@ public class WorldManager : MonoBehaviour
         float chunkWorldSizeX = chunkSizeX * blockOffsetX;
         float chunkWorldSizeZ = chunkSizeZ * blockOffsetZ;
 
-        // ûũ�� ���� ���� ��ǥ
+        // 청크의 월드 시작 좌표
         float chunkWorldStartX = chunkPos.X * chunkWorldSizeX;
         float chunkWorldStartZ = chunkPos.Z * chunkWorldSizeZ;
 
-        // ���� ��ǥ���� ûũ ���� ��ǥ�� ��ȯ
+        // 월드 좌표에서 청크 로컬 좌표로 변환
         float localX = (worldPosition.x - chunkWorldStartX) / blockOffsetX;
         float localY = worldPosition.y;
         float localZ = (worldPosition.z - chunkWorldStartZ) / blockOffsetZ;
@@ -637,10 +610,9 @@ public class WorldManager : MonoBehaviour
         HashSet<ChunkPosition> affectedChunks = new HashSet<ChunkPosition>();
         bool success = true;
 
-        // 중심 기준으로 size x size 영역 계산 (블록 오프셋 적용)
         int halfSize = size / 2;
         Vector3 blockOffset = dynamicGenerator.blockOffset;
-        
+
         for (int x = -halfSize; x <= halfSize; x++)
         {
             for (int z = -halfSize; z <= halfSize; z++)
@@ -657,6 +629,7 @@ public class WorldManager : MonoBehaviour
         foreach (var chunkPos in affectedChunks)
         {
             RebuildChunk(chunkPos);
+            //_ = _repo.SaveChunkAsync(LoadedChunks[chunkPos]);
         }
 
         return success;
@@ -667,7 +640,7 @@ public class WorldManager : MonoBehaviour
         var chunk = GetChunkAtWorldPosition(worldPosition);
         if (chunk == null)
         {
-            Debug.LogWarning($"���� ��ġ {worldPosition}���� ûũ�� ã�� �� �����ϴ�.");
+            Debug.LogWarning($"해당 위치 {worldPosition}에서 청크를 찾을 수 없습니다.");
             return false;
         }
 
@@ -679,24 +652,22 @@ public class WorldManager : MonoBehaviour
 
         if (!IsValidBlockPosition(localBlockPos))
         {
-            Debug.LogWarning($"�߸��� ���� ��ġ: {localBlockPos.X}, {localBlockPos.Y}, {localBlockPos.Z}");
             return false;
         }
 
         var newBlock = new Block(blockType, localBlockPos);
         chunk.SetBlock(newBlock);
 
-        // ������� ûũ �߰�
         affectedChunks.Add(chunk.Position);
 
         return true;
     }
     public EBlockType GetBlockType(Vector3 worldPosition)
     {
-        // ���� ��ǥ���� ûũ ã��
+        // 월드 좌표에서 청크 찾기
         var chunk = GetChunkAtWorldPosition(worldPosition);
 
-        // ûũ �� ���� ���� ��ǥ ���
+        // 청크 내 로컬 블록 좌표 계산
         var localPos = GetLocalPositionInChunk(worldPosition, chunk.Position);
         int blockX = Mathf.FloorToInt(localPos.x);
         int blockY = Mathf.FloorToInt(localPos.y / dynamicGenerator.blockOffset.y);
@@ -722,10 +693,10 @@ public class WorldManager : MonoBehaviour
 
     public bool HasBlockAt(ChunkPosition chunkPos, int x, int y, int z)
     {
-        // ûũ�� �ε�Ǿ� �ִ��� Ȯ��
+        // 청크가 로드되어 있는지 확인
         if (!_loadedChunks.ContainsKey(chunkPos))
         {
-            return false; // ûũ�� ������ ���ϵ� ����
+            return false;
         }
 
         var chunk = _loadedChunks[chunkPos];

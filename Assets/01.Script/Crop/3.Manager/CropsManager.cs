@@ -59,7 +59,7 @@ public class CropsManager : MonoBehaviour
         }
     }
 
-    private async void Start()
+    private void Start()
     {
         StartGrowthUpdate();
     }
@@ -68,10 +68,11 @@ public class CropsManager : MonoBehaviour
     {
         await PreloadAllCropPrefabs();
 
-        var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
-        foreach (var chunkPos in loadedChunks)
+        var loadedChunks = WorldManager.Instance.LoadedChunks;
+        foreach (var chunk in loadedChunks)
         {
-            string chunkId = $"{chunkPos.X}_{chunkPos.Y}_{chunkPos.Z}";
+
+            string chunkId = chunk.Key.ToChunkId();
             await LoadCropsFromChunk(chunkId);
         }
     }

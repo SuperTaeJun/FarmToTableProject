@@ -38,9 +38,9 @@ public class ChunkGenerator : MonoBehaviour
         blockMeshes = new Dictionary<string, Mesh>();
         blockMaterials = new Dictionary<string, Material>();
 
-        LoadMeshAndMaterial(_grassPrefab, "Grass", blockMeshes, blockMaterials);
-        LoadMeshAndMaterial(_dirtPrefab, "Dirt", blockMeshes, blockMaterials);
-        LoadMeshAndMaterial(_farmlandPrefab, "Farmland", blockMeshes, blockMaterials);
+        LoadCube(_grassPrefab, "Grass", blockMeshes, blockMaterials);
+        LoadCube(_dirtPrefab, "Dirt", blockMeshes, blockMaterials);
+        LoadCube(_farmlandPrefab, "Farmland", blockMeshes, blockMaterials);
     }
     public IEnumerator GenerateDynamicChunkCoroutine(ChunkPosition chunkPos, string[,,] chunkData, Transform parentTransform, System.Action<GameObject> onComplete)
     {
@@ -52,8 +52,7 @@ public class ChunkGenerator : MonoBehaviour
 
         System.Diagnostics.Stopwatch frameTimer = new System.Diagnostics.Stopwatch();
 
-        // 1�ܰ�: ���� ������ ó�� (���� ûũ ������)
-        const int subChunkSize = 2; // subChunkSize x subChunkSize ũ��� ûũ�� ó��
+        const int subChunkSize = 2;
 
         for (int subX = 0; subX < chunkSize; subX += subChunkSize)
         {
@@ -61,7 +60,7 @@ public class ChunkGenerator : MonoBehaviour
             {
                 frameTimer.Restart();
 
-                // 4x4 ���� ûũ ó��
+                // 4x4 작은 청크 처리
                 int endX = Mathf.Min(subX + subChunkSize, chunkSize);
                 int endZ = Mathf.Min(subZ + subChunkSize, chunkSize);
 
@@ -117,14 +116,12 @@ public class ChunkGenerator : MonoBehaviour
                     }
                 }
 
-                // ���� ûũ���� yield
                 yield return null;
             }
         }
 
-        // 2�ܰ�: �޽� ���� (�� ���� ������)
         List<GameObject> createdChunkObjects = new List<GameObject>();
-        const int maxCombinePerFrame = 150; // �� �۰� ����
+        const int maxCombinePerFrame = 150; // 한 프레임당 처리량
 
         foreach (var kvp in blockCombineInstances)
         {
@@ -134,7 +131,6 @@ public class ChunkGenerator : MonoBehaviour
             if (combineList.Count == 0)
                 continue;
 
-            // �޽ø� ���� ������ �����ؼ� ó��
             for (int i = 0; i < combineList.Count; i += maxCombinePerFrame)
             {
                 frameTimer.Restart();
@@ -157,13 +153,11 @@ public class ChunkGenerator : MonoBehaviour
 
                 createdChunkObjects.Add(chunkObj);
 
-                // �޽� ���� �� ������ yield
                 yield return null;
             }
         }
 
-        // 3�ܰ�: �ݶ��̴� �߰� (��ġ�� ó��)
-        const int collidersPerFrame = 3; // �����Ӵ� �ݶ��̴� ���� ��
+        const int collidersPerFrame = 3;
 
         for (int i = 0; i < createdChunkObjects.Count; i += collidersPerFrame)
         {
@@ -181,20 +175,17 @@ public class ChunkGenerator : MonoBehaviour
                     mc.convex = false;
                 }
             }
-
-            // �ݶ��̴� ��ġ ���� �� yield
             yield return null;
         }
         int groundLayer = Mathf.RoundToInt(Mathf.Log(GroundLayer.value, 2));
 
-        // �ڱ� �ڽ� ���� ��� ���� ������Ʈ
+        // 자기 자신 포함 모든 자식 오브젝트
         Transform[] allChildren = chunkParent.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {
             child.gameObject.layer = groundLayer;
         }
 
-        Debug.Log($"[ChunkGenerator] ûũ {chunkPos.X},{chunkPos.Z} ������ �Ϸ� - {blockCombineInstances.Count}�� Ÿ��");
         onComplete?.Invoke(chunkParent);
     }
     public GameObject GenerateDynamicChunk(ChunkPosition chunkPos, string[,,] chunkData)
@@ -210,7 +201,7 @@ public class ChunkGenerator : MonoBehaviour
         {
             for (int z = 0; z < chunkSize; z++)
             {
-                // chunkData�� ûũ ���� ��ǥ�踦 ���
+                // chunkData는 청크 로컬 좌표계를 사용
                 if (x >= chunkData.GetLength(0) || z >= chunkData.GetLength(2))
                     continue;
 
@@ -218,7 +209,6 @@ public class ChunkGenerator : MonoBehaviour
 
                 for (int y = worldHeight - 1; y >= 0; y--)
                 {
-                    // chunkData[x, y, z] - ûũ ���� ��ǥ ���
                     string blockName = chunkData[x, y, z];
                     if (blockName == null)
                         continue;
@@ -238,7 +228,7 @@ public class ChunkGenerator : MonoBehaviour
 
                     if (shouldDraw)
                     {
-                        // ���� ��ǥ�� ��ȯ�Ͽ� ��ġ ���
+                        // 월드 좌표로 변환하여 배치 계산
                         Vector3 pos = new Vector3(
                             (chunkPos.X * chunkSize + x) * blockOffset.x,
                             y * blockOffset.y,
@@ -265,7 +255,7 @@ public class ChunkGenerator : MonoBehaviour
             }
         }
 
-        // ���� Ÿ�Ժ��� �޽� ���� �� GameObject ����
+        // 블록 타입별로 메시 결합 및 GameObject 생성
         foreach (var kvp in blockCombineInstances)
         {
             string blockName = kvp.Key;
@@ -293,14 +283,12 @@ public class ChunkGenerator : MonoBehaviour
         }
 
         int groundLayer = Mathf.RoundToInt(Mathf.Log(GroundLayer.value, 2));
-        // �ڱ� �ڽ� ���� ��� ���� ������Ʈ
+
         Transform[] allChildren = chunkParent.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {
             child.gameObject.layer = groundLayer;
         }
-
-        Debug.Log($"[ChunkGenerator] ûũ {chunkPos.X},{chunkPos.Z} ������ �Ϸ� - {blockCombineInstances.Count}�� Ÿ��");
 
         return chunkParent;
     }
@@ -327,11 +315,10 @@ public class ChunkGenerator : MonoBehaviour
         return worldData;
     }
 
-    private void LoadMeshAndMaterial(GameObject prefab, string name, Dictionary<string, Mesh> blockMeshes, Dictionary<string, Material> blockMaterials)
+    private void LoadCube(GameObject prefab, string name, Dictionary<string, Mesh> blockMeshes, Dictionary<string, Material> blockMaterials)
     {
         if (prefab == null)
         {
-            Debug.LogWarning($"{name} �������� �������� �ʾҽ��ϴ�.");
             return;
         }
 
@@ -372,7 +359,7 @@ public class ChunkGenerator : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[{name}] �����տ��� Mesh/Material�� ã�� �� �����ϴ�.");
+            Debug.LogWarning($"[{name}] 프리팹에서 Mesh/Material을 찾을 수 없습니다.");
         }
     }
 
@@ -396,12 +383,12 @@ public class ChunkGenerator : MonoBehaviour
             int ny = y + dir.y;
             int nz = z + dir.z;
 
-            // ���� ûũ ������ ���
+            // 현재 청크 경계 내부
             if (nx >= 0 && nx < chunkSizeX &&
                 ny >= 0 && ny < chunkSizeY &&
                 nz >= 0 && nz < chunkSizeZ)
             {
-                // ������ ��ġ�� ������ ������ ���� ������ ����
+                // 인접한 위치에 블록이 없으면 현재 블록이 보임
                 if (chunkData[nx, ny, nz] == null)
                 {
                     return true;
@@ -409,7 +396,7 @@ public class ChunkGenerator : MonoBehaviour
             }
             else
             {
-                // ûũ ��踦 ����� ��� ���� ûũ Ȯ��
+                // 청크 경계를 넘어간 경우 다른 청크 확인
                 if (IsAdjacentBlockEmpty(currentChunkPos, x, y, z, dir))
                 {
                     return true;
@@ -422,13 +409,13 @@ public class ChunkGenerator : MonoBehaviour
 
     private bool IsAdjacentBlockEmpty(ChunkPosition currentChunkPos, int x, int y, int z, Vector3Int direction)
     {
-        // ���� ûũ�� ��ġ ���
+        // 인접 청크의 위치 계산
         ChunkPosition adjacentChunkPos = currentChunkPos;
         int adjacentX = x + direction.x;
         int adjacentY = y + direction.y;
         int adjacentZ = z + direction.z;
 
-        // ûũ ��踦 �Ѿ�� ��� ûũ ��ǥ ����
+        // 청크 경계를 넘어간 경우 청크 좌표 변환
         if (adjacentX < 0)
         {
             adjacentChunkPos.X -= 1;
@@ -461,9 +448,6 @@ public class ChunkGenerator : MonoBehaviour
             adjacentChunkPos.Z += 1;
             adjacentZ = 0;
         }
-
-        // WorldManager�� ���� ���� ûũ�� ���� ���� Ȯ��
-        // ���� ûũ�� ���ų� �ش� ��ġ�� ������ ������ true ��ȯ
         return !WorldManager.Instance.HasBlockAt(adjacentChunkPos, adjacentX, adjacentY, adjacentZ);
     }
 }

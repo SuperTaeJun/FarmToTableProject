@@ -60,11 +60,11 @@ public class ForageManager : MonoBehaviour
     }
     public async Task LoadAllForages()
     {
-        var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
+        var loadedChunks = WorldManager.Instance.LoadedChunks;
 
-        foreach (var chunkPos in loadedChunks)
+        foreach (var chunk in loadedChunks)
         {
-            string chunkId = $"{chunkPos.X}_{chunkPos.Y}_{chunkPos.Z}";
+            string chunkId = chunk.Key.ToChunkId();//$"{chunk.Key.X} _ {chunk.Key.Y} _ {chunk.Key.Z}";
             await LoadOrCreateForages(chunkId);
         }
     }

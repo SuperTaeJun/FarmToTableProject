@@ -78,8 +78,7 @@ public class BuildingManager : MonoBehaviour
     {
         await LoadAllPrefabs();
 
-        var loadedChunks = WorldManager.Instance.LoadedChunkPositions;
-        Debug.Log($"로딩할 청크 수: {loadedChunks?.Count() ?? 0}");
+        var loadedChunks = WorldManager.Instance.LoadedChunks;
 
         if (loadedChunks == null || !loadedChunks.Any())
         {
@@ -87,11 +86,9 @@ public class BuildingManager : MonoBehaviour
             return;
         }
 
-        foreach (var chunkPos in loadedChunks)
+        foreach (var chunk in loadedChunks)
         {
-            string chunkId = chunkPos.ToChunkId();
-            Debug.Log($"청크 로딩 시도: {chunkId}");
-
+            string chunkId = chunk.Key.ToChunkId();
             try
             {
                 var buildings = await LoadBuildingsForChunk(chunkId);

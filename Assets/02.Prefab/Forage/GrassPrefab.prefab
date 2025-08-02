@@ -104,7 +104,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.40314382, y: 0.19161296, z: 0.35089338}
   m_Center: {x: 0.098864995, y: 0.60118204, z: -0.06006667}
@@ -212,7 +212,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.40314382, y: 0.19161296, z: 0.35089338}
   m_Center: {x: 0.098864995, y: 0.60118204, z: -0.06006667}
@@ -320,7 +320,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.38367373, y: 0.18364573, z: 0.33569592}
   m_Center: {x: 0.10098541, y: 0.5971984, z: -0.06212753}
@@ -399,4 +399,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a640b12ab226c3347815ce12aaa54a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRadius: 2

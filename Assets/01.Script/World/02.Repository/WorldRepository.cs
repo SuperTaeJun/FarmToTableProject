@@ -124,9 +124,6 @@ public class WorldRepository : FirebaseRepositoryBase
                 Debug.LogWarning($"[WorldManager] 잘못된 청크 ID 형식: {id}");
             }
         }
-
-        Debug.Log($"[WorldManager] Firebase에서 {chunkPositions.Count}개의 청크를 발견했습니다.");
-
         return chunkPositions;
     }
 }
