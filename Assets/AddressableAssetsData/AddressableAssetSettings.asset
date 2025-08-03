@@ -81,9 +81,9 @@ MonoBehaviour:
       - m_Id: a8168850a8d1a104484e38879b7c88a9
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: ef62a81f67e19d4408689a68a6767d16
-        m_Value: 'StreamingAssets/[BuildTarget] '
+        m_Value: 'StreamingAssets/[BuildTarget]'
       - m_Id: fc592c9886731804796650e560ee1780
-        m_Value: 'Assets/StreamingAssets/[BuildTarget] '
+        m_Value: 'Assets/StreamingAssets/[BuildTarget]'
     m_ProfileEntryNames:
     - m_Id: 4b82a32756242654c875673dcd30068d
       m_Name: Remote.LoadPath

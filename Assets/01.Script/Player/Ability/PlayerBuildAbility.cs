@@ -97,6 +97,16 @@ public class PlayerBuildAbility : PlayerAbility
         _currentRotation = Quaternion.identity;
         _previewInstance.transform.rotation = _currentRotation;
 
+
+        // 머터리얼 인스턴스 생성
+        Renderer renderer = _previewInstance.GetComponentInChildren<Renderer>();
+        if (renderer != null)
+        {
+            // 머터리얼 인스턴스를 복제하여 프리뷰 전용으로 사용
+            _previewMaterial = new Material(renderer.sharedMaterial);
+            renderer.material = _previewMaterial;
+        }
+
     }
 
     private void DestroyPreview()
