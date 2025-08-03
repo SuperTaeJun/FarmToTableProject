@@ -146,50 +146,105 @@ public class Tractor : Vehicle
     private void PlantCropAtPosition(ECropType selectedCrop)
     {
         Vector3 selectedPos = currentDriver.CurrentSelectedPos;
-        string chunkId = WorldManager.GetChunkId(selectedPos);
-
-        if (CropsManager.Instance != null)
+        
+        // 3x3 범위에서 씨앗 심기
+        for (int x = -1; x <= 1; x++)
         {
-            _ = CropsManager.Instance.PlantCrop(selectedCrop, chunkId, selectedPos);
-            if (ObjectPoolManager.Instance)
-                ObjectPoolManager.Instance.Get(PoolType.Spark, selectedPos);
+            for (int z = -1; z <= 1; z++)
+            {
+                Vector3 plantPosition = selectedPos + new Vector3(x * 2, 0, z * 2);
+                string chunkId = WorldManager.GetChunkId(plantPosition);
+
+                if (CanPlantAt(plantPosition) && CropsManager.Instance != null)
+                {
+                    // 이미 작물이 있는지 체크
+                    var existingCrop = CropsManager.Instance.GetCropAtWorldPosition(plantPosition);
+                    if (existingCrop == null)
+                    {
+                        _ = CropsManager.Instance.PlantCrop(selectedCrop, chunkId, plantPosition);
+                        if (ObjectPoolManager.Instance)
+                            ObjectPoolManager.Instance.Get(PoolType.Spark, plantPosition);
+                    }
+                }
+            }
         }
     }
 
     private void WaterCropAtPosition(Vector3 position)
     {
-        ObjectPoolManager.Instance.Get(PoolType.CropWater, position);
-
-        string chunkId = WorldManager.GetChunkId(position);
-
-        if (CropsManager.Instance != null)
+        // 3x3 범위에서 물주기
+        for (int x = -1; x <= 1; x++)
         {
-            Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(position);
-            Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(position, chunk.Position);
-            _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
+            for (int z = -1; z <= 1; z++)
+            {
+                Vector3 waterPosition = position + new Vector3(x * 2, 0, z * 2);
+                
+                if (CanWaterAtPosition(waterPosition))
+                {
+                    ObjectPoolManager.Instance.Get(PoolType.CropWater, waterPosition);
+
+                    string chunkId = WorldManager.GetChunkId(waterPosition);
+
+                    if (CropsManager.Instance != null)
+                    {
+                        Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(waterPosition);
+                        Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(waterPosition, chunk.Position);
+                        _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
+                    }
+                }
+            }
         }
     }
 
     private void HarvestCropAtPosition(Vector3 position)
     {
-        string chunkId = WorldManager.GetChunkId(position);
-
-        if (CropsManager.Instance != null)
+        // 3x3 범위에서 수확하기
+        for (int x = -1; x <= 1; x++)
         {
-            Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(position);
-            Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(position, chunk.Position);
-            _ = CropsManager.Instance.HarvestCrop(chunkId, localPos);
-            if (ObjectPoolManager.Instance)
-                ObjectPoolManager.Instance.Get(PoolType.Dust, position);
+            for (int z = -1; z <= 1; z++)
+            {
+                Vector3 harvestPosition = position + new Vector3(x * 2, 0, z * 2);
+                string chunkId = WorldManager.GetChunkId(harvestPosition);
+
+                var growthStage = CropsManager.Instance?.GetCropGrowthStageAtWorldPosition(harvestPosition);
+                
+                if (growthStage == ECropGrowthStage.Harvest && CropsManager.Instance != null)
+                {
+                    Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(harvestPosition);
+                    Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(harvestPosition, chunk.Position);
+                    _ = CropsManager.Instance.HarvestCrop(chunkId, localPos);
+                    if (ObjectPoolManager.Instance)
+                        ObjectPoolManager.Instance.Get(PoolType.Dust, harvestPosition);
+                }
+            }
         }
     }
 
     protected override void OnPlayerMounted(Player player)
     {
+        base.OnPlayerMounted(player);
+
+        var selectAbility = currentDriver.GetAbility<PlayerSelectAbility>();
+        selectAbility.SetGridSize(new Vector2Int(3,3));
+        
+        // 다음 프레임에 강제로 업데이트
+        StartCoroutine(UpdateGridNextFrame());
+    }
+    
+    private IEnumerator UpdateGridNextFrame()
+    {
+        yield return null; // 한 프레임 대기
+        if (currentDriver != null)
+        {
+            currentDriver.GetAbility<PlayerSelectAbility>().SetGridSize(new Vector2Int(3,3));
+        }
     }
 
     protected override void OnPlayerDismounted(Player player)
     {
+        base.OnPlayerDismounted(player);
+
+        currentDriver.GetAbility<PlayerSelectAbility>().SetGridSize(new Vector2Int(1, 1));
         Debug.Log("트랙터 하차");
     }
 }

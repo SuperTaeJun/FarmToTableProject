@@ -11,6 +11,7 @@ public class CurrencyRepository : FirebaseRepositoryBase
     private string GetUserCurrencyPath()
     {
         return $"{COLLECTION_NAME}/{DEFAULT_USER_ID}";
+
     }
 
     public async Task SaveCurrencies(List<Currency> currencies)

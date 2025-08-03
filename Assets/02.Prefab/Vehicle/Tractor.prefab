@@ -854,10 +854,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 2
-  acceleration: 2
+  acceleration: 3
   maxSpeed: 5
   deceleration: 5
-  turnSpeed: 100
+  turnSpeed: 60
   moveVelocity: {x: 0, y: 0, z: 0}
   gravity: -9.81
   groundCheckDistance: 0.2

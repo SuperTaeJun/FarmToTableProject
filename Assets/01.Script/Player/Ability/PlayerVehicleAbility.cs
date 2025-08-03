@@ -3,7 +3,8 @@ using UnityEngine;
 public class PlayerVehicleAbility : PlayerAbility
 {
     private Vehicle currentVehicle;
-    
+
+    public bool IsMounted;
     private void Start()
     {
         // Vehicle 모드에서만 활성화되도록 모드 변경 이벤트 구독
@@ -63,6 +64,7 @@ public class PlayerVehicleAbility : PlayerAbility
             {
                 Debug.Log($"{currentVehicle.VehicleType} 조작 모드 활성화");
                 ShowVehicleControls();
+                IsMounted = true;
             }
         }
         else
@@ -71,8 +73,8 @@ public class PlayerVehicleAbility : PlayerAbility
             if (currentVehicle != null)
             {
                 Debug.Log("차량 조작 모드 비활성화");
-                HideVehicleControls();
                 currentVehicle = null;
+                IsMounted = false;
             }
         }
     }
@@ -82,6 +84,8 @@ public class PlayerVehicleAbility : PlayerAbility
         if (vehicle == null) return;
         
         currentVehicle = vehicle;
+
+        IsMounted = true;
 
         _owner.CharacterController.enabled = false;
         _owner.InputController.SetPlayerMoveInputLock(true);
@@ -94,6 +98,8 @@ public class PlayerVehicleAbility : PlayerAbility
     {
         if (currentVehicle != null)
         {
+            IsMounted = false;
+
             currentVehicle.DismountPlayer();
             currentVehicle = null;
             _owner.CharacterController.enabled = true;
@@ -121,10 +127,6 @@ public class PlayerVehicleAbility : PlayerAbility
         Debug.Log(controls);
     }
     
-    private void HideVehicleControls()
-    {
-        // 향후 UI 숨기기 로직
-    }
     
     public Vehicle CurrentVehicle => currentVehicle;
     public bool IsInVehicle => currentVehicle != null && currentVehicle.IsOccupied;

@@ -233,6 +233,12 @@ public class PlayerSelectAbility : PlayerAbility
             return;
         }
 
+        // 탈것 탑승 중일 때는 체크하지 않음
+        if (_owner.GetAbility<PlayerVehicleAbility>().IsMounted == true)
+        {
+            return;
+        }
+
         // BuildingManager를 통해 해당 위치의 건물 크기 정보 가져오기
         if (BuildingManager.Instance != null)
         {

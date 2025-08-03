@@ -15,8 +15,88 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: fabf2358eafcb1f4a920c8b0e994d4cd
   m_SerializeEntries:
+  - m_GUID: 04ad896c14ded07428314ec013f4a712
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_middle_2.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f2d3bff67e486e40bdd967af726a86e
+    m_Address: Assets/AssetStore/FarmAsset/Models/SM_Prop_Table_02.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83b75b9dc0fca124abdf9cf95e2a0535
+    m_Address: Assets/AssetStore/FarmAsset/Models/SM_Prop_LetterBox_03.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8431eb0eac589c54aba366838a0c2475
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_lower_1.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87f4cd45b028bcd4eaa6f6ebd885157d
+    m_Address: Assets/AssetStore/FarmAsset/Models/SM_Prop_Table_01.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91fac834e7e17b748baa0db3dfdb3436
+    m_Address: Assets/08.Material/M_Preview.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 933532a4fcc9baf4fa0491de14d08ed7
+    m_Address: Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e6bafe076c627b4a8119a660bc2eee0
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_top_1.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a465746ba4b97ad46ae89b2ccca10adf
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Wood/Source/fence.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab08612e63d71e8419000749e3c68d16
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/_Materials/cubeworld_mat.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc269d36a83c18e4394102ef00bc40d5
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_top_2.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c7ac79ddc7e915a43b2f17208dce3b52
     m_Address: Assets/02.Prefab/Building/Preview_Prefab_LightingProp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cacc3534b56e4254598ecefe2595824b
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_lower_2.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d221feb8b79f400469f0ea3df3b66eed
+    m_Address: Assets/AssetStore/FarmAsset/Models/SM_Bld_Shelter_01.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d488136026febc04e81858999370d96f
+    m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_middle_1.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb1377c6c3a6a410bbeea9b5ff5fdd79
+    m_Address: Assets/CartoonTown-LowPolyAssets/Materials/Colors.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdf18c58b725a2f469593ece1786d307
+    m_Address: Assets/AssetStore/FarmAsset/Materials/PolygonFarm_01_A.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
