@@ -93,29 +93,5 @@ public class PlayerEventController
     }
     #endregion
 
-    // 런타임에서 특정 이벤트 그룹을 다시 구독하는 메서드들
-    public void RefreshInputEvents()
-    {
-        UnsubscribeFromInputEvents();
-        SubscribeToInputEvents();
-    }
-
-    public void RefreshBuildingEvents()
-    {
-        UnsubscribeFromBuildingEvents();
-        SubscribeToBuildingEvents();
-    }
-
-    public void RefreshVehicleEvents()
-    {
-        UnsubscribeFromVehicleEvents();
-        SubscribeToVehicleEvents();
-    }
-
-    // 전체 이벤트 새로고침
-    public void RefreshAllEvents()
-    {
-        Cleanup();
-        Initialize();
-    }
+   
 }
