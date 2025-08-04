@@ -84,6 +84,11 @@ public class CropObject : MonoBehaviour
     {
         if (IsThisCrop(harvestedCrop))
         {
+
+            if (ObjectPoolManager.Instance)
+                ObjectPoolManager.Instance.Get(PoolType.Dust, transform.position);
+            SoundManager.Instance.PlaySFX(SFXType.Harvest);
+
             _ = InventoryManager.Instance.AddCropToInventory(harvestedCrop.Type);
             Destroy(gameObject);
         }
@@ -157,7 +162,9 @@ public class CropObject : MonoBehaviour
 
     private void ShowWateredEffect()
     {
-        // 물 준 효과 (파티클, 사운드 등)
+        ObjectPoolManager.Instance.Get(PoolType.CropWater, transform.position);
+        SoundManager.Instance.PlaySFX(SFXType.Watering);
+
     }
 
     private void ShowReadyToHarvestIndicator()

@@ -18,8 +18,8 @@ public class PlayerFarmingAbility : PlayerAbility
         if (CropsManager.Instance != null)
         {
             _ = CropsManager.Instance.PlantCrop(_currentSeed, chunkId, selectedPos);
-            if (ObjectPoolManager.Instance)
-                ObjectPoolManager.Instance.Get(PoolType.Spark, selectedPos);
+
+            ObjectPoolManager.Instance.Get(PoolType.Spark, selectedPos);
         }
         SoundManager.Instance.PlaySFX(SFXType.Seed);
     }
@@ -39,18 +39,16 @@ public class PlayerFarmingAbility : PlayerAbility
             {
                 Vector3 abovePosition = selectedPos + Vector3.up * (ChunkGenerator.Instance.blockOffset.y * 0.5f);
                 WorldManager.Instance.SetBlock(abovePosition, EBlockType.Farmland);
-
-                if(ObjectPoolManager.Instance)
+                if (ObjectPoolManager.Instance)
                     ObjectPoolManager.Instance.Get(PoolType.SmokeS, selectedPos);
             }
+            SoundManager.Instance.PlaySFX(SFXType.Cultivate);
         }
-        SoundManager.Instance.PlaySFX(SFXType.Cultivate);
     }
     public void OnWaterCrop()
     {
         Vector3 selectedPos = _owner.CurrentSelectedPos;
 
-        ObjectPoolManager.Instance.Get(PoolType.CropWater, selectedPos);
 
         string chunkId = WorldManager.GetChunkId(selectedPos);
 
@@ -60,7 +58,7 @@ public class PlayerFarmingAbility : PlayerAbility
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
             _ = CropsManager.Instance.WaterCrop(chunkId, localPos);
         }
-        SoundManager.Instance.PlaySFX(SFXType.Watering);
+
     }
 
     public void OnHarvestCrop()
@@ -73,10 +71,9 @@ public class PlayerFarmingAbility : PlayerAbility
             Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(selectedPos);
             Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(selectedPos, chunk.Position);
             _ = CropsManager.Instance.HarvestCrop(chunkId, localPos);
-            if (ObjectPoolManager.Instance)
-                ObjectPoolManager.Instance.Get(PoolType.Dust, selectedPos);
+
         }
-        SoundManager.Instance.PlaySFX(SFXType.Harvest);
+
     }
 
 }

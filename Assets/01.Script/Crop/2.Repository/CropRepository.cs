@@ -157,7 +157,6 @@ public class CropRepository : FirebaseRepositoryBase
             {
                 var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
 
-                // ??? ????? ??? ???? ?????
                 var targetCrop = cropList.Find(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);

@@ -18,7 +18,7 @@ public class CropsManager : MonoBehaviour
     [SerializeField] private List<SO_Crop> _cropDataList;
     private Dictionary<ECropType, SO_Crop> _cropDataDict = new Dictionary<ECropType, SO_Crop>(); // 기본 성장 비율 (시간 기준)
 
-    // 플레이어가 호출하면 발동됨
+    // 이벤트들
     public DebugEvent<Crop> OnCropPlanted = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropHarvested = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropWatered = new DebugEvent<Crop>();
@@ -27,7 +27,7 @@ public class CropsManager : MonoBehaviour
     public DebugEvent<Crop> OnCropGrowthUpdated = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>(); // 성장이 멈췄을 때
 
-    // 물이 필요한 상태, 수확 가능한 상태 등 추가 알림
+    // 물이 필요한 상태, 수확 가능한 상태 등
     public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // 물 필요
     public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>(); // 수확 가능
 
