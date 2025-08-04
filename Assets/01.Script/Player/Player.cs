@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
-    public Transform cameraTarget; // ī�޶� ����ٴ� �� ������Ʈ
+    public Transform cameraTarget;
     [SerializeField] private SO_PlayerData _data;
     public SO_PlayerData Data => _data;
 
@@ -22,9 +23,7 @@ public class Player : MonoBehaviour
     private PlayerVisualController _visualController;
     public PlayerVisualController VisualController => _visualController;
 
-    private PlayerDataRepository _playerRepository;
-    private float _saveInterval = 10f; // 10초마다 저장
-    private float _saveTimer;
+    private PlayerDataController _dataController;
 
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private BuildingObject _currentInteractableBuilding;
@@ -35,8 +34,8 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _inputController = GetComponent<PlayerInputController>();
         _visualController = GetComponentInChildren<PlayerVisualController>();
-        _playerRepository = new PlayerDataRepository();
-        
+        _dataController = new PlayerDataController(this);
+
         // PlayerVehicleAbility 컴포넌트 추가 (없으면)
         if (GetComponent<PlayerVehicleAbility>() == null)
         {
@@ -44,10 +43,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    async void Start()
+    private async void Start()
     {
         // Firebase에서 저장된 플레이어 데이터 로드
-        await LoadPlayerData();
+        await _dataController.LoadPlayerDataAsync();
 
         // 기존 로컬 저장 데이터도 체크 (호환성)
         if (PlayerDataHolder.Instance.IsSavedData())
@@ -60,31 +59,44 @@ public class Player : MonoBehaviour
 
         InputController.OnChunkPurchaseInput.AddListener(TryGenerateChunk);
         InputController.OnBuildingInteractionInput.AddListener(TryInteractWithBuilding);
-        
+
         // BuildingManager 이벤트 구독
         if (BuildingManager.Instance != null)
         {
             BuildingManager.Instance.OnBuildingEnterRange.AddListener(OnBuildingEnterRange);
             BuildingManager.Instance.OnBuildingExitRange.AddListener(OnBuildingExitRange);
         }
-        
+
         // VehicleManager 이벤트 등록
         if (VehicleManager.Instance != null)
         {
-            VehicleManager.Instance.OnVehicleDataChanged.AddListener(OnVehicleDataChanged);
+            VehicleManager.Instance.OnVehicleDataChanged.AddListener(_dataController.OnVehicleDataChanged);
+        }
+    }
+    private void OnDestroy()
+    {
+        InputController.OnChunkPurchaseInput.RemoveListener(TryGenerateChunk);
+        InputController.OnBuildingInteractionInput.RemoveListener(TryInteractWithBuilding);
+
+
+        // BuildingManager 이벤트 구독
+        if (BuildingManager.Instance != null)
+        {
+            BuildingManager.Instance.OnBuildingEnterRange.RemoveListener(OnBuildingEnterRange);
+            BuildingManager.Instance.OnBuildingExitRange.RemoveListener(OnBuildingExitRange);
+        }
+
+        // VehicleManager 이벤트 등록
+        if (VehicleManager.Instance != null)
+        {
+            VehicleManager.Instance.OnVehicleDataChanged.RemoveListener(_dataController.OnVehicleDataChanged);
         }
     }
 
+
     void Update()
     {
-        // 자동 저장 타이머
-        _saveTimer += Time.deltaTime;
-        if (_saveTimer >= _saveInterval)
-        {
-            _ = SavePlayerData(); // 비동기 저장 (await 하지 않음)
-            _saveTimer = 0f;
-        }
-
+        _dataController.Update();
     }
     public T GetAbility<T>() where T : PlayerAbility
     {
@@ -115,7 +127,7 @@ public class Player : MonoBehaviour
 
     private async void TryGenerateChunk()
     {
-        bool canBuy  = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
+        bool canBuy = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
         if (canBuy == false)
         {
             GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.LackOfMoney);
@@ -142,11 +154,8 @@ public class Player : MonoBehaviour
         float distForward = chunkSizeZ - localZ;
 
         float minDist = Mathf.Min(distLeft, distRight, distBack, distForward);
-        if (minDist > 3.0f)
-        {
-            Debug.Log("���� ������ �־ ûũ�� �������� ����.");
-            return;
-        }
+        if (minDist > 3.0f) return;
+
         int moveX = 0;
         int moveZ = 0;
 
@@ -160,10 +169,8 @@ public class Player : MonoBehaviour
             moveZ = +1;
 
         if (moveX == 0 && moveZ == 0)
-        {
-            Debug.Log("���� ���� ����");
             return;
-        }
+
 
         int targetChunkX = chunkX + moveX;
         int targetChunkZ = chunkZ + moveZ;
@@ -172,84 +179,12 @@ public class Player : MonoBehaviour
 
         if (!WorldManager.Instance.HasChunk(targetPos))
         {
-            Debug.Log($"�� ûũ ����: {targetPos.X}, {targetPos.Z}");
-
-            FadeManager.Instance.FadeScreenWithEvent(()=>WorldManager.Instance.GenerateAndBuildChunk(targetPos));
-        }
-        else
-        {
-            Debug.Log("�ش� ûũ �̹� ����!");
+            FadeManager.Instance.FadeScreenWithEvent(() => WorldManager.Instance.GenerateAndBuildChunk(targetPos));
         }
     }
 
-    public async Task SavePlayerData()
-    {
-        var currentData = await _playerRepository.LoadPlayerDataAsync();
-        if (currentData == null)
-        {
-            currentData = new PlayerDataDto();
-        }
-
-        currentData.SetPosition(transform.position);
-        currentData.SetRotation(transform.rotation);
-        currentData.LastSaved = System.DateTime.UtcNow;
-        
-        // 차량 언락 정보도 함께 저장
-        if (VehicleManager.Instance != null)
-        {
-            currentData.UnlockedVehicleTypes = VehicleManager.Instance.GetUnlockedVehicleTypesAsInt();
-        }
-
-        await _playerRepository.SavePlayerDataAsync(currentData);
-        Debug.Log($"플레이어 데이터 저장됨: {transform.position}");
-    }
-
-    public async Task LoadPlayerData()
-    {
-        var playerData = await _playerRepository.LoadPlayerDataAsync();
-        
-        if (playerData != null)
-        {
-            // 위치 정보 로드
-            _characterController.gameObject.SetActive(false);
-            transform.position = playerData.GetPosition();
-            transform.rotation = playerData.GetRotation();
-            _characterController.gameObject.SetActive(true);
-            Debug.Log($"플레이어 위치 로드됨: {transform.position}");
-            
-            // 차량 언락 정보를 VehicleManager에 전달
-            if (VehicleManager.Instance != null && playerData.UnlockedVehicleTypes != null)
-            {
-                VehicleManager.Instance.LoadVehicleUnlockData(playerData.UnlockedVehicleTypes);
-                Debug.Log($"차량 언락 정보 로드됨: {playerData.UnlockedVehicleTypes.Count}개");
-            }
-        }
-        else
-        {
-            Debug.Log("저장된 플레이어 데이터가 없습니다.");
-        }
-    }
-
-    private void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus)
-        {
-            _ = SavePlayerData();
-        }
-    }
-
-    private void OnApplicationFocus(bool hasFocus)
-    {
-        if (!hasFocus)
-        {
-            _ = SavePlayerData();
-        }
-    }
-    
-    private void OnVehicleDataChanged()
-    {
-        _ = SavePlayerData();
-    }
+    // 데이터 관리는 DataController로 위임
+    public PlayerDataController DataController => _dataController;
 
     private void OnBuildingEnterRange(BuildingObject building)
     {

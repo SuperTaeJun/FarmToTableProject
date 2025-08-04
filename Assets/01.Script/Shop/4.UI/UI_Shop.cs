@@ -100,6 +100,7 @@ public class UI_Shop : UI_Popup
     {
         base.Open();
         OpenShop();
+        SoundManager.Instance.PlayBGM(BGMType.Store);
     }
 
     public override void Close()
@@ -111,6 +112,8 @@ public class UI_Shop : UI_Popup
 
         _sellTabButton.image.color = Color.white;
         _sellTabPanel.gameObject.SetActive(false);
+
+        SoundManager.Instance.PlayBGM(BGMType.Pm);
     }
 
     public void OpenShop()

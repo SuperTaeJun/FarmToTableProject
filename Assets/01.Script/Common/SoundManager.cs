@@ -9,6 +9,7 @@ public enum BGMType
     Store,
     Loading,
     Clothing,
+    
 }
 
 public enum SFXType
