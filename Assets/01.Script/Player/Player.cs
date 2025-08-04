@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -25,6 +23,14 @@ public class Player : MonoBehaviour
 
     private PlayerDataController _dataController;
     private PlayerEventController _eventController;
+    private PlayerChunkController _chunkController;
+
+    // 컨트롤러들 접근자
+    public PlayerDataController DataController => _dataController;
+    public PlayerEventController EventController => _eventController;
+    public PlayerChunkController ChunkController => _chunkController;
+
+
 
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private BuildingObject _currentInteractableBuilding;
@@ -37,8 +43,9 @@ public class Player : MonoBehaviour
         _visualController = GetComponentInChildren<PlayerVisualController>();
         _dataController = new PlayerDataController(this);
         _eventController = new PlayerEventController(this);
+        _chunkController = new PlayerChunkController(this);
 
-        // PlayerVehicleAbility 컴포넌트 추가 (없으면)
+        // PlayerVehicleAbility 컴포넌트 추가
         if (GetComponent<PlayerVehicleAbility>() == null)
         {
             gameObject.AddComponent<PlayerVehicleAbility>();
@@ -50,7 +57,7 @@ public class Player : MonoBehaviour
         // Firebase에서 저장된 플레이어 데이터 로드
         await _dataController.LoadPlayerDataAsync();
 
-        // 기존 로컬 저장 데이터도 체크 (호환성)
+        // 기존 로컬 저장 데이터도 체크
         if (PlayerDataHolder.Instance.IsSavedData())
         {
             _characterController.gameObject.SetActive(false);
@@ -102,65 +109,9 @@ public class Player : MonoBehaviour
 
     public async void TryGenerateChunk()
     {
-        bool canBuy = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
-        if (canBuy == false)
-        {
-            GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.LackOfMoney);
-            return;
-        }
-
-        Vector3 pos = transform.position;
-
-        float chunkSizeX = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.x;
-        float chunkSizeZ = Chunk.ChunkSize * WorldManager.Instance.dynamicGenerator.blockOffset.z;
-
-        int chunkX = Mathf.FloorToInt(pos.x / chunkSizeX);
-        int chunkZ = Mathf.FloorToInt(pos.z / chunkSizeZ);
-
-        float chunkOriginX = chunkX * chunkSizeX;
-        float chunkOriginZ = chunkZ * chunkSizeZ;
-
-        float localX = pos.x - chunkOriginX;
-        float localZ = pos.z - chunkOriginZ;
-
-        float distLeft = localX;
-        float distRight = chunkSizeX - localX;
-        float distBack = localZ;
-        float distForward = chunkSizeZ - localZ;
-
-        float minDist = Mathf.Min(distLeft, distRight, distBack, distForward);
-        if (minDist > 3.0f) return;
-
-        int moveX = 0;
-        int moveZ = 0;
-
-        if (minDist == distLeft)
-            moveX = -1;
-        else if (minDist == distRight)
-            moveX = +1;
-        else if (minDist == distBack)
-            moveZ = -1;
-        else if (minDist == distForward)
-            moveZ = +1;
-
-        if (moveX == 0 && moveZ == 0)
-            return;
-
-
-        int targetChunkX = chunkX + moveX;
-        int targetChunkZ = chunkZ + moveZ;
-
-        var targetPos = new ChunkPosition(targetChunkX, 0, targetChunkZ);
-
-        if (!WorldManager.Instance.HasChunk(targetPos))
-        {
-            FadeManager.Instance.FadeScreenWithEvent(() => WorldManager.Instance.GenerateAndBuildChunk(targetPos));
-        }
+        await _chunkController.TryGenerateChunkAsync();
     }
 
-    // 컨트롤러들 접근자
-    public PlayerDataController DataController => _dataController;
-    public PlayerEventController EventController => _eventController;
 
     public void OnBuildingEnterRange(BuildingObject building)
     {
