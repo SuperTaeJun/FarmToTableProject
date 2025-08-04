@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 public class PlayerEventController
 {
     private Player _owner;

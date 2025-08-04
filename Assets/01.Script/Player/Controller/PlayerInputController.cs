@@ -108,7 +108,6 @@ public class PlayerInputController : MonoBehaviour
     {
         if (_isPopupOpen) return;
 
-        // �˾��� ���� ���� ���� Ŀ�� ����
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
             _isCursorLocked = false;
