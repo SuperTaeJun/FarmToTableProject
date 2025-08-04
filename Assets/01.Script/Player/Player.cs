@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public PlayerVisualController VisualController => _visualController;
 
     private PlayerDataController _dataController;
+    private PlayerEventController _eventController;
 
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private BuildingObject _currentInteractableBuilding;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
         _inputController = GetComponent<PlayerInputController>();
         _visualController = GetComponentInChildren<PlayerVisualController>();
         _dataController = new PlayerDataController(this);
+        _eventController = new PlayerEventController(this);
 
         // PlayerVehicleAbility 컴포넌트 추가 (없으면)
         if (GetComponent<PlayerVehicleAbility>() == null)
@@ -57,40 +59,13 @@ public class Player : MonoBehaviour
             _characterController.gameObject.SetActive(true);
         }
 
-        InputController.OnChunkPurchaseInput.AddListener(TryGenerateChunk);
-        InputController.OnBuildingInteractionInput.AddListener(TryInteractWithBuilding);
-
-        // BuildingManager 이벤트 구독
-        if (BuildingManager.Instance != null)
-        {
-            BuildingManager.Instance.OnBuildingEnterRange.AddListener(OnBuildingEnterRange);
-            BuildingManager.Instance.OnBuildingExitRange.AddListener(OnBuildingExitRange);
-        }
-
-        // VehicleManager 이벤트 등록
-        if (VehicleManager.Instance != null)
-        {
-            VehicleManager.Instance.OnVehicleDataChanged.AddListener(_dataController.OnVehicleDataChanged);
-        }
+        // 플레이어 이벤트 구독
+        _eventController.Initialize();
     }
     private void OnDestroy()
     {
-        InputController.OnChunkPurchaseInput.RemoveListener(TryGenerateChunk);
-        InputController.OnBuildingInteractionInput.RemoveListener(TryInteractWithBuilding);
-
-
-        // BuildingManager 이벤트 구독
-        if (BuildingManager.Instance != null)
-        {
-            BuildingManager.Instance.OnBuildingEnterRange.RemoveListener(OnBuildingEnterRange);
-            BuildingManager.Instance.OnBuildingExitRange.RemoveListener(OnBuildingExitRange);
-        }
-
-        // VehicleManager 이벤트 등록
-        if (VehicleManager.Instance != null)
-        {
-            VehicleManager.Instance.OnVehicleDataChanged.RemoveListener(_dataController.OnVehicleDataChanged);
-        }
+        // 플레이어 이벤트 해제
+        _eventController?.Cleanup();
     }
 
 
@@ -125,7 +100,7 @@ public class Player : MonoBehaviour
         _characterController.gameObject.SetActive(true);
     }
 
-    private async void TryGenerateChunk()
+    public async void TryGenerateChunk()
     {
         bool canBuy = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
         if (canBuy == false)
@@ -183,16 +158,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    // 데이터 관리는 DataController로 위임
+    // 컨트롤러들 접근자
     public PlayerDataController DataController => _dataController;
+    public PlayerEventController EventController => _eventController;
 
-    private void OnBuildingEnterRange(BuildingObject building)
+    public void OnBuildingEnterRange(BuildingObject building)
     {
         _currentInteractableBuilding = building;
         GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.BuildingInteraction);
     }
 
-    private void OnBuildingExitRange(BuildingObject building)
+    public void OnBuildingExitRange(BuildingObject building)
     {
         if (_currentInteractableBuilding == building)
         {
@@ -201,7 +177,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void TryInteractWithBuilding()
+    public void TryInteractWithBuilding()
     {
         if (_currentInteractableBuilding != null && _currentInteractableBuilding.CanInteract())
         {
