@@ -16,8 +16,6 @@ public class PashionFunction : IBuildingFunction
 
     private void OpenPashionUI()
     {
-        PlayerDataHolder.Instance.SavedData(_buildingObject.Player.position, _buildingObject.Player.rotation);
-
         FadeManager.Instance.FadeToScene("CharacterSelectScene");
     }
 }

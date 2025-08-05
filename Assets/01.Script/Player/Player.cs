@@ -37,27 +37,12 @@ public class Player : MonoBehaviour
         _dataController = new PlayerDataController(this);
         _eventController = new PlayerEventController(this);
         _chunkController = new PlayerChunkController(this);
-
-        // PlayerVehicleAbility 컴포넌트 추가
-        if (GetComponent<PlayerVehicleAbility>() == null)
-        {
-            gameObject.AddComponent<PlayerVehicleAbility>();
-        }
     }
 
     private async void Start()
     {
         // Firebase에서 저장된 플레이어 데이터 로드
         await _dataController.LoadPlayerDataAsync();
-
-        // 기존 로컬 저장 데이터도 체크
-        if (PlayerDataHolder.Instance.IsSavedData())
-        {
-            _characterController.gameObject.SetActive(false);
-            gameObject.transform.position = PlayerDataHolder.Instance.SavedPos;
-            gameObject.transform.rotation = PlayerDataHolder.Instance.SavedRot;
-            _characterController.gameObject.SetActive(true);
-        }
 
         // 플레이어 이벤트 구독
         _eventController.Initialize();
