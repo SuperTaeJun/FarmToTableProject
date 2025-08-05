@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum EBuildingType 
+public enum EBuildingType
 {
     Fence,
     LetterBox,
@@ -10,11 +10,21 @@ public enum EBuildingType
     Totem2,
     Totem3,
     Totem4,
+    LightingProp,
+
+    Ballon1,
+    Ballon2,
+    GarbageCan,
+    Flowers1,
+    Flowers2,
+    FlowerBox,
+    Board,
+    GiftBox1,
+    GiftBox2,
+
+
     Store,
-    Closet,
-    Shelter,
     Home,
     Pashion,
-    LightingProp,
     None
 }

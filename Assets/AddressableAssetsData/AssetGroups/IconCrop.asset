@@ -25,11 +25,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1eef80bb9633c2a44a843933a0819916
-    m_Address: Prefab_Totem3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1f12126e0ac40ee40a70e9b4a67fcd0d
     m_Address: Icon_Pepper
     m_ReadOnly: 0
@@ -55,11 +50,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a96895da9f10734bbb5bc1fbd27a58f
-    m_Address: Prefab_Totem1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5bef1b5ce96a74e44afec80d7c4945db
     m_Address: Icon_ChilliSeed
     m_ReadOnly: 0
@@ -70,11 +60,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 66d0146c7008620478136153284b7843
-    m_Address: Prefab_LetterBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 75b179d9ae561b9429f458d552cbf976
     m_Address: Icon_CarrotSeed
     m_ReadOnly: 0
@@ -82,11 +67,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7828ca097eee8874dbd0020ca5818f16
     m_Address: Icon_Watermelon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7882f6211f585e047b59c9e2db21fe64
-    m_Address: Prefab_Totem2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -102,11 +82,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 86d339b0e2655aa41a064c968344b433
     m_Address: Icon_Cucumber
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8aa41ad24b1f38f478c371164b8de9d5
-    m_Address: Prefab_Table1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -140,11 +115,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b0af38c5a59d1b1439da3a2e5e1b0d45
-    m_Address: Prefab_Shelter
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b876ceef288c0c743b51a4ca4baef86e
     m_Address: Icon_Onion
     m_ReadOnly: 0
@@ -155,23 +125,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ceb3c2f7244a192438059f43598e0ab4
-    m_Address: Prefab_Fence
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1f377e298b9a9942a041b2fc1f7420f
     m_Address: Icon_Carrot
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: da802d18acf91e04a95402345c0a84a3
-    m_Address: Prefab_Table2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: eb19ba0c9d5b8dd47afd3a145f4345e8
-    m_Address: Prefab_Totem4
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

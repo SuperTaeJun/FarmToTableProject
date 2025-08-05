@@ -70,11 +70,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c7ac79ddc7e915a43b2f17208dce3b52
-    m_Address: Assets/02.Prefab/Building/Preview_Prefab_LightingProp.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cacc3534b56e4254598ecefe2595824b
     m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_lower_2.fbx
     m_ReadOnly: 0
@@ -97,11 +92,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fdf18c58b725a2f469593ece1786d307
     m_Address: Assets/AssetStore/FarmAsset/Materials/PolygonFarm_01_A.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ff42dcb733659614181dfa308c8c862f
-    m_Address: Assets/02.Prefab/Building/Prefab_LightingProp.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

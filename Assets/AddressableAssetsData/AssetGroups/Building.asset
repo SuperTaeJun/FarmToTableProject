@@ -26,22 +26,47 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d79135303d06114eb1be6cbdbd6d437
-    m_Address: Prefab_Preview_Totem2
+    m_Address: Prefab_Preview_Totem_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d19c82cb376493439099b951932bc73
-    m_Address: Prefab_Preview_Table1
+    m_Address: Prefab_Preview_Table
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1eef80bb9633c2a44a843933a0819916
+    m_Address: Prefab_Totem3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e5738f7ab8411d4c96fdfcc2ae8b215
+    m_Address: Prefab_Flowers1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ceee534c26c01c4e8df860fdc6857c9
-    m_Address: Prefab_Preview_Totem1
+    m_Address: Prefab_Preview_Totem_1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4de3c8a28dd83e141a2b7f3612cbc88e
-    m_Address: Prefab_Preview_Table2
+    m_Address: Prefab_Preview_Table_02
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a96895da9f10734bbb5bc1fbd27a58f
+    m_Address: Prefab_Totem1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66a1f6410baaa7d4cb3a22a12162e49b
+    m_Address: Prefab_Preview_GarbageCan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66d0146c7008620478136153284b7843
+    m_Address: Prefab_LetterBox
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -51,12 +76,27 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7822c5df1d643894cb51d5b2707c7680
-    m_Address: Prefab_Preview_Totem3
+    m_Address: Prefab_Preview_Totem_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7882f6211f585e047b59c9e2db21fe64
+    m_Address: Prefab_Totem2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bb97a99c271f5545bf6269829c8f006
+    m_Address: Prefab_Gift1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7cff8eff26a54b54388a459e9c2d303a
     m_Address: Prefab_Preview_LetterBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8aa41ad24b1f38f478c371164b8de9d5
+    m_Address: Prefab_Table
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -66,7 +106,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 97b7103b97c9ef64ba20bca568bf26af
-    m_Address: Prefab_Preview_Totem4
+    m_Address: Prefab_Preview_Totem_4
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -75,8 +115,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9b101168298d6454a876c0ba3ebe5ec8
-    m_Address: Prefab_Preview_Shelter
+  - m_GUID: 9b764bc0739284b4b84fd8d3a764c01a
+    m_Address: Prefab_Preview_Scarecrow
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -87,6 +127,61 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2d6ebde5b839a94b9732c9e343e482c
     m_Address: Preview_Store
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b312ed7d27e2f5243a15071381b6733c
+    m_Address: Prefab_Flowers2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bffa377723522a348b501052c6a34436
+    m_Address: 'Prefab_Preview_Ballon1 '
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7ac79ddc7e915a43b2f17208dce3b52
+    m_Address: Prefab_Preview_LightingProp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ceb3c2f7244a192438059f43598e0ab4
+    m_Address: Prefab_Fence
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1d2b0f525d9f8a438a837f97b2ce6ae
+    m_Address: Prefab_Preview_Ballon2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d97deb6fd2a3d6344a77b48ade7408e7
+    m_Address: Prefab_Ballon2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da802d18acf91e04a95402345c0a84a3
+    m_Address: Prefab_Table2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e39a5fee5dd500f4dacfc47e35fa79dc
+    m_Address: Prefab_Banch
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9abdfef7433a684581965e00decf6c3
+    m_Address: Prefab_Ballon1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb19ba0c9d5b8dd47afd3a145f4345e8
+    m_Address: Prefab_Totem4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff42dcb733659614181dfa308c8c862f
+    m_Address: Prefab_LightingProp
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

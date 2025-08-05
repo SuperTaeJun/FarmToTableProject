@@ -15,8 +15,48 @@ MonoBehaviour:
   m_GroupName: Icon
   m_GUID: f858a36f545eaf24bb63fc1536aa355a
   m_SerializeEntries:
+  - m_GUID: 02db1b2cbba2da04199f1cc0e3e3c5d6
+    m_Address: Icon_Chair
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 042d46b09e04d924e812bf31cd4b72f9
+    m_Address: Icon_Totem3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0dce976486c133b40b16f8bb2c225055
+    m_Address: Icon_Scarecrow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11213a1172f529d499ae14ee1b95c1b6
     m_Address: Icon_Bicycle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13f269fff23f04c40b524e8ba162d6eb
+    m_Address: Icon_FlowerBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17b711d21e806a64487716c1cd4e4ad5
+    m_Address: Icon_Totem4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b6dd0fe84bdb83498a82fefd30a34e6
+    m_Address: Icon_Home
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e48534ef99c5154f8330173b8c9ebf2
+    m_Address: Icon_Table1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f52d7ff878e62b448058fcfd929815d
+    m_Address: Icon_Flower1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -25,8 +65,33 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26638fe927de09c4e9045ba8bb77a083
+    m_Address: Icon_AutoWatering
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26b4d397e7b35e64cba7128c88329f45
     m_Address: Icon_RacingCar
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4be4aec507b88914fa3f1a6e39154cfc
+    m_Address: Icon_Gift2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5263e117ad221734dac2cda16998ec62
+    m_Address: Icon_Totem2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c9d35e2e11c64844830549ecb48eda5
+    m_Address: Icon_LightingProp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64283645f49f39a409662c4c9835778e
+    m_Address: Icon_Fence
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -35,8 +100,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71702c4582265cc4f97a5751d887ea54
+    m_Address: Icon_Balloon1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 80d844a02e7c4704b9b42fbf8f9ce755
     m_Address: Icon_Tractor
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87e5c787c6dcb0a43bf004e653e9c0c8
+    m_Address: Icon_Board
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -45,13 +120,68 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8dcfa6be299a0e541bd92e0546ea34fa
+    m_Address: Icon_Windmill
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a39c5f779b2520746b3fa76f71d4e4df
+    m_Address: Icon_Table2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a62a6ce1f79fe0b4b875d941a5739511
+    m_Address: Icon_Balloon2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5d6c5cc09902eb4c90fdc8c4d706a60
+    m_Address: Icon_Banch
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9e3e125f1c95a445a46e94cc1f8a8c5
+    m_Address: Icon_Pashion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba43615af2e2d7941a96517b2bac6111
+    m_Address: Icon_LetterBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf5e348fda3c16248988069534716355
     m_Address: Icon_Bike2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de31a72030833994faa0a898d5f3d276
+    m_Address: Icon_Flower2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e561268a5ffb9194e82b1318be3e3f73
+    m_Address: Icon_Totem1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e68aefb7931aad040a793e74ed58bf44
     m_Address: Icon_Bike3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea181807a46b15b4eb542e159e4e573d
+    m_Address: Icon_Gift1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eadc2685eff60d04d9d2046ec73c5c9b
+    m_Address: Icon_GarbageCan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcde8e48ee11e4c4fb2651ada32868bf
+    m_Address: Icon_Store
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
