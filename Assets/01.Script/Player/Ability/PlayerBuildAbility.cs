@@ -18,7 +18,7 @@ public class PlayerBuildAbility : PlayerAbility
 
     private void Update()
     {
-        if (_owner.ModeController.CurrentMode != EPlayerMode.Construction || _selectedType == EBuildingType.None)
+        if (_owner.GetAbility<PlayerModeAbility>()?.CurrentMode != EPlayerMode.Construction || _selectedType == EBuildingType.None)
         {
             HidePreview();
             return;
@@ -68,7 +68,7 @@ public class PlayerBuildAbility : PlayerAbility
 
     private async void TryBuild(EPlayerMode playerMode)
     {
-        if (_owner.ModeController.CurrentMode != EPlayerMode.Construction || _selectedType == EBuildingType.None) return;
+        if (_owner.GetAbility<PlayerModeAbility>()?.CurrentMode != EPlayerMode.Construction || _selectedType == EBuildingType.None) return;
         if (!_canPlace) return;
 
         // 스냅된 위치에 건물 배치

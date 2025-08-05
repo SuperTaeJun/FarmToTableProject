@@ -8,7 +8,6 @@ public class Player : MonoBehaviour
     [SerializeField] private SO_PlayerData _data;
     public SO_PlayerData Data => _data;
 
-    private Dictionary<Type, PlayerAbility> _abilitiesCache = new();
 
     private CharacterController _characterController;
     public CharacterController CharacterController => _characterController;
@@ -16,10 +15,8 @@ public class Player : MonoBehaviour
     public Animator Animator => _animator;
     private PlayerInputController _inputController;
     public PlayerInputController InputController => _inputController;
-    private PlayerModeController _modeController;
-    public PlayerModeController ModeController => _modeController;
-    private PlayerVisualController _visualController;
-    public PlayerVisualController VisualController => _visualController;
+
+    private Dictionary<Type, PlayerAbility> _abilitiesCache = new();
 
     private PlayerDataController _dataController;
     private PlayerEventController _eventController;
@@ -36,11 +33,9 @@ public class Player : MonoBehaviour
     private BuildingObject _currentInteractableBuilding;
     private void Awake()
     {
-        _modeController = GetComponent<PlayerModeController>();
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _inputController = GetComponent<PlayerInputController>();
-        _visualController = GetComponentInChildren<PlayerVisualController>();
         _dataController = new PlayerDataController(this);
         _eventController = new PlayerEventController(this);
         _chunkController = new PlayerChunkController(this);

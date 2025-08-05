@@ -76,7 +76,7 @@ public class PlayerSelectAbility : PlayerAbility
                 if (gridPosition != lastGridPosition)
                 {
                     // 건설모드가 아닐 때만 해당 위치의 건물 크기 체크
-                    if (_owner.ModeController.CurrentMode != EPlayerMode.Construction)
+                    if (_owner.GetAbility<PlayerModeAbility>().CurrentMode != EPlayerMode.Construction)
                     {
                         CheckAndSetBuildingSize(gridPosition);
                     }
@@ -228,7 +228,7 @@ public class PlayerSelectAbility : PlayerAbility
     private void CheckAndSetBuildingSize(Vector3 position)
     {
         // 건설모드가 아닐 때만 실행
-        if (_owner.ModeController.CurrentMode == EPlayerMode.Construction)
+        if (_owner.GetAbility<PlayerModeAbility>()?.CurrentMode == EPlayerMode.Construction)
         {
             return;
         }

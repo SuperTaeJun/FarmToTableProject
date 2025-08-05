@@ -11,9 +11,9 @@ public class PlayerBlockAbility : PlayerAbility
     private void Start()
     {
         // 모드 변경 이벤트 구독
-        _owner.ModeController.OnModeChanged.AddListener(OnModeChanged);
+        _owner.GetAbility<PlayerModeAbility>()?.OnModeChanged.AddListener(OnModeChanged);
         // 초기 모드 확인
-        OnModeChanged(_owner.ModeController.CurrentMode);
+        OnModeChanged(_owner.GetAbility<PlayerModeAbility>().CurrentMode);
     }
 
     private void OnModeChanged(EPlayerMode newMode)

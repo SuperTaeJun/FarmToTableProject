@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerLocomotionAbility : PlayerAbility
 {

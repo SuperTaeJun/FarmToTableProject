@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class VehicleManager : MonoBehaviour
@@ -85,7 +84,7 @@ public class VehicleManager : MonoBehaviour
         }
 
         // 기존에 타고 있는 차량이 있다면 하차
-        if (player.ModeController.CurrentMode == EPlayerMode.Vehicle)
+        if (player.GetAbility<PlayerModeAbility>()?.CurrentMode == EPlayerMode.Vehicle)
         {
             Vehicle currentVehicle = GetPlayerVehicle(player);
             if (currentVehicle != null)

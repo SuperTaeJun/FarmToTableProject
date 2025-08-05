@@ -8,12 +8,12 @@ public class PlayerVehicleAbility : PlayerAbility
     private void Start()
     {
         // Vehicle 모드에서만 활성화되도록 모드 변경 이벤트 구독
-        _owner.ModeController.OnModeChanged.AddListener(OnModeChanged);
+        _owner.GetAbility<PlayerModeAbility>()?.OnModeChanged.AddListener(OnModeChanged);
     }
     
     private void Update()
     {
-        if (_owner.ModeController.CurrentMode != EPlayerMode.Vehicle)
+        if (_owner.GetAbility<PlayerModeAbility>()?.CurrentMode != EPlayerMode.Vehicle)
             return;
             
         if (currentVehicle == null)
@@ -23,7 +23,7 @@ public class PlayerVehicleAbility : PlayerAbility
             if (currentVehicle == null)
             {
                 // 차량이 없으면 모드를 기본으로 변경
-                _owner.ModeController.SwitchMode(EPlayerMode.BlockEdit);
+                _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.BlockEdit);
                 return;
             }
         }
@@ -63,7 +63,6 @@ public class PlayerVehicleAbility : PlayerAbility
             if (currentVehicle != null)
             {
                 Debug.Log($"{currentVehicle.VehicleType} 조작 모드 활성화");
-                ShowVehicleControls();
                 IsMounted = true;
             }
         }
@@ -89,7 +88,7 @@ public class PlayerVehicleAbility : PlayerAbility
 
         _owner.CharacterController.enabled = false;
         _owner.InputController.SetPlayerMoveInputLock(true);
-        _owner.ModeController.SwitchMode(EPlayerMode.Vehicle);
+        _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.Vehicle);
         _owner.Animator.SetTrigger("Mount");
         vehicle.MountPlayer(_owner);
     }
@@ -105,37 +104,16 @@ public class PlayerVehicleAbility : PlayerAbility
             _owner.CharacterController.enabled = true;
             _owner.InputController.SetPlayerMoveInputLock(false);
             _owner.Animator.SetTrigger("Dismount");
-            _owner.ModeController.SwitchMode(EPlayerMode.BlockEdit);
+            _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.BlockEdit);
 
         }
     }
     
-    private void ShowVehicleControls()
-    {
-        if (currentVehicle == null) return;
-        
-        string controls = "차량 조작법:\\n";
-        controls += "WASD: 이동\\n";
-        controls += "E: 하차\\n";
-        
-        if (currentVehicle is Tractor)
-        {
-            controls += "F: 경작 모드 토글";
-        }
-        
-        // 향후 UI로 표시할 수 있음
-        Debug.Log(controls);
-    }
-    
-    
-    public Vehicle CurrentVehicle => currentVehicle;
-    public bool IsInVehicle => currentVehicle != null && currentVehicle.IsOccupied;
-    
     private void OnDestroy()
     {
-        if (_owner != null && _owner.ModeController != null)
+        if (_owner != null && _owner.GetAbility<PlayerModeAbility>() != null)
         {
-            _owner.ModeController.OnModeChanged.RemoveListener(OnModeChanged);
+            _owner.GetAbility<PlayerModeAbility>()?.OnModeChanged.RemoveListener(OnModeChanged);
         }
     }
 }

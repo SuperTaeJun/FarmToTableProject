@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public enum EVisualPart
 {
@@ -9,7 +8,7 @@ public enum EVisualPart
     WateringCan,
     Rake
 }
-public class PlayerVisualController : MonoBehaviour
+public class PlayerVisualAbility : PlayerAbility
 {
     [SerializeField] private List<PartObjectList> _partsList;
     [SerializeField] private List<VisualPart> _visualPartList;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerInputController : MonoBehaviour
+public class PlayerInputController : PlayerAbility
 {
     public DebugEvent<Vector2> OnMoveInput = new DebugEvent<Vector2>();
     public DebugEvent<Vector2> OnCameraRotateInput = new DebugEvent<Vector2>();
@@ -15,8 +15,9 @@ public class PlayerInputController : MonoBehaviour
     private EPlayerMode _currentMode;
     private bool _isPopupOpen = false;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

@@ -1,27 +1,19 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerAnimController : MonoBehaviour
+public class PlayerAnimAbility : PlayerAbility
 {
-    private Player _owner;
-
-    private void Awake()
-    {
-        _owner = GetComponent<Player>();
-    }
-
     private void Start()
     {
         _owner.InputController.OnLeftMouseInput.AddListener(OnTriggerLeftMouseAnim);
     }
-
     private void OnTriggerLeftMouseAnim(EPlayerMode currentMode)
     {
         switch (currentMode)
         {
             case EPlayerMode.BlockEdit:
                 _owner.Animator.SetTrigger("Dig");
-                _owner.VisualController.SetActiveVisualPart(EVisualPart.Shovel);
+                _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.Shovel);
                 _owner.InputController.SetPlayerMoveInputLock(true);
                 break;
 
@@ -58,7 +50,7 @@ public class PlayerAnimController : MonoBehaviour
                 else
                 {
                     _owner.Animator.SetTrigger("Cultivate");
-                    _owner.VisualController.SetActiveVisualPart(EVisualPart.Rake);
+                    _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.Rake);
                 }
                 break;
             case ECropGrowthStage.Seed:
@@ -71,7 +63,7 @@ public class PlayerAnimController : MonoBehaviour
                 {
                     Debug.Log("물을주는중");
                     _owner.Animator.SetTrigger("Watering");
-                    _owner.VisualController.SetActiveVisualPart(EVisualPart.WateringCan);
+                    _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.WateringCan);
                 }
                 break;
 
@@ -135,7 +127,7 @@ public class PlayerAnimController : MonoBehaviour
     private void OnFinisAnim()
     {
         _owner.InputController.SetPlayerMoveInputLock(false);
-        _owner.VisualController.SetDisActiveVisualAllPart();
+        _owner.GetAbility<PlayerVisualAbility>()?.SetDisActiveVisualAllPart();
     }
 
     private bool CanWaterAtPosition(Vector3 position)
