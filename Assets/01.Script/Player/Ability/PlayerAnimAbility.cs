@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class PlayerAnimAbility : PlayerAbility
 {
-    private Dictionary<ECropGrowthStage?, IFarmingAnimationStrategy> _farmingAnimationStrategies;
+    private Dictionary<string, IFarmingAnimationStrategy> _farmingAnimationStrategies;
     private void Start()
     {
         _owner.GetAbility<PlayerInputAbility>()?.OnRightMouseInput.AddListener(OnTriggerLeftMouseAnim);
         InitFarmingAnimStrategies();
     }
-    
+
     private void InitFarmingAnimStrategies()
     {
-        _farmingAnimationStrategies = new Dictionary<ECropGrowthStage?, IFarmingAnimationStrategy>
+        _farmingAnimationStrategies = new Dictionary<string, IFarmingAnimationStrategy>
         {
-            { null, new EmptyLandAnimationStrategy() },
-            { ECropGrowthStage.Seed, new SeedStageAnimationStrategy() },
-            { ECropGrowthStage.Vegetative, new GrowingStageAnimationStrategy() },
-            { ECropGrowthStage.Mature, new GrowingStageAnimationStrategy() },
-            { ECropGrowthStage.Harvest, new HarvestStageAnimationStrategy() }
+            { "Empty", new EmptyLandAnimationStrategy() },
+            {ECropGrowthStage.Seed.ToString(), new SeedStageAnimationStrategy() },
+            { ECropGrowthStage.Vegetative.ToString(), new GrowingStageAnimationStrategy() },
+            {ECropGrowthStage.Mature.ToString(), new GrowingStageAnimationStrategy() },
+            { ECropGrowthStage.Harvest.ToString(), new HarvestStageAnimationStrategy() }
         };
     }
     private void OnTriggerLeftMouseAnim(EPlayerMode currentMode)
@@ -48,7 +48,10 @@ public class PlayerAnimAbility : PlayerAbility
     {
         Vector3 selectedPos = _owner.CurrentSelectedPos;
         ECropGrowthStage? growthStage = CropsManager.Instance?.GetCropGrowthStageAtWorldPosition(selectedPos);
-        if (_farmingAnimationStrategies.TryGetValue(growthStage, out IFarmingAnimationStrategy strategy))
+
+        string stageKey = growthStage?.ToString() ?? "Empty";
+
+        if (_farmingAnimationStrategies.TryGetValue(stageKey, out IFarmingAnimationStrategy strategy))
         {
             strategy.ExecuteAnimation(_owner, selectedPos);
         }
@@ -65,13 +68,12 @@ public class PlayerAnimAbility : PlayerAbility
             Vector3 currentEuler = effect.transform.eulerAngles;
             float yRotation = currentEuler.y;
 
-            Vector3 playerMoveDirection = _owner.gameObject.transform.forward; 
+            Vector3 playerMoveDirection = _owner.gameObject.transform.forward;
 
             if (playerMoveDirection.magnitude > 0.1f)
             {
-                // �̵������� �ݴ�
                 Vector3 oppositeDirection = -playerMoveDirection;
-                oppositeDirection.y = 0; 
+                oppositeDirection.y = 0;
 
                 yRotation = Mathf.Atan2(oppositeDirection.x, oppositeDirection.z) * Mathf.Rad2Deg;
             }
