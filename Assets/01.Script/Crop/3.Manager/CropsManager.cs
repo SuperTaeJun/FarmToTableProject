@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UIElements;
 
 public class CropsManager : MonoBehaviour
 {
@@ -301,5 +302,21 @@ public class CropsManager : MonoBehaviour
     {
         var crop = GetCropAtWorldPosition(worldPosition);
         return crop?.GrowthStage;
+    }
+
+    public bool CanWatering(Vector3 worldPosition)
+    {
+        var crop = GetCropAtWorldPosition(worldPosition);
+
+        if (crop == null) return false;
+
+        return crop.GrowthStage != ECropGrowthStage.Seed &&
+               crop.GrowthStage != ECropGrowthStage.Harvest &&
+               !crop.IsWateredForCurrentStage();
+    }
+    public bool CanPlant(Vector3 worldPosition)
+    {
+        EBlockType blockType = WorldManager.Instance.GetBlockType(worldPosition);
+        return blockType == EBlockType.Farmland;
     }
 }

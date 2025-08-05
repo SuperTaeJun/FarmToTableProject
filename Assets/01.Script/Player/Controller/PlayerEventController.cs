@@ -26,29 +26,27 @@ public class PlayerEventController
         UnsubscribeFromVehicleEvents();
     }
 
-    #region Input Events
+
     private void SubscribeToInputEvents()
     {
-        if (_isInputEventsSubscribed || _owner.InputController == null) return;
+        if (_isInputEventsSubscribed || _owner.GetAbility<PlayerInputAbility>() == null) return;
 
-        _owner.InputController.OnChunkPurchaseInput.AddListener(_owner.TryGenerateChunk);
-        _owner.InputController.OnBuildingInteractionInput.AddListener(_owner.TryInteractWithBuilding);
+        _owner.GetAbility<PlayerInputAbility>()?.OnChunkPurchaseInput.AddListener(_owner.TryGenerateChunk);
+        _owner.GetAbility<PlayerInputAbility>()?.OnBuildingInteractionInput.AddListener(_owner.TryInteractWithBuilding);
         
         _isInputEventsSubscribed = true;
     }
 
     private void UnsubscribeFromInputEvents()
     {
-        if (!_isInputEventsSubscribed || _owner.InputController == null) return;
+        if (!_isInputEventsSubscribed || _owner.GetAbility<PlayerInputAbility>() == null) return;
 
-        _owner.InputController.OnChunkPurchaseInput.RemoveListener(_owner.TryGenerateChunk);
-        _owner.InputController.OnBuildingInteractionInput.RemoveListener(_owner.TryInteractWithBuilding);
+        _owner.GetAbility<PlayerInputAbility>()?.OnChunkPurchaseInput.RemoveListener(_owner.TryGenerateChunk);
+        _owner.GetAbility<PlayerInputAbility>()?.OnBuildingInteractionInput.RemoveListener(_owner.TryInteractWithBuilding);
         
         _isInputEventsSubscribed = false;
     }
-    #endregion
 
-    #region Building Events
     private void SubscribeToBuildingEvents()
     {
         if (_isBuildingEventsSubscribed || BuildingManager.Instance == null) return;
@@ -68,9 +66,8 @@ public class PlayerEventController
         
         _isBuildingEventsSubscribed = false;
     }
-    #endregion
 
-    #region Vehicle Events
+
     private void SubscribeToVehicleEvents()
     {
         if (_isVehicleEventsSubscribed || VehicleManager.Instance == null || _owner.DataController == null) return;
@@ -88,7 +85,5 @@ public class PlayerEventController
         
         _isVehicleEventsSubscribed = false;
     }
-    #endregion
 
-   
 }

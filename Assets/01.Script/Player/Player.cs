@@ -13,8 +13,7 @@ public class Player : MonoBehaviour
     public CharacterController CharacterController => _characterController;
     private Animator _animator;
     public Animator Animator => _animator;
-    private PlayerInputController _inputController;
-    public PlayerInputController InputController => _inputController;
+
 
     private Dictionary<Type, PlayerAbility> _abilitiesCache = new();
 
@@ -35,7 +34,6 @@ public class Player : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
-        _inputController = GetComponent<PlayerInputController>();
         _dataController = new PlayerDataController(this);
         _eventController = new PlayerEventController(this);
         _chunkController = new PlayerChunkController(this);

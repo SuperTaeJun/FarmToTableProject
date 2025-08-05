@@ -18,7 +18,7 @@ public class PlayerLocomotionAbility : PlayerAbility
     private void Start()
     {
         _currentMoveSpeed = _owner.Data.WalkSpeed;
-        _owner.InputController.OnMoveInput.AddListener(HandleMovement);
+        _owner.GetAbility<PlayerInputAbility>()?.OnMoveInput.AddListener(HandleMovement);
 
     }
     private void HandleMovement(Vector2 input)

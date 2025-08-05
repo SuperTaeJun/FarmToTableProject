@@ -13,7 +13,7 @@ public class PlayerBuildAbility : PlayerAbility
     private void Start()
     {
         _selectedType = EBuildingType.None;
-        _owner.InputController.OnLeftMouseInput.AddListener(TryBuild);
+        _owner.GetAbility<PlayerInputAbility>()?.OnRightMouseInput.AddListener(TryBuild);
     }
 
     private void Update()

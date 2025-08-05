@@ -14,7 +14,7 @@ public class PlayerModeAbility : PlayerAbility
     public DebugEvent<EPlayerMode> OnModeChanged = new DebugEvent<EPlayerMode>();
     private void Start()
     {
-        _owner.InputController.OnModeChangeInput.AddListener(SwitchMode);
+        _owner.GetAbility<PlayerInputAbility>()?.OnModeChangeInput.AddListener(SwitchMode);
 
         OnModeChanged.Invoke(_currentMode);
     }

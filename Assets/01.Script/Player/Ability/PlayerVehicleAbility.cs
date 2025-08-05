@@ -87,7 +87,7 @@ public class PlayerVehicleAbility : PlayerAbility
         IsMounted = true;
 
         _owner.CharacterController.enabled = false;
-        _owner.InputController.SetPlayerMoveInputLock(true);
+        _owner.GetAbility<PlayerInputAbility>().SetPlayerMoveInputLock(true);
         _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.Vehicle);
         _owner.Animator.SetTrigger("Mount");
         vehicle.MountPlayer(_owner);
@@ -102,7 +102,7 @@ public class PlayerVehicleAbility : PlayerAbility
             currentVehicle.DismountPlayer();
             currentVehicle = null;
             _owner.CharacterController.enabled = true;
-            _owner.InputController.SetPlayerMoveInputLock(false);
+            _owner.GetAbility<PlayerInputAbility>().SetPlayerMoveInputLock(false);
             _owner.Animator.SetTrigger("Dismount");
             _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.BlockEdit);
 

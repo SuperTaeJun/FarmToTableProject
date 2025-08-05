@@ -18,14 +18,6 @@ public class PlayerChunkController
     {
         try
         {
-            // 돈 지불 체크
-            bool canBuy = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
-            if (!canBuy)
-            {
-                _owner.GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.LackOfMoney);
-                return false;
-            }
-
             // 청크 생성
             var targetPos = CalculateTargetChunkPosition();
 
@@ -36,6 +28,14 @@ public class PlayerChunkController
 
             if (WorldManager.Instance.HasChunk(targetPos.Value))
             {
+                return false;
+            }
+
+            // 돈 지불 체크
+            bool canBuy = await CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 500);
+            if (!canBuy)
+            {
+                _owner.GetAbility<PlayerNotificationAbility>()?.ActiveDialogBox(EPlayerNotificationType.LackOfMoney);
                 return false;
             }
 
