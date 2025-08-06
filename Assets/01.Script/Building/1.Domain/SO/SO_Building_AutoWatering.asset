@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 21
   Category: 0
-  BuildingName: AutoWatering
+  BuildingName: "\uC790\uB3D9\uBB3C\uC8FC\uAE30"
   Prefab:
     m_AssetGUID: 84ae67a30d7ab2f43927feefb4178e33
     m_SubObjectName: 
@@ -28,7 +28,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   UISprite:
-    m_AssetGUID: 02db1b2cbba2da04199f1cc0e3e3c5d6
+    m_AssetGUID: 26638fe927de09c4e9045ba8bb77a083
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

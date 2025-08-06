@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 11
   Category: 1
-  BuildingName: GarbageCan
+  BuildingName: "\uC4F0\uB808\uAE30\uD1B5"
   Prefab:
     m_AssetGUID: c089384733776fb44a3d40782f842d39
     m_SubObjectName: 

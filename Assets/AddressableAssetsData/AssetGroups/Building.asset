@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bb72f65a9efc7d4291376969e480267
+    m_Address: Prefab_AutoHarvest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d79135303d06114eb1be6cbdbd6d437
     m_Address: Prefab_Preview_Totem2
     m_ReadOnly: 0
@@ -62,6 +67,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ceee534c26c01c4e8df860fdc6857c9
     m_Address: Prefab_Preview_Totem1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 483b2e033a8c3cf4e8f214f64aedbe7c
+    m_Address: Prefab_Preview_AutoHarvest
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

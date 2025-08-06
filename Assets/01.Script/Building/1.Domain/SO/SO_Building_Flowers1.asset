@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 12
   Category: 1
-  BuildingName: Flowers1
+  BuildingName: "\uAF431"
   Prefab:
     m_AssetGUID: 2e5738f7ab8411d4c96fdfcc2ae8b215
     m_SubObjectName: 

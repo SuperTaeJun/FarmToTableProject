@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 5
   Category: 1
-  BuildingName: Totem2
+  BuildingName: "\uD1A0\uD15C2"
   Prefab:
     m_AssetGUID: 7882f6211f585e047b59c9e2db21fe64
     m_SubObjectName: 

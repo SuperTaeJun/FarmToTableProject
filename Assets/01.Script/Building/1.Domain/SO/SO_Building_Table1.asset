@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2
   Category: 1
-  BuildingName: Table1
+  BuildingName: "\uD14C\uC774\uBE141"
   Prefab:
     m_AssetGUID: 8aa41ad24b1f38f478c371164b8de9d5
     m_SubObjectName: 

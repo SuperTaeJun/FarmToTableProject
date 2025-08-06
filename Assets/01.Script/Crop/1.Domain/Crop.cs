@@ -17,15 +17,15 @@ public class Crop
     public bool IsWateredForVegetative { get; private set; }
     public bool IsWateredForMature { get; private set; }
 
-    public Crop(ECropType type, string chunkId, Vector3 position, ICurrentGameTimeProvider timeProvider)
+    public Crop(ECropType type, string chunkId, Vector3 position, int plantedDay, int plantedHour)
     {
         Type = type;
         ChunkId = chunkId;
         Position = position;
         GrowthStage = ECropGrowthStage.Seed;
 
-        PlantedDay = timeProvider.CurrentDay;
-        PlantedHour = timeProvider.CurrentHour;
+        PlantedDay = plantedDay;
+        PlantedHour = plantedHour;
 
         LastWateredDay = -1;
         LastWateredHour = -1;
@@ -51,14 +51,14 @@ public class Crop
         IsWateredForMature = isWateredForMature;
     }
 
-    public void Water(ICurrentGameTimeProvider timeProvider)
+    public void Water(int plantedDay, int plantedHour)
     {
         IsWatered = true;
-        LastWateredDay = timeProvider.CurrentDay;
-        LastWateredHour = timeProvider.CurrentHour;
+        LastWateredDay = plantedDay;
+        LastWateredHour = plantedHour;
     }
 
-    public void WaterCurrentStage(ICurrentGameTimeProvider timeProvider)
+    public void WaterCurrentStage(int plantedDay, int plantedHour)
     {
         switch (GrowthStage)
         {
@@ -71,8 +71,8 @@ public class Crop
         }
 
         IsWatered = true;
-        LastWateredDay = timeProvider.CurrentDay;
-        LastWateredHour = timeProvider.CurrentHour;
+        LastWateredDay = plantedDay;
+        LastWateredHour = plantedHour;
     }
 
     public bool IsWateredForCurrentStage()

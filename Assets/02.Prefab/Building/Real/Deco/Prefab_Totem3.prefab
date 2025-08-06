@@ -156,4 +156,5 @@ MonoBehaviour:
   buildingType: 0
   scaleUpDuration: 0.5
   scaleEase: 27
-  interactionRange: 3.5
+  interactionRange: 0
+  VfxPos: {fileID: 0}

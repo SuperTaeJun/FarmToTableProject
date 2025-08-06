@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 19
   Category: 0
-  BuildingName: Home
+  BuildingName: "\uC9D1"
   Prefab:
     m_AssetGUID: 96ff1d3e4d7aebc4eace3135740bb2f5
     m_SubObjectName: 

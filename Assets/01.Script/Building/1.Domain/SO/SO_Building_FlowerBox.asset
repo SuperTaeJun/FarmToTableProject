@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 14
   Category: 1
-  BuildingName: FlowerBox
+  BuildingName: "\uAF43\uBC15\uC2A4"
   Prefab:
     m_AssetGUID: 7b36c98f59eeda24bb3784fdd803c281
     m_SubObjectName: 

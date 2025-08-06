@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 20
   Category: 0
-  BuildingName: Pashion
+  BuildingName: "\uC637\uAC00\uAC8C"
   Prefab:
     m_AssetGUID: 0908845462118dd46a66a218a51198ba
     m_SubObjectName: 

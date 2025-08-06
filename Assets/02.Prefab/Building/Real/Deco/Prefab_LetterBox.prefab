@@ -126,7 +126,8 @@ MonoBehaviour:
   buildingType: 1
   scaleUpDuration: 0.5
   scaleEase: 27
-  interactionRange: 3.5
+  interactionRange: 0
+  VfxPos: {fileID: 0}
 --- !u!114 &-6859438847873466076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,3 +144,4 @@ MonoBehaviour:
   scaleUpDuration: 0.5
   scaleEase: 27
   interactionRange: 3.5
+  VfxPos: {fileID: 0}

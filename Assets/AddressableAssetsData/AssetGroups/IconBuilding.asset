@@ -26,7 +26,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0dce976486c133b40b16f8bb2c225055
-    m_Address: Icon_Scarecrow
+    m_Address: Icon_AutoHarvest
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

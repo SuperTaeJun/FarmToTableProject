@@ -48,7 +48,8 @@ MonoBehaviour:
   buildingType: 0
   scaleUpDuration: 0.5
   scaleEase: 27
-  interactionRange: 3.5
+  interactionRange: 0
+  VfxPos: {fileID: 0}
 --- !u!1 &1554715522003236
 GameObject:
   m_ObjectHideFlags: 0

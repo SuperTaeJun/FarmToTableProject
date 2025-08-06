@@ -107,8 +107,7 @@ public class CropsManager : MonoBehaviour
         string cropKey = GetCropKey(chunkId, localPos);
         if (_crops.ContainsKey(cropKey)) return;
 
-        ICurrentGameTimeProvider timeProvider = GameTimeManager.Instance;
-        var newCrop = new Crop(cropType, chunkId, localPos, timeProvider);
+        var newCrop = new Crop(cropType, chunkId, localPos, GameTimeManager.Instance.CurrentDay, GameTimeManager.Instance.CurrentHour);
         _crops[cropKey] = newCrop;
 
         GameObject prefab = GetCropPrefab(cropType);
@@ -274,8 +273,7 @@ public class CropsManager : MonoBehaviour
         if (crop.GrowthStage == ECropGrowthStage.Seed || crop.GrowthStage == ECropGrowthStage.Harvest) return;
         if (crop.IsWateredForCurrentStage()) return;
 
-        ICurrentGameTimeProvider timeProvider = GameTimeManager.Instance;
-        crop.WaterCurrentStage(timeProvider);
+        crop.WaterCurrentStage(GameTimeManager.Instance.CurrentDay, GameTimeManager.Instance.CurrentHour);
         await _repo.WaterCrop(chunkId, localPosition);
         OnCropWatered.Invoke(crop);
     }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
+public class GameTimeManager : MonoBehaviour
 {
     public static GameTimeManager Instance { get; private set; }
 

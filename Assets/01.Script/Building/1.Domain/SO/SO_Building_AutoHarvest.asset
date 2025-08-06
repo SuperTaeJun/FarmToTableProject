@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
-  m_Name: SO_Building_GiftBox1
+  m_Name: SO_Building_AutoHarvest
   m_EditorClassIdentifier: 
-  Type: 16
-  Category: 1
-  BuildingName: "\uC120\uBB3C\uC0C1\uC7901"
+  Type: 22
+  Category: 0
+  BuildingName: "\uC790\uB3D9\uC218\uD655"
   Prefab:
-    m_AssetGUID: 7bb97a99c271f5545bf6269829c8f006
+    m_AssetGUID: 0bb72f65a9efc7d4291376969e480267
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   PreviewPrefab:
-    m_AssetGUID: 824105aaec3e69c45b9b85692637ac5c
+    m_AssetGUID: 483b2e033a8c3cf4e8f214f64aedbe7c
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   UISprite:
-    m_AssetGUID: ea181807a46b15b4eb542e159e4e573d
+    m_AssetGUID: 0dce976486c133b40b16f8bb2c225055
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

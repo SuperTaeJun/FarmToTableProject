@@ -27,5 +27,6 @@ public enum EBuildingType
     Home,
     Pashion,
     AutoWatering,
+    AutoHarvest,
     None
 }

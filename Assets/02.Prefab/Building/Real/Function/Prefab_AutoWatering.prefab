@@ -125,7 +125,7 @@ MonoBehaviour:
   buildingType: 21
   scaleUpDuration: 0.5
   scaleEase: 27
-  interactionRange: 3.5
+  interactionRange: 1
   VfxPos: {fileID: 4328485390583310043}
 --- !u!1 &7073737557124874983
 GameObject:

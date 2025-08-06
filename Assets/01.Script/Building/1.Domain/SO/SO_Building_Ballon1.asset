@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 9
   Category: 1
-  BuildingName: Ballon1
+  BuildingName: "\uD48D\uC1201"
   Prefab:
     m_AssetGUID: e9abdfef7433a684581965e00decf6c3
     m_SubObjectName: 
@@ -26,7 +26,7 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
-    m_EditorAssetChanged: 1
+    m_EditorAssetChanged: 0
   UISprite:
     m_AssetGUID: 71702c4582265cc4f97a5751d887ea54
     m_SubObjectName: 

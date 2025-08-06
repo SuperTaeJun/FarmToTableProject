@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 17
   Category: 1
-  BuildingName: GiftBox2
+  BuildingName: "\uC120\uBB3C\uC0C1\uC7902"
   Prefab:
     m_AssetGUID: 1d18371f22f251341a85aaab5a3e5ebc
     m_SubObjectName: 

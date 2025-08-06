@@ -1,18 +1,17 @@
 using UnityEngine;
-using System.Threading.Tasks;
 
-public class AutoWateringFunction : IBuildingFunction
+public class AutoHarvestFunction : IBuildingFunction
 {
     private BuildingObject _buildingObject;
     private bool _isActive = false;
     private int _startDay = -1;
     private float _lastWateringTime = 0f;
 
-    private const int WATERING_RANGE = 2;
-    private const float WATERING_INTERVAL_HOURS = 5f;
+    private const int HARVEST_RANGE = 2;
+    private const float HARVEST_INTERVAL_HOURS = 5f;
     private const int OPERATION_DAYS = 2;
 
-    public AutoWateringFunction(BuildingObject buildingObject)
+    public AutoHarvestFunction(BuildingObject buildingObject)
     {
         _buildingObject = buildingObject;
     }
@@ -40,14 +39,14 @@ public class AutoWateringFunction : IBuildingFunction
         if (!_isActive) return;
         if (GameTimeManager.Instance == null) return;
 
-        // 4ì¼ì´ ì§€ë‚¬ëŠ”ì§€ ì²´í¬
+        // 4ÀÏÀÌ Áö³µ´ÂÁö Ã¼Å©
         if (GameTimeManager.Instance.CurrentDay >= _startDay + OPERATION_DAYS)
         {
             StopAutoWatering();
             return;
         }
 
-        // ê¸‰ìˆ˜ ì¸í„°ë²Œ ì²´í¬
+        // ±Þ¼ö ÀÎÅÍ¹ú Ã¼Å©
         CheckAndWater();
     }
 
@@ -57,23 +56,23 @@ public class AutoWateringFunction : IBuildingFunction
         float gameHoursPerSecond = 24f / GameTimeManager.Instance.secondsPerDay;
         float hoursElapsed = (currentTime - _lastWateringTime) * gameHoursPerSecond;
 
-        if (hoursElapsed >= WATERING_INTERVAL_HOURS)
+        if (hoursElapsed >= HARVEST_INTERVAL_HOURS)
         {
-            WaterCropsInRange();
+            HarvestCropsInRange();
             _lastWateringTime = currentTime;
         }
     }
 
-    private async void WaterCropsInRange()
+    private async void HarvestCropsInRange()
     {
         Vector3 centerPos = _buildingObject.transform.position;
 
-        for (int x = -WATERING_RANGE; x <= WATERING_RANGE; x++)
+        for (int x = -HARVEST_RANGE; x <= HARVEST_RANGE; x++)
         {
-            for (int z = -WATERING_RANGE; z <= WATERING_RANGE; z++)
+            for (int z = -HARVEST_RANGE; z <= HARVEST_RANGE; z++)
             {
-                //ë¸”ëŸ­ ë†’ì´ ì˜¤í”„ì…‹ y 0.5
-                Vector3 waterPosition = centerPos + new Vector3(x,0.5f, z);
+                //ºí·° ³ôÀÌ ¿ÀÇÁ¼Â y 0.5
+                Vector3 waterPosition = centerPos + new Vector3(x, 0.5f, z);
 
                 string chunkId = WorldManager.GetChunkId(waterPosition);
 
@@ -81,7 +80,7 @@ public class AutoWateringFunction : IBuildingFunction
                 {
                     Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(waterPosition);
                     Vector3 localPos = WorldManager.Instance.GetLocalPositionInChunk(waterPosition, chunk.Position);
-                    await CropsManager.Instance.WaterCrop(chunkId, localPos);
+                    await CropsManager.Instance.HarvestCrop(chunkId, localPos);
                 }
 
             }

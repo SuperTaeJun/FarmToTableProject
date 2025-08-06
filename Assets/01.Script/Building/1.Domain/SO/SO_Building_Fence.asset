@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 0
   Category: 1
-  BuildingName: Fence
+  BuildingName: "\uC6B8\uD0C0\uB9AC"
   Prefab:
     m_AssetGUID: ceb3c2f7244a192438059f43598e0ab4
     m_SubObjectName: 

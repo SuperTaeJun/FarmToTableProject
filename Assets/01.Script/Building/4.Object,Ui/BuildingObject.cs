@@ -90,6 +90,9 @@ public class BuildingObject : MonoBehaviour
             case EBuildingType.AutoWatering:
                 _functions = new IBuildingFunction[] { new AutoWateringFunction(this) };
                 break;
+            case EBuildingType.AutoHarvest:
+                _functions = new IBuildingFunction[] { new AutoHarvestFunction(this) };
+                break;
             default:
                 _functions = new IBuildingFunction[0];
                 break;
@@ -126,6 +129,8 @@ public class BuildingObject : MonoBehaviour
 
     private void CheckPlayerDistance()
     {
+        if (interactionRange == 0) return;
+
         if (!EnsurePlayerReference()) return;
 
         float distance = Vector3.Distance(transform.position, _player.position);

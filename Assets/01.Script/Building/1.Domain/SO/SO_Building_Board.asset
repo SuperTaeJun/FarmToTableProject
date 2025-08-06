@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 15
   Category: 1
-  BuildingName: Board
+  BuildingName: "\uAC8C\uC2DC\uD310"
   Prefab:
     m_AssetGUID: 233041c3165d2dc448cec6a6102500f5
     m_SubObjectName: 

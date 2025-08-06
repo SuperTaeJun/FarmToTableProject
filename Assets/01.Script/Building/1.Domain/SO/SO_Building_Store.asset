@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 18
   Category: 0
-  BuildingName: Store
+  BuildingName: "\uC885\uD569\uC0C1\uC810"
   Prefab:
     m_AssetGUID: 6cf3d12de3512e5488575ddba3777088
     m_SubObjectName: 
@@ -34,4 +34,4 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   Size: {x: 2, y: 3}
-  Cost: 1
+  Cost: 0
