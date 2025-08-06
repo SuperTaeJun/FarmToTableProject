@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Icon
   m_GUID: f858a36f545eaf24bb63fc1536aa355a
   m_SerializeEntries:
+  - m_GUID: 06cf9057b64cf5c4394d3d7f1ce83471
+    m_Address: Icon_Meat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11213a1172f529d499ae14ee1b95c1b6
     m_Address: Icon_Bicycle
     m_ReadOnly: 0
@@ -52,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e68aefb7931aad040a793e74ed58bf44
     m_Address: Icon_Bike3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f86dbaedc78b2b24b8bbecba6b355f78
+    m_Address: Icon_Egg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

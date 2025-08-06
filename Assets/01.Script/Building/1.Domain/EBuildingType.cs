@@ -28,5 +28,9 @@ public enum EBuildingType
     Pashion,
     AutoWatering,
     AutoHarvest,
+    PigFarm,
+    ChickenFarm,
+    EnergyFarm,
+
     None
 }

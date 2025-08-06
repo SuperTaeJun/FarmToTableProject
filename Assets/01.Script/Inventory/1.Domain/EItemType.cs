@@ -30,6 +30,7 @@ public enum EItemType
     Pepper,
     Asparagus,
 
+
     // 건축재료
     Wood,
     Stone,
@@ -42,5 +43,9 @@ public enum EItemType
     Sedan,
     Cart,
     Bicycle,
-    RacingCar
+    RacingCar,
+
+    // 동물류
+    Egg,
+    Meat,
 }

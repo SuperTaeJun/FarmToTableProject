@@ -11,7 +11,7 @@ public class BuildingObject : MonoBehaviour
     [SerializeField] private Ease scaleEase = Ease.OutBack;
 
     private Collider _collider;
-    
+
     [Header("Interaction")]
     [SerializeField] private float interactionRange = 3.5f;
     private bool _playerInRange = false;
@@ -92,6 +92,12 @@ public class BuildingObject : MonoBehaviour
                 break;
             case EBuildingType.AutoHarvest:
                 _functions = new IBuildingFunction[] { new AutoHarvestFunction(this) };
+                break;
+            case EBuildingType.PigFarm:
+                _functions = new IBuildingFunction[] { new PigFarmFunction() };
+                break;
+            case EBuildingType.ChickenFarm:
+                _functions = new IBuildingFunction[] { new ChickenFarmFunction() };
                 break;
             default:
                 _functions = new IBuildingFunction[0];

@@ -91,7 +91,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8dcfa6be299a0e541bd92e0546ea34fa
-    m_Address: Icon_Windmill
+    m_Address: Icon_EnergyFarm
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -125,6 +125,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5310b6e50aa9ed41b10d83f139fa0ae
+    m_Address: Icon_ChickenFarm
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e561268a5ffb9194e82b1318be3e3f73
     m_Address: Icon_Totem1
     m_ReadOnly: 0
@@ -137,6 +142,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eadc2685eff60d04d9d2046ec73c5c9b
     m_Address: Icon_GarbageCan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f69f997e22b94e241a4c716397305125
+    m_Address: Icon_PigFarm
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

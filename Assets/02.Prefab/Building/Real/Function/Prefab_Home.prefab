@@ -100,9 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingType: 11
+  buildingType: 19
   scaleUpDuration: 0.5
   scaleEase: 27
+  interactionRange: 3.5
+  VfxPos: {fileID: 0}
 --- !u!65 &3368816437825506179
 BoxCollider:
   m_ObjectHideFlags: 0

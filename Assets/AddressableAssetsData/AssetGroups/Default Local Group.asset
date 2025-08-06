@@ -25,6 +25,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 534bb6da8a47cc647adc282db883632a
+    m_Address: Assets/02.Prefab/Building/Preview/Function/Prefab_Preview_ChickenFarm.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 535087ba78b911c43a12223ba5a1859d
+    m_Address: Assets/02.Prefab/Building/Real/Function/Prefab_PigFarm.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83b75b9dc0fca124abdf9cf95e2a0535
     m_Address: Assets/AssetStore/FarmAsset/Models/SM_Prop_LetterBox_03.fbx
     m_ReadOnly: 0
@@ -67,6 +77,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bc269d36a83c18e4394102ef00bc40d5
     m_Address: Assets/AssetStore/CubeMap/Cube_World/Totem/Source/totem_top_2.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4f769a336ffdde43ac9d69fc002fb1c
+    m_Address: Assets/02.Prefab/Building/Preview/Function/Prefab_Preview_PigFarm.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5e38e3a4c39a7e4baf0edb93f63b154
+    m_Address: Assets/02.Prefab/Building/Real/Function/Prefab_ChickenFarm.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
