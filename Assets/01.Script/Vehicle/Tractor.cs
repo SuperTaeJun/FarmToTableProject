@@ -65,7 +65,7 @@ public class Tractor : Vehicle
         switch (growthStage)
         {
             case null:
-                if (CanPlantAt(currentSelectedPos))
+                if (CropsManager.Instance.CanPlant(currentSelectedPos))
                 {
                     ECropType selectedCrop = currentDriver.GetAbility<PlayerFarmingAbility>().CurrentSeed;
                     // 인벤토리에 씨앗이 있는지 체크
@@ -90,7 +90,7 @@ public class Tractor : Vehicle
             case ECropGrowthStage.Vegetative:
             case ECropGrowthStage.Mature:
                 // 물주기
-                if (CanWaterAtPosition(currentSelectedPos))
+                if (CropsManager.Instance.CanWatering(currentSelectedPos))
                 {
                     WaterCropAtPosition(currentSelectedPos);
                 }
@@ -101,22 +101,6 @@ public class Tractor : Vehicle
                 HarvestCropAtPosition(currentSelectedPos);
                 break;
         }
-    }
-
-    private bool CanPlantAt(Vector3 position)
-    {
-        EBlockType blockType = WorldManager.Instance.GetBlockType(position);
-        return blockType == EBlockType.Farmland;
-    }
-
-    private bool CanWaterAtPosition(Vector3 position)
-    {
-        var crop = CropsManager.Instance?.GetCropAtWorldPosition(position);
-        if (crop == null) return false;
-
-        return crop.GrowthStage != ECropGrowthStage.Seed &&
-               crop.GrowthStage != ECropGrowthStage.Harvest &&
-               !crop.IsWateredForCurrentStage();
     }
 
     private void CultivateAtPosition(Vector3 position)
@@ -155,7 +139,7 @@ public class Tractor : Vehicle
                 Vector3 plantPosition = selectedPos + new Vector3(x * 2, 0, z * 2);
                 string chunkId = WorldManager.GetChunkId(plantPosition);
 
-                if (CanPlantAt(plantPosition) && CropsManager.Instance != null)
+                if (CropsManager.Instance.CanPlant(selectedPos)&& CropsManager.Instance != null)
                 {
                     // 이미 작물이 있는지 체크
                     var existingCrop = CropsManager.Instance.GetCropAtWorldPosition(plantPosition);
@@ -179,10 +163,8 @@ public class Tractor : Vehicle
             {
                 Vector3 waterPosition = position + new Vector3(x * 2, 0, z * 2);
                 
-                if (CanWaterAtPosition(waterPosition))
+                if (CropsManager.Instance.CanWatering(position))
                 {
-                    ObjectPoolManager.Instance.Get(PoolType.CropWater, waterPosition);
-
                     string chunkId = WorldManager.GetChunkId(waterPosition);
 
                     if (CropsManager.Instance != null)

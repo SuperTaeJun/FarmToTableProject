@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
-  m_Name: SO_Building_Table
+  m_Name: SO_Building_AutoWatering
   m_EditorClassIdentifier: 
-  Type: 2
-  Category: 1
-  BuildingName: "\uD14C\uC774\uBE14"
+  Type: 21
+  Category: 0
+  BuildingName: AutoWatering
   Prefab:
-    m_AssetGUID: 8aa41ad24b1f38f478c371164b8de9d5
+    m_AssetGUID: 84ae67a30d7ab2f43927feefb4178e33
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   PreviewPrefab:
-    m_AssetGUID: 1d19c82cb376493439099b951932bc73
+    m_AssetGUID: a9ef27b08db77994abfd05945e254169
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   UISprite:
-    m_AssetGUID: 1e48534ef99c5154f8330173b8c9ebf2
+    m_AssetGUID: 02db1b2cbba2da04199f1cc0e3e3c5d6
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Size: {x: 2, y: 3}
+  Size: {x: 1, y: 1}
   Cost: 0

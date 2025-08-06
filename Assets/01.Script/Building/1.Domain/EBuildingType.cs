@@ -4,7 +4,7 @@ public enum EBuildingType
 {
     Fence,
     LetterBox,
-    Table,
+    Table1,
     Table2,
     Totem1,
     Totem2,
@@ -26,5 +26,6 @@ public enum EBuildingType
     Store,
     Home,
     Pashion,
+    AutoWatering,
     None
 }

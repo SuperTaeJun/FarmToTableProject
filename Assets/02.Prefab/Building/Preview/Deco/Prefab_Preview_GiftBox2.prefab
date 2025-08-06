@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 431167315212873694}
   - component: {fileID: 804574572685576006}
   m_Layer: 0
-  m_Name: Prefab_Preview_Gift2
+  m_Name: Prefab_Preview_GiftBox2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

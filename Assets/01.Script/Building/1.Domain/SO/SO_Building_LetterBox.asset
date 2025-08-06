@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   Category: 1
-  BuildingName: "\uC6B0\uD3B8\uD568"
+  BuildingName: LetterBox
   Prefab:
     m_AssetGUID: 66d0146c7008620478136153284b7843
     m_SubObjectName: 

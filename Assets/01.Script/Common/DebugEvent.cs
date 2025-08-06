@@ -92,7 +92,7 @@ public class DebugEvent<T1, T2>
 
     public void Invoke(T1 param1, T2 param2)
     {
-        Debug.Log($"[DebugEvent] Invoked with parameters: {param1}, {param2}");
+        //Debug.Log($"[DebugEvent] Invoked with parameters: {param1}, {param2}");
         foreach (var listener in listeners)
         {
             listener.Invoke(param1, param2);

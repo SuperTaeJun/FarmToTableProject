@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
   m_Name: SO_Building_Pashion
   m_EditorClassIdentifier: 
-  Type: 12
+  Type: 20
   Category: 0
-  BuildingName: "\uC637\uAC00\uAC8C"
+  BuildingName: Pashion
   Prefab:
     m_AssetGUID: 0908845462118dd46a66a218a51198ba
     m_SubObjectName: 
@@ -22,7 +22,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   PreviewPrefab:
-    m_AssetGUID: a635a12c266c5da4ea52613c20a98131
+    m_AssetGUID: 99843b60acc24064e97a06a978629a69
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

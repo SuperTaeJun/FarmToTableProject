@@ -164,7 +164,6 @@ public class CropObject : MonoBehaviour
     {
         ObjectPoolManager.Instance.Get(PoolType.CropWater, transform.position);
         SoundManager.Instance.PlaySFX(SFXType.Watering);
-
     }
 
     private void ShowReadyToHarvestIndicator()

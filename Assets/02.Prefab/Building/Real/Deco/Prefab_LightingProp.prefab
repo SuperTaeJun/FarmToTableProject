@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 5357413229967815954}
   - component: {fileID: 2288919420801988781}
   - component: {fileID: 5949055898897216349}
+  - component: {fileID: -6357779649186427189}
   m_Layer: 0
   m_Name: Prefab_LightingProp
   m_TagString: Untagged
@@ -231,3 +232,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0197067, y: 3.3481991, z: 1.0197067}
   m_Center: {x: 0.00000008940697, y: 1.6740996, z: -0.00000014901161}
+--- !u!114 &-6357779649186427189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200156826840799068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  scaleUpDuration: 0.5
+  scaleEase: 27
+  interactionRange: 3.5

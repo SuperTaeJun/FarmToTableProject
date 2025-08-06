@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4858259414363301540}
   - component: {fileID: 6218186530252481066}
   - component: {fileID: 1267641060228084483}
+  - component: {fileID: 1507872723595203313}
   m_Layer: 0
   m_Name: Prefab_GarbageCan
   m_TagString: Untagged
@@ -125,3 +126,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7083313, y: 0.833296, z: 0.7276465}
   m_Center: {x: -0.00000011920929, y: 0.41648826, z: 0.000000029802322}
+--- !u!114 &1507872723595203313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6036190987079869209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  scaleUpDuration: 0.5
+  scaleEase: 27
+  interactionRange: 3.5

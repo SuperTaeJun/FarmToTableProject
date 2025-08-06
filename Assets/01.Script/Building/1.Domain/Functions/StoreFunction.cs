@@ -19,4 +19,9 @@ public class StoreFunction : IBuildingFunction
 
         FadeManager.Instance.FadeScreenWithEvent(() => PopupManager.Instance.Open(EPopupType.UI_ShopPopup));
     }
+
+    public void Update()
+    {
+        // StoreFunction은 업데이트가 필요 없음
+    }
 }

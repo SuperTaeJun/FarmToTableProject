@@ -13,4 +13,9 @@ public class HomeFunction : IBuildingFunction
     {
         FadeManager.Instance.FadeScreenWithEvent(() => GameTimeManager.Instance.GoToNextDayMorning());
     }
+
+    public void Update()
+    {
+        // HomeFunction은 업데이트가 필요 없음
+    }
 }

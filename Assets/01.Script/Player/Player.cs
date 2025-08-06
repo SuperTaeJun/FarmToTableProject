@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
     {
         if (_currentInteractableBuilding != null && _currentInteractableBuilding.CanInteract())
         {
-            _currentInteractableBuilding.Interact();
+            _currentInteractableBuilding.FunctionInteract();
         }
     }
 }

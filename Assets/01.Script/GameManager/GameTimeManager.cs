@@ -7,10 +7,8 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
     public static GameTimeManager Instance { get; private set; }
 
     [Header("Time Settings")]
-    [Tooltip("���� �� �Ϸ簡 �� ������")]
     public float secondsPerDay = 60f;
-    [Tooltip("���� �ð� (��)")]
-    public int startHour = 12; // 12�ú��� ����
+    public int startHour = 12; 
 
     private float totalGameTime = 0f;
     private int previousDay = 0;
@@ -65,6 +63,7 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
 
     public float NormalizedTimeOfDay => (totalGameTime % secondsPerDay) / secondsPerDay;
     public string CurrentTimeString => $"{CurrentHour:D2}:{CurrentMinute:D2}";
+    public float TotalGameTime => totalGameTime;
 
     private void Awake()
     {
@@ -115,14 +114,12 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
         int currentHour = CurrentHour;
         int currentMinute = CurrentMinute;
 
-        // �� ��ȭ üũ
         if (currentMinute != previousMinute)
         {
             OnTimeChanged?.Invoke(currentHour, currentMinute);
             previousMinute = currentMinute;
         }
 
-        // �ð� ��ȭ üũ
         if (currentHour != previousHour)
         {
             previousHour = currentHour;
@@ -153,7 +150,6 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
         };
 
         await _repository.SaveGameTimeAsync(gameTimeDto);
-        Debug.Log($"���� �ð� ����: Day {CurrentDay}, {CurrentHour:D2}:{CurrentMinute:D2}");
     }
 
     public async Task LoadGameTime()
@@ -162,22 +158,16 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
         
         if (gameTimeDto != null)
         {
-            // ����� �ð����� totalGameTime ���
+
             SetGameTime(gameTimeDto.CurrentDay, gameTimeDto.CurrentHour, gameTimeDto.CurrentMinute);
-            Debug.Log($"���� �ð� �ε�: Day {CurrentDay}, {CurrentHour:D2}:{CurrentMinute:D2}");
         }
-        else
-        {
-            Debug.Log("����� ���� �ð��� �����ϴ�. �⺻������ �����մϴ�.");
-        }
+
     }
 
     private void SetGameTime(int day, int hour, int minute)
     {
-        // ��ǥ �ð��� totalGameTime���� ��ȯ
         float targetTotalTime = day * secondsPerDay;
         
-        // �ð°� ���� ���� �� �ð����� ��ȯ
         float targetHour = (hour - startHour + 24) % 24;
         float targetMinute = minute;
         float timeInDay = (targetHour + targetMinute / 60f) / 24f * secondsPerDay;
@@ -203,10 +193,8 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
     
     private void OnDestroy()
     {
-        // 어플리케이션 종료 시 저장
         _ = SaveGameTime();
         
-        // 이벤트 정리 (메모리 누수 방지)
         OnDayChanged = null;
         OnTimeChanged = null;
 
@@ -247,6 +235,5 @@ public class GameTimeManager : MonoBehaviour,ICurrentGameTimeProvider
         
         _ = SaveGameTime();
         
-        Debug.Log($"다음날 아침으로 이동: Day {CurrentDay}, {CurrentHour:D2}:{CurrentMinute:D2}");
     }
 }

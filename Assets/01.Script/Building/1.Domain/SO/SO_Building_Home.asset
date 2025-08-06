@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
   m_Name: SO_Building_Home
   m_EditorClassIdentifier: 
-  Type: 11
+  Type: 19
   Category: 0
-  BuildingName: "\uC9D1"
+  BuildingName: Home
   Prefab:
     m_AssetGUID: 96ff1d3e4d7aebc4eace3135740bb2f5
     m_SubObjectName: 

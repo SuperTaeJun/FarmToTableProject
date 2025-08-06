@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4092387940775162}
+  - component: {fileID: -1269684561256382955}
   m_Layer: 0
   m_Name: Prefab_Totem4
   m_TagString: Building
@@ -32,6 +33,22 @@ Transform:
   - {fileID: 4021137682556688}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-1269684561256382955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274293070224236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  scaleUpDuration: 0.5
+  scaleEase: 27
+  interactionRange: 3.5
 --- !u!1 &1554715522003236
 GameObject:
   m_ObjectHideFlags: 0

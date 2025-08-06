@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
-  m_Name: SO_Building_LightProp
+  m_Name: SO_Building_GiftBox2
   m_EditorClassIdentifier: 
-  Type: 13
+  Type: 17
   Category: 1
-  BuildingName: "\uAC00\uB85C\uB4F1"
+  BuildingName: GiftBox2
   Prefab:
-    m_AssetGUID: ff42dcb733659614181dfa308c8c862f
+    m_AssetGUID: 1d18371f22f251341a85aaab5a3e5ebc
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   PreviewPrefab:
-    m_AssetGUID: c7ac79ddc7e915a43b2f17208dce3b52
+    m_AssetGUID: 60aebb79f75b64e4ea39e1547168913d
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   UISprite:
-    m_AssetGUID: 5c9d35e2e11c64844830549ecb48eda5
+    m_AssetGUID: 4be4aec507b88914fa3f1a6e39154cfc
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

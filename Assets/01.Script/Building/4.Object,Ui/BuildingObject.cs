@@ -1,6 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
-
+using System.Collections;
 public class BuildingObject : MonoBehaviour
 {
     private IBuildingFunction[] _functions;
@@ -18,6 +18,8 @@ public class BuildingObject : MonoBehaviour
     private Transform _player;
     public Transform Player => _player;
 
+    public Transform VfxPos;
+
     private void Start()
     {
         if (ObjectPoolManager.Instance)
@@ -30,6 +32,12 @@ public class BuildingObject : MonoBehaviour
         BuildAnimation();
     }
 
+    private void Update()
+    {
+        CheckPlayerDistance();
+
+        FunctionUpdate();
+    }
     private void BuildAnimation()
     {
         // 생성될 때 충돌 방지를 위해 isTrigger 설정
@@ -39,7 +47,6 @@ public class BuildingObject : MonoBehaviour
             _collider.isTrigger = true; // 트리거로 전환 (충돌 감지 안 하고, 통과만 가능하게 함)
         }
 
-        // 크기 축소 초기화
         transform.localScale = _originalScale * 0.1f;
 
         Vector3 midScale = new Vector3(_originalScale.x, transform.localScale.y, _originalScale.z);
@@ -58,7 +65,7 @@ public class BuildingObject : MonoBehaviour
         });
     }
 
-    private System.Collections.IEnumerator DisableTriggerAfterDelay(float delay)
+    private IEnumerator DisableTriggerAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         if (_collider != null)
@@ -80,19 +87,32 @@ public class BuildingObject : MonoBehaviour
             case EBuildingType.Home:
                 _functions = new IBuildingFunction[] { new HomeFunction(this) };
                 break;
+            case EBuildingType.AutoWatering:
+                _functions = new IBuildingFunction[] { new AutoWateringFunction(this) };
+                break;
             default:
                 _functions = new IBuildingFunction[0];
                 break;
         }
     }
 
-    public void Interact()
+    public void FunctionInteract()
     {
         if (_functions != null)
         {
             foreach (var function in _functions)
             {
                 function.Execute();
+            }
+        }
+    }
+    private void FunctionUpdate()
+    {
+        if (_functions != null)
+        {
+            foreach (var function in _functions)
+            {
+                function.Update();
             }
         }
     }
@@ -103,10 +123,6 @@ public class BuildingObject : MonoBehaviour
         InitializeFunctions();
     }
 
-    private void Update()
-    {
-        CheckPlayerDistance();
-    }
 
     private void CheckPlayerDistance()
     {

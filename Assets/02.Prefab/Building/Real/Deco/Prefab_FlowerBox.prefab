@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 614889124174000343}
   - component: {fileID: 5196474411169171807}
   - component: {fileID: 3373856699811997454}
+  - component: {fileID: 8362770045518859976}
   m_Layer: 0
   m_Name: Prefab_FlowerBox
   m_TagString: Untagged
@@ -108,3 +109,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1534324, y: 0.75786203, z: 0.4345995}
   m_Center: {x: -0.006832719, y: 0.37537637, z: 0.0054531693}
+--- !u!114 &8362770045518859976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4512217804241745405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 0
+  scaleUpDuration: 0.5
+  scaleEase: 27
+  interactionRange: 3.5

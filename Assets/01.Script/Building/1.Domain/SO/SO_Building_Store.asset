@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
   m_Name: SO_Building_Store
   m_EditorClassIdentifier: 
-  Type: 8
+  Type: 18
   Category: 0
-  BuildingName: "\uC0C1\uC810"
+  BuildingName: Store
   Prefab:
     m_AssetGUID: 6cf3d12de3512e5488575ddba3777088
     m_SubObjectName: 
@@ -33,5 +33,5 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Size: {x: 2, y: 2}
-  Cost: 0
+  Size: {x: 2, y: 3}
+  Cost: 1

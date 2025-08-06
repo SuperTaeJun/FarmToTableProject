@@ -72,8 +72,6 @@ public class WorldRepository : FirebaseRepositoryBase
                 }
             }
         }
-        Debug.Log($"[ConvertToDto] Saving Chunk {chunk.Position.X},{chunk.Position.Z} with {dto.Blocks.Count} blocks.");
-
         return dto;
     }
 
@@ -96,8 +94,6 @@ public class WorldRepository : FirebaseRepositoryBase
                 blockCount++;
             }
         }
-        Debug.Log($"[ConvertToDomain] Block count after conversion: {blockCount}");
-
         return chunk;
     }
     public async Task<List<ChunkPosition>> GetAllChunkPositionsFromFirebase()

@@ -267,6 +267,7 @@ public class CropsManager : MonoBehaviour
 
     public async Task WaterCrop(string chunkId, Vector3 localPosition)
     {
+        Debug.Log("물주는중");
         string cropKey = GetCropKey(chunkId, localPosition);
 
         if (!_crops.TryGetValue(cropKey, out Crop crop)) return;

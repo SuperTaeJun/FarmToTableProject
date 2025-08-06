@@ -18,4 +18,9 @@ public class PashionFunction : IBuildingFunction
     {
         FadeManager.Instance.FadeToScene("CharacterSelectScene");
     }
+
+    public void Update()
+    {
+        // PashionFunction은 업데이트가 필요 없음
+    }
 }
