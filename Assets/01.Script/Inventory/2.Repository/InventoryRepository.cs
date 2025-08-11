@@ -128,4 +128,13 @@ public class InventoryRepository : FirebaseRepositoryBase
             }
         }, $"아이템 수량 업데이트 [ID: {itemId}] to {newQuantity}");
     }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            var docRef = Firestore.Document(GetUserInventoryPath());
+            await docRef.DeleteAsync();
+        }, "모든 인벤토리 데이터 삭제");
+    }
 }

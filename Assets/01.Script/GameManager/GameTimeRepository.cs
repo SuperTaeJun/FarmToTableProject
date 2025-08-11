@@ -31,4 +31,14 @@ public class GameTimeRepository : FirebaseRepositoryBase
             return null;
         }, "게임 시간 로드");
     }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            await Firestore.Collection(COLLECTION_NAME)
+                          .Document(UserId)
+                          .DeleteAsync();
+        }, "모든 게임 시간 데이터 삭제");
+    }
 }

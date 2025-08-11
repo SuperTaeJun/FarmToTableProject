@@ -4820,7 +4820,8 @@ MonoBehaviour:
   scaleUpDuration: 0.5
   scaleEase: 27
   interactionRange: 1
-  VfxPos: {fileID: 5281729728397741689}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 5281729728397741689}
 --- !u!65 &1412284506596424884
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -86,4 +86,13 @@ public class CurrencyRepository : FirebaseRepositoryBase
             return targetCurrency?.Amount ?? 0;
         }, $"통화 수량 조회 [{currencyType}]");
     }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            var docRef = Firestore.Document(GetUserCurrencyPath());
+            await docRef.DeleteAsync();
+        }, "모든 통화 데이터 삭제");
+    }
 }

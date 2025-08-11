@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class HomeFunction : IBuildingFunction
 {
-    private BuildingObject _buildingObject;
-
-    public HomeFunction(BuildingObject buildingObject)
+    public HomeFunction()
     {
-        _buildingObject = buildingObject;
     }
 
     public void Execute()

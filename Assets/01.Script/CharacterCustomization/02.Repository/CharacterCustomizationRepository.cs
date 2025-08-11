@@ -52,4 +52,13 @@ public class CharacterCustomizationRepository : FirebaseRepositoryBase
 
         }, $"커스터마이징 로드 ID : {UserId}");
     }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId);
+            await docRef.DeleteAsync();
+        }, "모든 커스터마이징 데이터 삭제");
+    }
 }

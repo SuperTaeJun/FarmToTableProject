@@ -96,4 +96,12 @@ public class AchievmentRepository : FirebaseRepositoryBase
         }, $"업적 진행도 업데이트 [{achievementName}] to {newProgress}");
     }
 
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            var docRef = Firestore.Document(GetUserAchievementPath());
+            await docRef.DeleteAsync();
+        }, "모든 업적 데이터 삭제");
+    }
 }

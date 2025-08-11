@@ -31,4 +31,14 @@ public class PlayerDataRepository : FirebaseRepositoryBase
             return null;
         }, "플레이어 데이터 로드");
     }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            await Firestore.Collection(COLLECTION_NAME)
+                          .Document(UserId)
+                          .DeleteAsync();
+        }, "모든 플레이어 데이터 삭제");
+    }
 }

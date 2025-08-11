@@ -122,4 +122,27 @@ public class WorldRepository : FirebaseRepositoryBase
         }
         return chunkPositions;
     }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            // 1. chunks 컬렉션의 모든 문서 조회
+            var chunksCollection = Firestore.Collection(CollectionName)
+                                           .Document(UserId)
+                                           .Collection("chunks");
+            var snapshot = await chunksCollection.GetSnapshotAsync();
+            
+            // 2. 각 청크 문서 삭제
+            foreach (var doc in snapshot.Documents)
+            {
+                await doc.Reference.DeleteAsync();
+            }
+            
+            // 3. 상위 사용자 문서 삭제
+            await Firestore.Collection(CollectionName)
+                          .Document(UserId)
+                          .DeleteAsync();
+        }, "모든 월드 청크 데이터 삭제");
+    }
 }

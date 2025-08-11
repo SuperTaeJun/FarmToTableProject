@@ -8,7 +8,7 @@ public class BuildingRepository : FirebaseRepositoryBase
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection(COLLECTION_NAME).Document(chunkId);
+            var docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId).Collection("chunks").Document(chunkId);
             var buildingDtoList = new List<BuildingDto>();
             foreach (var building in buildings)
             {
@@ -19,14 +19,14 @@ public class BuildingRepository : FirebaseRepositoryBase
                 { COLLECTION_NAME, buildingDtoList }
             };
             await docRef.SetAsync(docData);
-        }, $"∫Ùµ˘µÈ ¿˙¿Â √ª≈© : [{chunkId}]");
+        }, $"Í±¥Î¨º Ï†ÄÏû• Ï≤≠ÌÅ¨ : [{chunkId}]");
 
     }
     public async Task<List<Building>> LoadBuildingByChunk(string chunkId)
     {
         return await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection(COLLECTION_NAME).Document(chunkId);
+            var docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId).Collection("chunks").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
             var result = new List<Building>();
 
@@ -40,39 +40,39 @@ public class BuildingRepository : FirebaseRepositoryBase
                     {
                         if (buildingDto != null)
                         {
-                            result.Add(buildingDto.ToBuilding(chunkId)); // chunkId ¿¸¥ﬁ
+                            result.Add(buildingDto.ToBuilding(chunkId)); // chunkId Ï†ÑÎã¨
                         }
                     }
                 }
             }
             return result;
-        }, $"∫Ùµ˘µÈ ∫“∑Øø¿±‚ √ª≈© : [{chunkId}]");
+        }, $"Í±¥Î¨º Î∂àÎü¨Ïò§Í∏∞ Ï≤≠ÌÅ¨ : [{chunkId}]");
     }
     public async Task SaveSingleBuilding(Building building)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection(COLLECTION_NAME).Document(building.ChunkId);
+            var docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId).Collection("chunks").Document(building.ChunkId);
             var snapshot = await docRef.GetSnapshotAsync();
             List<BuildingDto> buildingList = new List<BuildingDto>();
             if (snapshot.Exists && snapshot.ContainsField(COLLECTION_NAME))
             {
                 buildingList = snapshot.ConvertTo<Dictionary<string, List<BuildingDto>>>()[COLLECTION_NAME];
             }
-            // ªı ¿€π∞ √ﬂ∞°
+            // ÏÉà Í±¥Î¨º Ï∂îÍ∞Ä
             buildingList.Add(new BuildingDto(building));
             var docData = new Dictionary<string, object>
             {
                 { COLLECTION_NAME, buildingList }
             };
             await docRef.SetAsync(docData);
-        }, $"∞«π∞«œ≥™ ¿˙¿Â ¿ßƒ° : [{building.Position}] √ª≈© : [{building.ChunkId}]");
+        }, $"Í±¥Î¨ºÌïòÎÇò Ï†ÄÏû• ÏúÑÏπò : [{building.Position}] Ï≤≠ÌÅ¨ : [{building.ChunkId}]");
     }
     public async Task RemoveBuilding(string chunkId, Vector3 position)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection(COLLECTION_NAME).Document(chunkId);
+            var docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId).Collection("chunks").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
             if (snapshot.Exists && snapshot.ContainsField(COLLECTION_NAME))
             {
@@ -83,6 +83,29 @@ public class BuildingRepository : FirebaseRepositoryBase
                 };
                 await docRef.SetAsync(docData);
             }
-        }, $"∞«π∞ ¡¶∞≈ ¿ßƒ° : [{position}] √ª≈© : [{chunkId}]");
+        }, $"Í±¥Î¨º Ï†úÍ±∞ ÏúÑÏπò : [{position}] Ï≤≠ÌÅ¨ : [{chunkId}]");
+    }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            // 1. chunks Ïª¨Î†âÏÖòÏùò Î™®Îì† Î¨∏ÏÑú Ï°∞Ìöå
+            var chunksCollection = Firestore.Collection(COLLECTION_NAME)
+                                           .Document(UserId)
+                                           .Collection("chunks");
+            var snapshot = await chunksCollection.GetSnapshotAsync();
+            
+            // 2. Í∞Å Ï≤≠ÌÅ¨ Î¨∏ÏÑú ÏÇ≠Ï†ú
+            foreach (var doc in snapshot.Documents)
+            {
+                await doc.Reference.DeleteAsync();
+            }
+            
+            // 3. ÏÉÅÏúÑ ÏÇ¨Ïö©Ïûê Î¨∏ÏÑú ÏÇ≠Ï†ú
+            await Firestore.Collection(COLLECTION_NAME)
+                          .Document(UserId)
+                          .DeleteAsync();
+        }, "Î™®Îì† Í±¥Î¨º Îç∞Ïù¥ÌÑ∞ ÏÇ≠Ï†ú");
     }
 }

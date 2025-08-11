@@ -74,13 +74,13 @@ public class BuildingObject : MonoBehaviour
         switch (buildingType)
         {
             case EBuildingType.Store:
-                _functions = new IBuildingFunction[] { new StoreFunction(this) };
+                _functions = new IBuildingFunction[] { new StoreFunction() };
                 break;
             case EBuildingType.Pashion:
-                _functions = new IBuildingFunction[] { new PashionFunction(this) };
+                _functions = new IBuildingFunction[] { new PashionFunction() };
                 break;
             case EBuildingType.Home:
-                _functions = new IBuildingFunction[] { new HomeFunction(this) };
+                _functions = new IBuildingFunction[] { new HomeFunction() };
                 break;
             case EBuildingType.AutoWatering:
                 _functions = new IBuildingFunction[] { new AutoWateringFunction(this) };

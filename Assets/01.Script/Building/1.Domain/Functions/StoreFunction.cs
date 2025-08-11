@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class StoreFunction : IBuildingFunction
 {
-    private BuildingObject _buildingObject;
 
-    public StoreFunction(BuildingObject buildingObject)
+    public StoreFunction()
     {
-        _buildingObject = buildingObject;
+
     }
 
     public void Execute()

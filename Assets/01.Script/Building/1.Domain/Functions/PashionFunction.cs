@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class PashionFunction : IBuildingFunction
 {
-    private BuildingObject _buildingObject;
-
-    public PashionFunction(BuildingObject buildingObject)
+    public PashionFunction()
     {
-        _buildingObject = buildingObject;
+
     }
 
     public void Execute()

@@ -126,7 +126,8 @@ MonoBehaviour:
   scaleUpDuration: 0.5
   scaleEase: 27
   interactionRange: 1
-  VfxPos: {fileID: 4328485390583310043}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 4328485390583310043}
 --- !u!1 &7073737557124874983
 GameObject:
   m_ObjectHideFlags: 0
