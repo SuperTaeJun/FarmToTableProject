@@ -8,47 +8,48 @@ public abstract class FirebaseRepositoryBase
 {
     protected FirebaseAuth Auth => FirebaseAuth.DefaultInstance;
     protected FirebaseFirestore Firestore => FirebaseFirestore.DefaultInstance;
+    protected string UserId => FirebaseManager.Instance.GetUserId();
 
 
-    /// ¹İÈ¯°ª ÀÖ´Â ºñµ¿±â ÀÛ¾÷¿ë
+    /// ë°˜í™˜ê°’ì´ ìˆëŠ” ë¹„ë™ê¸° ì‘ì—… ì‹¤í–‰
     protected async Task<T> ExecuteAsync<T>(Func<Task<T>> taskFunc, string context = "")
     {
         await FirebaseManager.Instance.InitTask;
 
         try
         {
-            // °øÅë ·Îµù UI ½ÃÀÛ
-            Debug.Log($"[Firebase] ½ÃÀÛ: {context}");
+            // ë¡œë”© UI í‘œì‹œ
+            Debug.Log($"[Firebase] ì‹œì‘: {context}");
 
             T result = await taskFunc.Invoke();
 
-            // ·Îµù UI Á¾·á
-            Debug.Log($"[Firebase] ¼º°ø: {context}");
+            // ë¡œë”© UI ì¢…ë£Œ
+            Debug.Log($"[Firebase] ì™„ë£Œ: {context}");
             return result;
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Firebase] ½ÇÆĞ: {context} - {e.Message}");
-            throw; // ÇÊ¿ä ½Ã »ç¿ëÀÚ Á¤ÀÇ ¿¹¿Ü ·¡ÇÎµµ °¡´É
+            Debug.LogError($"[Firebase] ì‹¤íŒ¨: {context} - {e.Message}");
+            throw; // í•„ìš” ì‹œ ì˜ˆì™¸ë¥¼ ìƒìœ„ë¡œ ë˜ì ¸ì„œ í˜¸ì¶œë¶€ì—ì„œ ì²˜ë¦¬
         }
     }
 
-    /// ¹İÈ¯°ª ¾ø´Â ºñµ¿±â ÀÛ¾÷¿ë
+    /// ë°˜í™˜ê°’ì´ ì—†ëŠ” ë¹„ë™ê¸° ì‘ì—… ì‹¤í–‰
     protected async Task ExecuteAsync(Func<Task> taskFunc, string context = "")
     {
         await FirebaseManager.Instance.InitTask;
 
         try
         {
-            Debug.Log($"[Firebase] ½ÃÀÛ: {context}");
+            Debug.Log($"[Firebase] ì‹œì‘: {context}");
 
             await taskFunc.Invoke();
 
-            Debug.Log($"[Firebase] ¼º°ø: {context}");
+            Debug.Log($"[Firebase] ì™„ë£Œ: {context}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Firebase] ½ÇÆĞ: {context} - {e.Message}");
+            Debug.LogError($"[Firebase] ì‹¤íŒ¨: {context} - {e.Message}");
             throw;
         }
     }

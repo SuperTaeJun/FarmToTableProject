@@ -5,13 +5,11 @@ using System.Linq;
 
 public class CurrencyRepository : FirebaseRepositoryBase
 {
-    private const string DEFAULT_USER_ID = "DefaultUser";
     private const string COLLECTION_NAME = "currencies";
 
     private string GetUserCurrencyPath()
     {
-        return $"{COLLECTION_NAME}/{DEFAULT_USER_ID}";
-
+        return $"{COLLECTION_NAME}/{UserId}";
     }
 
     public async Task SaveCurrencies(List<Currency> currencies)
@@ -32,7 +30,7 @@ public class CurrencyRepository : FirebaseRepositoryBase
             };
 
             await docRef.SetAsync(docData);
-        }, "Save User Currencies");
+        }, "사용자 통화 저장");
     }
 
     public async Task<List<Currency>> LoadCurrencies()
@@ -61,7 +59,7 @@ public class CurrencyRepository : FirebaseRepositoryBase
             }
 
             return result;
-        }, "Load User Currencies");
+        }, "사용자 통화 로드");
     }
 
     public async Task UpdateCurrency(ECurrencyType currencyType, int newAmount)
@@ -76,7 +74,7 @@ public class CurrencyRepository : FirebaseRepositoryBase
                 targetCurrency.SetAmount(newAmount);
                 await SaveCurrencies(currencies);
             }
-        }, $"Update Currency [{currencyType}] to {newAmount}");
+        }, $"통화 업데이트 [{currencyType}] to {newAmount}");
     }
 
     public async Task<int> GetCurrencyAmount(ECurrencyType currencyType)
@@ -86,6 +84,6 @@ public class CurrencyRepository : FirebaseRepositoryBase
             var currencies = await LoadCurrencies();
             var targetCurrency = currencies.FirstOrDefault(c => c.CurrencyType == currencyType);
             return targetCurrency?.Amount ?? 0;
-        }, $"Get Currency Amount [{currencyType}]");
+        }, $"통화 수량 조회 [{currencyType}]");
     }
 }

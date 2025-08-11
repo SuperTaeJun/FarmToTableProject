@@ -12,15 +12,16 @@ public class FirebaseManager : MonoBehaviour
     public FirebaseApp App { get; private set; }
     public FirebaseAuth Auth { get; private set; }
     public FirebaseFirestore Firestore { get; private set; }
+    public FirebaseUser CurrentUser { get; private set; }
 
     public bool IsInitialized { get; private set; } = false;
 
     private Task _initTask;
-    public Task InitTask => _initTask; // ¿ÜºÎ °ø°³
+    public Task InitTask => _initTask; // ì™¸ë¶€ ì ‘ê·¼ìš©
 
     public event Action OnFirebaseInitialized;
 
-    private  void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -32,8 +33,9 @@ public class FirebaseManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        _initTask = InitFirebase(); // ÃÊ±âÈ­ Task ÀúÀå
+        _initTask = InitFirebase(); // ì´ˆê¸°í™” Task ì €ì¥
     }
+
     private void Start()
     {
 
@@ -45,21 +47,42 @@ public class FirebaseManager : MonoBehaviour
 
         if (dependencyStatus == DependencyStatus.Available)
         {
-            Debug.Log("Firebase ¿¬°á ¼º°ø");
+            Debug.Log("Firebase ì¢…ì†ì„± í™•ì¸ ì™„ë£Œ");
 
             App = FirebaseApp.DefaultInstance;
-            //Auth = FirebaseAuth.DefaultInstance;
+            Auth = FirebaseAuth.DefaultInstance;
             Firestore = FirebaseFirestore.DefaultInstance;
+
+            await SignInAnonymously();
 
             IsInitialized = true;
             OnFirebaseInitialized?.Invoke();
         }
         else
         {
-            Debug.LogError($"Firebase ¿¬°á ½ÇÆĞ: {dependencyStatus}");
-            throw new Exception("Firebase ÃÊ±âÈ­ ½ÇÆĞ");
+            Debug.LogError($"Firebase ì¢…ì†ì„± í™•ì¸ ì‹¤íŒ¨: {dependencyStatus}");
+            throw new Exception("Firebase ì´ˆê¸°í™” ì‹¤íŒ¨");
         }
     }
 
+    public async Task<bool> SignInAnonymously()
+    {
+        try
+        {
+            var authResult = await Auth.SignInAnonymouslyAsync();
+            CurrentUser = authResult.User;
+            Debug.Log($"Anonymous sign in successful: {CurrentUser.UserId}");
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Anonymous sign in failed: {e.Message}");
+            return false;
+        }
+    }
 
+    public string GetUserId()
+    {
+        return CurrentUser?.UserId ?? "DefaultUser";
+    }
 }

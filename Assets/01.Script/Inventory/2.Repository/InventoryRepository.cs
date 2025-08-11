@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 
 public class InventoryRepository : FirebaseRepositoryBase
 {
-    private const string DEFAULT_USER_ID = "DefaultUser";
     private const string COLLECTION_NAME = "inventories";
 
     private string GetUserInventoryPath()
     {
-        return $"{COLLECTION_NAME}/{DEFAULT_USER_ID}";
+        return $"{COLLECTION_NAME}/{UserId}";
     }
 
     public async Task SaveInventory(List<InventoryItem> items)
@@ -30,7 +29,7 @@ public class InventoryRepository : FirebaseRepositoryBase
             };
 
             await docRef.SetAsync(docData);
-        }, "Save User Inventory");
+        }, "사용자 인벤토리 저장");
     }
 
     public async Task<List<InventoryItem>> LoadInventory()
@@ -53,7 +52,7 @@ public class InventoryRepository : FirebaseRepositoryBase
             }
 
             return result;
-        }, "Load User Inventory");
+        }, "사용자 인벤토리 로드");
     }
 
     public async Task AddItem(InventoryItem item)
@@ -78,7 +77,7 @@ public class InventoryRepository : FirebaseRepositoryBase
             };
 
             await docRef.SetAsync(docData);
-        }, $"Add Item [{item.ItemType}] x{item.Quantity}");
+        }, $"아이템 추가 [{item.ItemType}] x{item.Quantity}");
     }
 
     public async Task RemoveItem(string itemId)
@@ -100,7 +99,7 @@ public class InventoryRepository : FirebaseRepositoryBase
 
                 await docRef.SetAsync(docData);
             }
-        }, $"Remove Item [ID: {itemId}]");
+        }, $"아이템 제거 [ID: {itemId}]");
     }
 
     public async Task UpdateItemQuantity(string itemId, int newQuantity)
@@ -127,6 +126,6 @@ public class InventoryRepository : FirebaseRepositoryBase
                     await docRef.SetAsync(docData);
                 }
             }
-        }, $"Update Item Quantity [ID: {itemId}] to {newQuantity}");
+        }, $"아이템 수량 업데이트 [ID: {itemId}] to {newQuantity}");
     }
 }

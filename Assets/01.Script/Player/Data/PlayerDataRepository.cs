@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class PlayerDataRepository : FirebaseRepositoryBase
 {
-    private const string COLLECTION_NAME = "DefaultUser";
-    private const string PLAYER_DATA_DOC = "playerData";
-
+    private const string COLLECTION_NAME = "PlayerData";
+    
     public async Task SavePlayerDataAsync(PlayerDataDto playerData)
     {
         await ExecuteAsync(async () =>
         {
             await Firestore.Collection(COLLECTION_NAME)
-                          .Document(PLAYER_DATA_DOC)
+                          .Document(UserId)
                           .SetAsync(playerData);
-        }, "플레이어 위치 저장");
+        }, "플레이어 데이터 저장");
     }
 
     public async Task<PlayerDataDto> LoadPlayerDataAsync()
@@ -22,7 +21,7 @@ public class PlayerDataRepository : FirebaseRepositoryBase
         return await ExecuteAsync(async () =>
         {
             var snapshot = await Firestore.Collection(COLLECTION_NAME)
-                                         .Document(PLAYER_DATA_DOC)
+                                         .Document(UserId)
                                          .GetSnapshotAsync();
 
             if (snapshot.Exists)
@@ -30,6 +29,6 @@ public class PlayerDataRepository : FirebaseRepositoryBase
                 return snapshot.ConvertTo<PlayerDataDto>();
             }
             return null;
-        }, "플레이어 위치 로드");
+        }, "플레이어 데이터 로드");
     }
 }

@@ -6,12 +6,11 @@ using UnityEngine;
 
 public class AchievmentRepository : FirebaseRepositoryBase
 {
-    private const string DEFAULT_USER_ID = "DefaultUser";
     private const string COLLECTION_NAME = "Achievements";
 
     private string GetUserAchievementPath()
     {
-        return $"{COLLECTION_NAME}/{DEFAULT_USER_ID}";
+        return $"{COLLECTION_NAME}/{UserId}";
     }
 
     public async Task SaveAchievements(List<Achievment> achievements)
@@ -21,7 +20,7 @@ public class AchievmentRepository : FirebaseRepositoryBase
             var docRef = Firestore.Document(GetUserAchievementPath());
 
             var achievementData = new Dictionary<string, object>();
-            
+
             foreach (var achievement in achievements)
             {
                 var data = new Dictionary<string, object>
@@ -37,12 +36,12 @@ public class AchievmentRepository : FirebaseRepositoryBase
                     { "createdDay", achievement.CreatedDay },
                     { "isCompleted", achievement.IsCompleted }
                 };
-                
+
                 achievementData[achievement.Name] = data;
             }
 
             await docRef.SetAsync(achievementData);
-        }, "¾÷Àû ÀúÀå");
+        }, "ì—…ì  ì €ì¥");
     }
 
     public async Task<List<Achievment>> LoadAchievements()
@@ -57,7 +56,7 @@ public class AchievmentRepository : FirebaseRepositoryBase
             if (snapshot.Exists)
             {
                 var achievementData = snapshot.ToDictionary();
-                
+
                 foreach (var kvp in achievementData)
                 {
                     if (kvp.Value is Dictionary<string, object> data)
@@ -72,7 +71,7 @@ public class AchievmentRepository : FirebaseRepositoryBase
                             System.Convert.ToInt32(data["rewardAmount"]),
                             System.Convert.ToInt32(data["createdDay"])
                         );
-                        
+
                         achievement.SetProgress(System.Convert.ToInt32(data["currentValue"]));
                         result.Add(achievement);
                     }
@@ -80,7 +79,7 @@ public class AchievmentRepository : FirebaseRepositoryBase
             }
 
             return result;
-        }, "¾÷Àû ºÒ·¯¿À±â");
+        }, "ì—…ì  ë¶ˆëŸ¬ì˜¤ê¸°");
     }
 
     public async Task UpdateAchievementProgress(string achievementName, int newProgress)
@@ -94,7 +93,7 @@ public class AchievmentRepository : FirebaseRepositoryBase
             };
 
             await docRef.UpdateAsync(updates);
-        }, $"¾÷Àû ¾÷µ¥ÀÌÆ® [{achievementName}] to {newProgress}");
+        }, $"ì—…ì  ì§„í–‰ë„ ì—…ë°ì´íŠ¸ [{achievementName}] to {newProgress}");
     }
 
 }

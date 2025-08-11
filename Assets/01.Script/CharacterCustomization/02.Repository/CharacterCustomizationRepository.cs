@@ -7,22 +7,22 @@ public class CharacterCustomizationRepository : FirebaseRepositoryBase
 {
     private const string COLLECTION_NAME = "CharacterCustomizations";
 
-    public async Task SaveCustomizationAsync(string userId, CharacterCustomization customization)
+    public async Task SaveCustomizationAsync(CharacterCustomization customization)
     {
         await ExecuteAsync(async () =>
         {
-            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(userId);
+            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId);
 
             Dictionary<string, object> data = customization.ToDictionary();
             await docRef.SetAsync(data, SetOptions.MergeAll);
 
-        }, $"Ä¿½º¸¶ÀÌÂ¡ ÀúÀå ID: {userId}");
+        }, $"ì»¤ìŠ¤í„°ë§ˆì´ì§• ì €ì¥ ID: {UserId}");
     }
-    public async Task<CharacterCustomization> LoadCustomizationAsync(string userId)
+    public async Task<CharacterCustomization> LoadCustomizationAsync()
     {
         return await ExecuteAsync(async () =>
         {
-            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(userId);
+            DocumentReference docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId);
 
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
@@ -41,15 +41,15 @@ public class CharacterCustomizationRepository : FirebaseRepositoryBase
                     }
                 }
 
-                Debug.Log($"[Firebase] Ä¿½º¸¶ÀÌÂ¡ ·Îµå ID : {userId}");
+                Debug.Log($"[Firebase] ì»¤ìŠ¤í„°ë§ˆì´ì§• ë¡œë“œ ID : {UserId}");
             }
             else
             {
-                Debug.LogWarning($"[Firebase] Ä¿½º¸¶ÀÌÂ¡ µ¥ÀÌÅÍ¸¦ ¸øÃ£À½ ID : {userId}. µğÆúÆ® Ä¿½º¸¶ÀÌÂ¡ µ¥ÀÌÅÍ ¹İÈ¯");
+                Debug.LogWarning($"[Firebase] ì»¤ìŠ¤í„°ë§ˆì´ì§• ë°ì´í„°ë¥¼ ì°¾ì§€ëª»í•¨ ID : {UserId}. ë””í´íŠ¸ ì»¤ìŠ¤í„°ë§ˆì´ì§• ë°ì´í„°ë¥¼ ë°˜í™˜");
             }
 
             return customization;
 
-        }, $"Ä¿½º¸¶ÀÌÂ¡ ·Îµå ID : {userId}");
+        }, $"ì»¤ìŠ¤í„°ë§ˆì´ì§• ë¡œë“œ ID : {UserId}");
     }
 }

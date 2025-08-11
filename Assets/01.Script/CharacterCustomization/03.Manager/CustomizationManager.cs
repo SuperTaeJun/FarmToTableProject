@@ -15,8 +15,6 @@ public class CustomizationManager : MonoBehaviour
     public event Action<ECustomizeCharacterAnimType> OnPlayAnim;
     private CharacterCustomizationRepository _repo;
 
-    //일단 디폴트유저로해둠
-    string userId = "DefaultUser";
     private void Awake()
     {
         if (Instance == null)
@@ -92,14 +90,14 @@ public class CustomizationManager : MonoBehaviour
     {
         if (CurrentCustomization != null)
         {
-            await _repo.SaveCustomizationAsync(userId, CurrentCustomization);
+            await _repo.SaveCustomizationAsync(CurrentCustomization);
         }
     }
 
     public async Task LoadCustomizationAsync(string userID)
     {
 
-        CurrentCustomization = await _repo.LoadCustomizationAsync(userID);
+        CurrentCustomization = await _repo.LoadCustomizationAsync();
 
         if (IsAllPartsDefault(CurrentCustomization))
         {
