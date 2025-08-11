@@ -9,7 +9,6 @@ public class BuildingObject : MonoBehaviour
     private Vector3 _originalScale;
     [SerializeField] private float scaleUpDuration = 0.5f;
     [SerializeField] private Ease scaleEase = Ease.OutBack;
-
     private Collider _collider;
 
     [Header("Interaction")]
@@ -17,7 +16,6 @@ public class BuildingObject : MonoBehaviour
     private bool _playerInRange = false;
     private Transform _player;
     public Transform Player => _player;
-
     public Transform VfxPos;
 
     private void Start()
@@ -28,7 +26,6 @@ public class BuildingObject : MonoBehaviour
         _originalScale = transform.localScale;
 
         InitializeFunctions();
-
         BuildAnimation();
     }
 
@@ -40,11 +37,10 @@ public class BuildingObject : MonoBehaviour
     }
     private void BuildAnimation()
     {
-        // 생성될 때 충돌 방지를 위해 isTrigger 설정
         _collider = GetComponent<Collider>();
         if (_collider != null)
         {
-            _collider.isTrigger = true; // 트리거로 전환 (충돌 감지 안 하고, 통과만 가능하게 함)
+            _collider.isTrigger = true;
         }
 
         transform.localScale = _originalScale * 0.1f;
@@ -55,7 +51,6 @@ public class BuildingObject : MonoBehaviour
         scaleSequence.Append(transform.DOScale(midScale, scaleUpDuration * 0.5f).SetEase(scaleEase));
         scaleSequence.Append(transform.DOScale(_originalScale, scaleUpDuration * 0.5f).SetEase(scaleEase));
 
-        // 애니메이션 완료 후 트리거 해제 (충돌 활성화)
         scaleSequence.OnComplete(() =>
         {
             if (_collider != null)
@@ -94,10 +89,10 @@ public class BuildingObject : MonoBehaviour
                 _functions = new IBuildingFunction[] { new AutoHarvestFunction(this) };
                 break;
             case EBuildingType.PigFarm:
-                _functions = new IBuildingFunction[] { new PigFarmFunction() };
+                _functions = new IBuildingFunction[] { new PigFarmFunction(this) };
                 break;
             case EBuildingType.ChickenFarm:
-                _functions = new IBuildingFunction[] { new ChickenFarmFunction() };
+                _functions = new IBuildingFunction[] { new ChickenFarmFunction(this) };
                 break;
             default:
                 _functions = new IBuildingFunction[0];
@@ -125,13 +120,11 @@ public class BuildingObject : MonoBehaviour
             }
         }
     }
-
     public void SetBuildingType(EBuildingType type)
     {
         buildingType = type;
         InitializeFunctions();
     }
-
 
     private void CheckPlayerDistance()
     {
@@ -152,7 +145,6 @@ public class BuildingObject : MonoBehaviour
             OnPlayerExitRange();
         }
     }
-
     private void OnPlayerEnterRange()
     {
         if (HasFunction())
@@ -160,7 +152,6 @@ public class BuildingObject : MonoBehaviour
             BuildingManager.Instance?.OnBuildingEnterRange.Invoke(this);
         }
     }
-
     private void OnPlayerExitRange()
     {
         if (HasFunction())
@@ -168,7 +159,6 @@ public class BuildingObject : MonoBehaviour
             BuildingManager.Instance?.OnBuildingExitRange.Invoke(this);
         }
     }
-
     private bool EnsurePlayerReference()
     {
         if (_player == null)
@@ -181,15 +171,49 @@ public class BuildingObject : MonoBehaviour
         }
         return _player != null;
     }
-
     private bool HasFunction()
     {
         return _functions != null && _functions.Length > 0;
     }
-
     public bool CanInteract()
     {
         return _playerInRange && HasFunction();
+    }
+    
+    public bool IsFarmReadyToHarvest()
+    {
+        if (_functions == null) return false;
+        
+        foreach (var function in _functions)
+        {
+            if (function is ChickenFarmFunction chickenFarm)
+            {
+                return chickenFarm.IsReadyToHarvest;
+            }
+            else if (function is PigFarmFunction pigFarm)
+            {
+                return pigFarm.IsReadyToHarvest;
+            }
+        }
+        return true; // 농장이 아닌 경우 항상 상호작용 가능
+    }
+    
+    public float GetFarmHoursUntilReady()
+    {
+        if (_functions == null) return 0f;
+        
+        foreach (var function in _functions)
+        {
+            if (function is ChickenFarmFunction chickenFarm)
+            {
+                return chickenFarm.HoursUntilReady;
+            }
+            else if (function is PigFarmFunction pigFarm)
+            {
+                return pigFarm.HoursUntilReady;
+            }
+        }
+        return 0f;
     }
 
 }

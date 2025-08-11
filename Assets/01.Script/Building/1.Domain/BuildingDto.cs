@@ -26,6 +26,9 @@ public class BuildingDto
     [FirestoreProperty]
     public int SizeY { get; set; }
 
+    [FirestoreProperty]
+    public float LastHarvestTime { get; set; } = -1f;
+
     public BuildingDto() { }
 
     public BuildingDto(Building building)

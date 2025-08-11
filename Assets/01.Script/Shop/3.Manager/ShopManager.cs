@@ -119,13 +119,12 @@ public class ShopManager : MonoBehaviour
         var shopItem = _shopData.GetShopItem(itemType);
         if (shopItem == null || !shopItem.IsAvailableForSale())
         {
-            Debug.LogWarning($"아이템 '{itemType}'을 판매할 수 없습니다.");
+            Debug.LogWarning($"아이템을 판매할 수 없습니다.");
             return false;
         }
         
         if (!_inventoryManager.HasItem(itemType, quantity))
         {
-            Debug.LogWarning($"판매할 아이템이 부족합니다: {itemType} x{quantity}");
             return false;
         }
         
@@ -137,7 +136,6 @@ public class ShopManager : MonoBehaviour
             
             var transaction = new ShopTransaction(ETransactionType.Sell, itemType, quantity, shopItem.SellPrice, _shopData.shopType);
             OnItemSold.Invoke(transaction);
-            Debug.Log($"판매 완료: {itemType} x{quantity} (총 {totalPrice}원)");
             return true;
         }
         

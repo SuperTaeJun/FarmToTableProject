@@ -13,7 +13,6 @@ public class Crop
     public int LastWateredHour { get; private set; }
     public bool IsWatered { get; private set; }
     public float GrowthProgress { get; private set; }
-
     public bool IsWateredForVegetative { get; private set; }
     public bool IsWateredForMature { get; private set; }
 

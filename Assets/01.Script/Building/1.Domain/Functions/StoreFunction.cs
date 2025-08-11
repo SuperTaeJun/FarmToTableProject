@@ -22,6 +22,6 @@ public class StoreFunction : IBuildingFunction
 
     public void Update()
     {
-        // StoreFunction은 업데이트가 필요 없음
+
     }
 }

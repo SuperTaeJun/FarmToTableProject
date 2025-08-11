@@ -15,7 +15,7 @@ MonoBehaviour:
   currencyType: 0
   currencyName: "\uB3C8"
   description: 
-  icon: {fileID: 21300000, guid: 1e153510633504eb892e0ada2bc766dd, type: 3}
+  icon: {fileID: 21300000, guid: 06a947db8b27845df9b6156f90c807fb, type: 3}
   displayColor: {r: 1, g: 1, b: 1, a: 1}
   defaultAmount: 0
   maxAmount: 999999

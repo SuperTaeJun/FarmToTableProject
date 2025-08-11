@@ -12,25 +12,27 @@ public class CropsManager : MonoBehaviour
     private Dictionary<string, Crop> _crops = new Dictionary<string, Crop>();
     public Dictionary<string, Crop> Crops => _crops;
 
-    // Addressables 캐시
     private Dictionary<ECropType, GameObject> _cachedCropPrefabs = new Dictionary<ECropType, GameObject>();
 
     [Header("Crop Data")]
     [SerializeField] private List<SO_Crop> _cropDataList;
-    private Dictionary<ECropType, SO_Crop> _cropDataDict = new Dictionary<ECropType, SO_Crop>(); // 기본 성장 비율 (시간 기준)
+    private Dictionary<ECropType, SO_Crop> _cropDataDict = new Dictionary<ECropType, SO_Crop>(); 
 
     // 이벤트들
     public DebugEvent<Crop> OnCropPlanted = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropHarvested = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropWatered = new DebugEvent<Crop>();
 
+    public DebugEvent<EAchievementType,int> OnReportAchievement = new DebugEvent<EAchievementType,int>();
+
+
     // 성장 시간에 따라 호출되는 이벤트, 성장 중단 등도 포함
     public DebugEvent<Crop> OnCropGrowthUpdated = new DebugEvent<Crop>();
-    public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>(); // 성장이 멈췄을 때
+    public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>();
 
     // 물이 필요한 상태, 수확 가능한 상태 등
-    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>(); // 물 필요
-    public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>(); // 수확 가능
+    public DebugEvent<Crop> OnCropNeedsWater = new DebugEvent<Crop>();
+    public DebugEvent<Crop> OnCropReadyToHarvest = new DebugEvent<Crop>();
 
     private void Awake()
     {
@@ -122,6 +124,7 @@ public class CropsManager : MonoBehaviour
 
         await _repo.SaveSingleCrop(newCrop);
         OnCropPlanted.Invoke(newCrop);
+        OnReportAchievement.Invoke(EAchievementType.PlantCrop,1);
     }
 
     public async Task HarvestCrop(string chunkId, Vector3 position)
@@ -133,6 +136,7 @@ public class CropsManager : MonoBehaviour
         _crops.Remove(cropKey);
         await _repo.RemoveCrop(chunkId, position);
         OnCropHarvested.Invoke(crop);
+        OnReportAchievement.Invoke(EAchievementType.HarvestCrop,1);
     }
 
     public Crop GetCrop(string chunkId, Vector3 position)
@@ -276,6 +280,7 @@ public class CropsManager : MonoBehaviour
         crop.WaterCurrentStage(GameTimeManager.Instance.CurrentDay, GameTimeManager.Instance.CurrentHour);
         await _repo.WaterCrop(chunkId, localPosition);
         OnCropWatered.Invoke(crop);
+        OnReportAchievement.Invoke(EAchievementType.WaterCrop, 1);
     }
 
     private string GetCropKey(string chunkId, Vector3 localPosition)

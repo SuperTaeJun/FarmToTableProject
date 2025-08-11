@@ -15,7 +15,7 @@ MonoBehaviour:
   currencyType: 1
   currencyName: "\uBCF4"
   description: 
-  icon: {fileID: 21300000, guid: 6f7c55f23fc094e97aa703869490d377, type: 3}
+  icon: {fileID: 21300000, guid: 053c03f158b6943da9f1a2490974df70, type: 3}
   displayColor: {r: 1, g: 1, b: 1, a: 1}
   defaultAmount: 0
   maxAmount: 999999

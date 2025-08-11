@@ -1,5 +1,3 @@
-using Firebase.Firestore;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -65,12 +63,10 @@ public class CropRepository : FirebaseRepositoryBase
                 cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
             }
 
-            // ???? ????? ???? ??? ????
             cropList.RemoveAll(c => Vector3.Distance(
                 new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                 crop.Position) < 0.1f);
 
-            // ?? ??? ???
             cropList.Add(new CropDto(crop));
 
             var docData = new Dictionary<string, object>
@@ -92,7 +88,6 @@ public class CropRepository : FirebaseRepositoryBase
             {
                 var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
 
-                // ??? ????? ??? ????
                 cropList.RemoveAll(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
@@ -117,7 +112,6 @@ public class CropRepository : FirebaseRepositoryBase
             {
                 var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
 
-                // ??? ????? ??? ???? ???? ???????
                 var targetCrop = cropList.Find(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
@@ -126,7 +120,6 @@ public class CropRepository : FirebaseRepositoryBase
                 {
                     targetCrop.GrowthProgress = newGrowthProgress;
 
-                    // ???? ??? ????
                     if (newGrowthProgress >= 1.0f)
                         targetCrop.GrowthStage = (int)ECropGrowthStage.Harvest;
                     else if (newGrowthProgress >= 0.5f)
