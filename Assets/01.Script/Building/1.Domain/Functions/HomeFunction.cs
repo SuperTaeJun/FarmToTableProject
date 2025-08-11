@@ -13,6 +13,5 @@ public class HomeFunction : IBuildingFunction
 
     public void Update()
     {
-        // HomeFunction은 업데이트가 필요 없음
     }
 }

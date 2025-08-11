@@ -41,7 +41,6 @@ public class CropDto
     [FirestoreProperty]
     public float GrowthProgress { get; set; }
 
-    // �ܰ躰 �� �ֱ� ���� �߰�
     [FirestoreProperty]
     public bool IsWateredForVegetative { get; set; }
 

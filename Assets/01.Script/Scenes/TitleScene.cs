@@ -1,11 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using DG.Tweening;
 
 public class TitleScene : MonoBehaviour
 {
-    [SerializeField]private Button NewGameButton;
+    [SerializeField] private Button NewGameButton;
     [SerializeField] private Button LoadGameButton;
+
+
+    [Header("확인 팝업")]
+    [SerializeField] private Transform ConfirmPopup;
+    [SerializeField] private Button ConfirmButton;
+    [SerializeField] private Button CancelButton;
 
     private const string LODINGSCENE_NAME = "LodingScene";
     
@@ -13,16 +20,30 @@ public class TitleScene : MonoBehaviour
     {
         NewGameButton.onClick.AddListener(() => OnNewGameButtonClicked());
         LoadGameButton.onClick.AddListener(() => OnLoadGameButtonClicked());
+        ConfirmButton.onClick.AddListener(() => OnConfirmButtonClicked());
+        CancelButton.onClick.AddListener(() => OnCancelButtonClicked());
     }
     private void Start()
     {
         SoundManager.Instance.PlayBGM(BGMType.Title);
     }
 
-    private async void OnNewGameButtonClicked()
+    private void OnNewGameButtonClicked()
+    {
+        ConfirmPopup.gameObject.SetActive(true);
+        ConfirmPopup.localScale = Vector3.zero;
+        ConfirmPopup.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+
+    }
+    private async void OnConfirmButtonClicked()
     {
         await DeleteAllGameData();
         FadeManager.Instance.FadeToScene(LODINGSCENE_NAME);
+        ConfirmPopup.gameObject.SetActive(false);
+    }
+    private void OnCancelButtonClicked()
+    {
+        ConfirmPopup.gameObject.SetActive(false);
     }
 
     private void OnLoadGameButtonClicked()
@@ -45,7 +66,8 @@ public class TitleScene : MonoBehaviour
                 new GameTimeRepository().DeleteAllData(),
                 new ForageRepository().DeleteAllData(),
                 new WorldRepository().DeleteAllData(),
-                new BuildingRepository().DeleteAllData()
+                new BuildingRepository().DeleteAllData(),
+                new CropRepository().DeleteAllData()
             );
 
             Debug.Log("게임 데이터 삭제 완료!");

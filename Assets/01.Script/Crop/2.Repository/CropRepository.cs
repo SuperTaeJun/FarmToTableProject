@@ -4,115 +4,101 @@ using UnityEngine;
 
 public class CropRepository : FirebaseRepositoryBase
 {
+    private const string CollectionName = "cropChunks";
+    // 청크 단위로 모든 작물 저장 (익명 인증 사용)
     public async Task SaveCrops(string chunkId, List<Crop> crops)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("crops").Document(chunkId);
-
-            var cropDataList = new List<CropDto>();
-
-            foreach (var crop in crops)
-            {
-                cropDataList.Add(new CropDto(crop));
-            }
-
-            var docData = new Dictionary<string, object>
-            {
-                { "crops", cropDataList }
-            };
-
-            await docRef.SetAsync(docData);
-        }, $"Save Crops for Chunk [{chunkId}]");
+            var dto = ConvertToDto(crops, chunkId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("crops").Document(chunkId);
+            
+            await docRef.SetAsync(dto);
+        }, "작물 청크 저장");
     }
 
+    // 청크별 작물 로드 (익명 인증 사용)
     public async Task<List<Crop>> LoadCropsByChunk(string chunkId)
     {
         return await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("crops").Document(chunkId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("crops").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
 
-            var result = new List<Crop>();
-
-            if (snapshot.Exists && snapshot.ContainsField("crops"))
+            if (!snapshot.Exists)
             {
-                var cropDtos = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
-
-                foreach (var cropDto in cropDtos)
-                {
-                    result.Add(cropDto.ToCrop());
-                }
+                Debug.Log($"[CropRepo] 작물 청크 없음: {chunkId}");
+                return new List<Crop>();
             }
 
-            return result;
-        }, $"Load Crops for Chunk [{chunkId}]");
+            var dto = snapshot.ConvertTo<CropChunkDocumentDto>();
+            return ConvertToDomain(dto);
+        }, "작물 청크 로드");
     }
 
     public async Task SaveSingleCrop(Crop crop)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("crops").Document(crop.ChunkId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("crops").Document(crop.ChunkId);
             var snapshot = await docRef.GetSnapshotAsync();
 
-            List<CropDto> cropList = new List<CropDto>();
-
-            if (snapshot.Exists && snapshot.ContainsField("crops"))
+            CropChunkDocumentDto dto;
+            
+            if (snapshot.Exists)
             {
-                cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
+                dto = snapshot.ConvertTo<CropChunkDocumentDto>();
+                
+                // 기존 작물 제거 (같은 위치)
+                dto.Crops.RemoveAll(c => Vector3.Distance(
+                    new Vector3(c.PositionX, c.PositionY, c.PositionZ),
+                    crop.Position) < 0.1f);
+            }
+            else
+            {
+                dto = new CropChunkDocumentDto
+                {
+                    ChunkId = crop.ChunkId,
+                    Crops = new List<CropDto>()
+                };
             }
 
-            cropList.RemoveAll(c => Vector3.Distance(
-                new Vector3(c.PositionX, c.PositionY, c.PositionZ),
-                crop.Position) < 0.1f);
-
-            cropList.Add(new CropDto(crop));
-
-            var docData = new Dictionary<string, object>
-            {
-                { "crops", cropList }
-            };
-
-            await docRef.SetAsync(docData);
-        }, $"Save Single Crop at [{crop.Position}] in Chunk [{crop.ChunkId}]");
+            dto.Crops.Add(new CropDto(crop));
+            await docRef.SetAsync(dto);
+        }, "단일 작물 저장");
     }
     public async Task RemoveCrop(string chunkId, Vector3 position)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("crops").Document(chunkId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("crops").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
 
-            if (snapshot.Exists && snapshot.ContainsField("crops"))
+            if (snapshot.Exists)
             {
-                var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
-
-                cropList.RemoveAll(c => Vector3.Distance(
+                var dto = snapshot.ConvertTo<CropChunkDocumentDto>();
+                
+                dto.Crops.RemoveAll(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
 
-                var docData = new Dictionary<string, object>
-                {
-                    { "crops", cropList }
-                };
-
-                await docRef.SetAsync(docData);
+                await docRef.SetAsync(dto);
             }
-        }, $"Remove Crop at [{position}] in Chunk [{chunkId}]");
+        }, "작물 제거");
     }
+    // 작물 성장 업데이트 (익명 인증 사용)
     public async Task UpdateCropGrowth(string chunkId, Vector3 position, float newGrowthProgress)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("crops").Document(chunkId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("crops").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
 
-            if (snapshot.Exists && snapshot.ContainsField("crops"))
+            if (snapshot.Exists)
             {
-                var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
+                var dto = snapshot.ConvertTo<CropChunkDocumentDto>();
 
-                var targetCrop = cropList.Find(c => Vector3.Distance(
+                var targetCrop = dto.Crops.Find(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
 
@@ -120,6 +106,7 @@ public class CropRepository : FirebaseRepositoryBase
                 {
                     targetCrop.GrowthProgress = newGrowthProgress;
 
+                    // 성장 단계 업데이트
                     if (newGrowthProgress >= 1.0f)
                         targetCrop.GrowthStage = (int)ECropGrowthStage.Harvest;
                     else if (newGrowthProgress >= 0.5f)
@@ -129,28 +116,23 @@ public class CropRepository : FirebaseRepositoryBase
                     else
                         targetCrop.GrowthStage = (int)ECropGrowthStage.Seed;
 
-                    var docData = new Dictionary<string, object>
-                    {
-                        { "crops", cropList }
-                    };
-
-                    await docRef.SetAsync(docData);
+                    await docRef.SetAsync(dto);
                 }
             }
-        }, $"Update Crop Growth at [{position}] in Chunk [{chunkId}]");
+        }, "작물 성장 업데이트");
     }
     public async Task WaterCrop(string chunkId, Vector3 position)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("crops").Document(chunkId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("crops").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
 
-            if (snapshot.Exists && snapshot.ContainsField("crops"))
+            if (snapshot.Exists)
             {
-                var cropList = snapshot.ConvertTo<Dictionary<string, List<CropDto>>>()["crops"];
+                var dto = snapshot.ConvertTo<CropChunkDocumentDto>();
 
-                var targetCrop = cropList.Find(c => Vector3.Distance(
+                var targetCrop = dto.Crops.Find(c => Vector3.Distance(
                     new Vector3(c.PositionX, c.PositionY, c.PositionZ),
                     position) < 0.1f);
 
@@ -163,14 +145,75 @@ public class CropRepository : FirebaseRepositoryBase
                         targetCrop.LastWateredHour = GameTimeManager.Instance.CurrentHour;
                     }
 
-                    var docData = new Dictionary<string, object>
-                    {
-                        { "crops", cropList }
-                    };
-
-                    await docRef.SetAsync(docData);
+                    await docRef.SetAsync(dto);
                 }
             }
-        }, $"Water Crop at [{position}] in Chunk [{chunkId}]");
+        }, "작물 급수");
+    }
+
+    private CropChunkDocumentDto ConvertToDto(List<Crop> crops, string chunkId)
+    {
+        var dto = new CropChunkDocumentDto
+        {
+            ChunkId = chunkId,
+            Crops = new List<CropDto>()
+        };
+
+        foreach (var crop in crops)
+        {
+            dto.Crops.Add(new CropDto(crop));
+        }
+
+        return dto;
+    }
+
+    private List<Crop> ConvertToDomain(CropChunkDocumentDto dto)
+    {
+        var crops = new List<Crop>();
+
+        foreach (var cropDto in dto.Crops)
+        {
+            crops.Add(cropDto.ToCrop());
+        }
+
+        return crops;
+    }
+
+    public async Task<List<string>> GetAllCropChunkIds()
+    {
+        var chunkIds = new List<string>();
+
+        var collection = Firestore.Collection(CollectionName).Document(UserId).Collection("crops");
+        var snapshot = await collection.GetSnapshotAsync();
+
+        foreach (var doc in snapshot.Documents)
+        {
+            chunkIds.Add(doc.Id);
+        }
+
+        return chunkIds;
+    }
+
+    public async Task DeleteAllData()
+    {
+        await ExecuteAsync(async () =>
+        {
+            // 1. crops 컬렉션의 모든 문서 조회
+            var cropsCollection = Firestore.Collection(CollectionName)
+                                           .Document(UserId)
+                                           .Collection("crops");
+            var snapshot = await cropsCollection.GetSnapshotAsync();
+            
+            // 2. 각 청크 문서 삭제
+            foreach (var doc in snapshot.Documents)
+            {
+                await doc.Reference.DeleteAsync();
+            }
+            
+            // 3. 상위 사용자 문서 삭제
+            await Firestore.Collection(CollectionName)
+                          .Document(UserId)
+                          .DeleteAsync();
+        }, "모든 작물 데이터 삭제");
     }
 }

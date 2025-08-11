@@ -5,7 +5,6 @@ public class StoreFunction : IBuildingFunction
 
     public StoreFunction()
     {
-
     }
 
     public void Execute()

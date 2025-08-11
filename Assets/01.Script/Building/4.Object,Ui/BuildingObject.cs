@@ -32,7 +32,6 @@ public class BuildingObject : MonoBehaviour
     private void Update()
     {
         CheckPlayerDistance();
-
         FunctionUpdate();
     }
     private void BuildAnimation()
