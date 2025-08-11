@@ -34,6 +34,10 @@ public class PigFarmFunction : IBuildingFunction
             _lastHarvestTime = GameTimeManager.Instance.TotalGameTime;
             _isReadyToHarvest = false;
             UpdateVfxVisibility();
+            if (_buildingObject != null && _buildingObject.ExecuteVfxTransform != null)
+            {
+                _buildingObject.ExecuteVfxTransform.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -68,9 +72,9 @@ public class PigFarmFunction : IBuildingFunction
     
     private void UpdateVfxVisibility()
     {
-        if (_buildingObject != null && _buildingObject.VfxPos != null)
+        if (_buildingObject != null && _buildingObject.ExecuteVfxTransform != null)
         {
-            _buildingObject.VfxPos.gameObject.SetActive(_isReadyToHarvest);
+            _buildingObject.ExecuteInfoTransform.gameObject.SetActive(_isReadyToHarvest);
         }
     }
 }

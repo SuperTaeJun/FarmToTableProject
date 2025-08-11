@@ -13,10 +13,10 @@ public class WorldRepository : FirebaseRepositoryBase
             var dto = ConvertToDto(chunk);
 
             var docId = GetDocumentId(chunk.Position);
-            var docRef = Firestore.Collection(CollectionName).Document(docId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("chunks").Document(docId);
 
             await docRef.SetAsync(dto);
-        }, "SaveChunk");
+        }, "청크 저장");
     }
 
     public async Task<Chunk> LoadChunkAsync(ChunkPosition pos)
@@ -24,18 +24,18 @@ public class WorldRepository : FirebaseRepositoryBase
         return await ExecuteAsync(async () =>
         {
             var docId = GetDocumentId(pos);
-            var docRef = Firestore.Collection(CollectionName).Document(docId);
+            var docRef = Firestore.Collection(CollectionName).Document(UserId).Collection("chunks").Document(docId);
 
             var snapshot = await docRef.GetSnapshotAsync();
             if (!snapshot.Exists)
             {
-                Debug.Log($"[WorldRepo] ûũ ����: {docId}");
+                Debug.Log($"[WorldRepo] 청크 없음: {docId}");
                 return null;
             }
 
             var dto = snapshot.ConvertTo<WorldDocumentDto>();
             return ConvertToDomain(dto);
-        }, "LoadChunk");
+        }, "청크 로드");
     }
     private string GetDocumentId(ChunkPosition pos)
     {
@@ -100,7 +100,7 @@ public class WorldRepository : FirebaseRepositoryBase
     {
         var chunkPositions = new List<ChunkPosition>();
 
-        var collection = Firestore.Collection("worldChunks");
+        var collection = Firestore.Collection(CollectionName).Document(UserId).Collection("chunks");
         var snapshot = await collection.GetSnapshotAsync();
 
         foreach (var doc in snapshot.Documents)
@@ -117,7 +117,7 @@ public class WorldRepository : FirebaseRepositoryBase
             }
             else
             {
-                Debug.LogWarning($"[WorldManager] �߸��� ûũ ID ����: {id}");
+                Debug.LogWarning($"[WorldManager] 잘못된 청크 ID 형식: {id}");
             }
         }
         return chunkPositions;

@@ -32,7 +32,7 @@ public class AutoWateringFunction : IBuildingFunction
         _isActive = true;
         _startDay = GameTimeManager.Instance.CurrentDay;
         _lastWateringTime = GameTimeManager.Instance.TotalGameTime;
-        _buildingObject.VfxPos.gameObject.SetActive(true);
+        _buildingObject.ExecuteVfxTransform.gameObject.SetActive(true);
     }
 
     public void Update()
@@ -91,6 +91,6 @@ public class AutoWateringFunction : IBuildingFunction
     private void StopAutoWatering()
     {
         _isActive = false;
-        _buildingObject.VfxPos.gameObject.SetActive(false);
+        _buildingObject.ExecuteVfxTransform.gameObject.SetActive(false);
     }
 }

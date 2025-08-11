@@ -6,11 +6,13 @@ using UnityEngine;
 
 public class ForageRepository : FirebaseRepositoryBase
 {
+    private const string COLLECTION_NAME = "forages";
+
     public async Task SaveForages(string chunkId, List<Forage> forages)
     {
         await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("forages").Document(chunkId);
+            var docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId).Collection("chunks").Document(chunkId);
 
             var forageDataList = new List<Dictionary<string, object>>();
 
@@ -32,14 +34,14 @@ public class ForageRepository : FirebaseRepositoryBase
         };
 
             await docRef.SetAsync(docData);
-        }, $"Save Forages for Chunk [{chunkId}]");
+        }, $"청크 채집 오브젝트 저장 [{chunkId}]");
     }
 
     public async Task<List<Forage>> LoadForagesByChunk(string chunkId)
     {
         return await ExecuteAsync(async () =>
         {
-            var docRef = Firestore.Collection("forages").Document(chunkId);
+            var docRef = Firestore.Collection(COLLECTION_NAME).Document(UserId).Collection("chunks").Document(chunkId);
             var snapshot = await docRef.GetSnapshotAsync();
 
             var result = new List<Forage>();
@@ -67,7 +69,7 @@ public class ForageRepository : FirebaseRepositoryBase
             }
 
             return result;
-        }, $"Load Forages for Chunk [{chunkId}]");
+        }, $"청크 채집 오브젝트 로드 [{chunkId}]");
     }
     private Dictionary<string, object> Vector3ToDict(Vector3 v)
     {

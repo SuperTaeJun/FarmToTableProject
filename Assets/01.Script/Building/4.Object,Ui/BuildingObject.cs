@@ -16,8 +16,8 @@ public class BuildingObject : MonoBehaviour
     private bool _playerInRange = false;
     private Transform _player;
     public Transform Player => _player;
-    public Transform VfxPos;
-
+    public Transform ExecuteVfxTransform;
+    public Transform ExecuteInfoTransform;
     private void Start()
     {
         if (ObjectPoolManager.Instance)

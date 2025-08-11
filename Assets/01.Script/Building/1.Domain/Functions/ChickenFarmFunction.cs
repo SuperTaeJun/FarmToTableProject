@@ -33,6 +33,10 @@ public class ChickenFarmFunction : IBuildingFunction
             _lastHarvestTime = GameTimeManager.Instance.TotalGameTime;
             _isReadyToHarvest = false;
             UpdateVfxVisibility();
+            if (_buildingObject != null && _buildingObject.ExecuteVfxTransform != null)
+            {
+                _buildingObject.ExecuteVfxTransform.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -67,9 +71,9 @@ public class ChickenFarmFunction : IBuildingFunction
     
     private void UpdateVfxVisibility()
     {
-        if (_buildingObject != null && _buildingObject.VfxPos != null)
+        if (_buildingObject != null && _buildingObject.ExecuteInfoTransform != null)
         {
-            _buildingObject.VfxPos.gameObject.SetActive(_isReadyToHarvest);
+            _buildingObject.ExecuteInfoTransform.gameObject.SetActive(_isReadyToHarvest);
         }
     }
     
