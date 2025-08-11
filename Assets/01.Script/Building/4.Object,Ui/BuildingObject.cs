@@ -66,6 +66,7 @@ public class BuildingObject : MonoBehaviour
         if (_collider != null)
         {
             _collider.isTrigger = false;
+
         }
     }
 
