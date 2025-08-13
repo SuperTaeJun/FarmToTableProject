@@ -39,6 +39,8 @@ public class MainHudManager : MonoBehaviour
     private void OnClikedInventoryButton() => PopupManager.Instance.Open(EPopupType.UI_InventoryPopup);
     public void RefreshPlayerModeIcon(EPlayerMode curmode)
     {
+        if (curmode == EPlayerMode.Vehicle) return;
+
         foreach (var image in _selectedImage)
         {
             image.gameObject.SetActive(false);

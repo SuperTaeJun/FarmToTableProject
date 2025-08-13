@@ -289,13 +289,15 @@ public class UI_Shop : UI_Popup
     private void OnItemPurchased(ShopTransaction transaction)
     {
         RefreshBuyItems();
-        // 구매 효과나 알림 표시
+
+        SoundManager.Instance.PlaySFX(SFXType.StoreCash);
     }
     
     private void OnItemSold(ShopTransaction transaction)
     {
         RefreshSellItems();
-        // 판매 효과나 알림 표시
+
+        SoundManager.Instance.PlaySFX(SFXType.StoreCash);
     }
     
     private void OnCurrencyChanged(ECurrencyType currencyType, int oldAmount, int newAmount)

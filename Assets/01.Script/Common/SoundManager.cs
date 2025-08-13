@@ -22,6 +22,11 @@ public enum SFXType
     Seed,
     Build,
     Step,
+    ForagePlant,
+    ForageTree,
+    StoreCash,
+    Mount,
+    Dismount
 }
 
 [System.Serializable]

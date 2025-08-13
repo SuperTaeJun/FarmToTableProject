@@ -28,5 +28,7 @@ public class PlayerForageAbility : PlayerAbility
         ObjectPoolManager.Instance.Get(PoolType.SomkeL, _owner.CurrentSelectedPos);
 
         ForageManager.Instance.RemoveForage(_currentForage);
+
+        SoundManager.Instance.PlaySFX(SFXType.ForagePlant);
     }
 }

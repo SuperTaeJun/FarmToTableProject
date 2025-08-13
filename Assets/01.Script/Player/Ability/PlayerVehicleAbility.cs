@@ -91,6 +91,8 @@ public class PlayerVehicleAbility : PlayerAbility
         _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.Vehicle);
         _owner.Animator.SetTrigger("Mount");
         vehicle.MountPlayer(_owner);
+
+        SoundManager.Instance.PlaySFX(SFXType.Mount);
     }
     
     public void DismountVehicle()
@@ -106,6 +108,7 @@ public class PlayerVehicleAbility : PlayerAbility
             _owner.Animator.SetTrigger("Dismount");
             _owner.GetAbility<PlayerModeAbility>()?.SwitchMode(EPlayerMode.BlockEdit);
 
+            SoundManager.Instance.PlaySFX(SFXType.Dismount);
         }
     }
     
