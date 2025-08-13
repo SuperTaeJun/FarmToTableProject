@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5758117255996542652}
   - component: {fileID: 3505492760738686047}
   - component: {fileID: 5071613164439361107}
-  - component: {fileID: 8080686903848035627}
+  - component: {fileID: 2530855032161904065}
   m_Layer: 0
   m_Name: SM_Prop_Windfarm_Blades_01
   m_TagString: Untagged
@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5503917383424661997}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.5005372, w: 0.865715}
   m_LocalPosition: {x: -0, y: 12.69, z: 0.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6431555807331370764}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 13.156287}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 247.29126}
 --- !u!33 &3505492760738686047
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!111 &8080686903848035627
+--- !u!111 &2530855032161904065
 Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ Animation:
   m_GameObject: {fileID: 5503917383424661997}
   m_Enabled: 1
   serializedVersion: 4
-  m_Animation: {fileID: 7400000, guid: 68cd4246aa5b0450da31a44b8af74066, type: 2}
+  m_Animation: {fileID: 7400000, guid: ab60e2150dd1c2f4192d8bf10406d76d, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: ab60e2150dd1c2f4192d8bf10406d76d, type: 2}
   m_WrapMode: 0
@@ -134,7 +134,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1275.6073, y: 0, z: 1486.6978}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5758117255996542652}
@@ -229,5 +229,7 @@ MonoBehaviour:
   buildingType: 25
   scaleUpDuration: 0.5
   scaleEase: 27
+  targetScale: {x: 1, y: 1, z: 1}
   interactionRange: 3.5
-  VfxPos: {fileID: 0}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 0}

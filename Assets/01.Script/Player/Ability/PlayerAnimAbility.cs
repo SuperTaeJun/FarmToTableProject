@@ -28,6 +28,8 @@ public class PlayerAnimAbility : PlayerAbility
         switch (currentMode)
         {
             case EPlayerMode.BlockEdit:
+                if (ForageManager.Instance.GetForageAtWorldPosition(_owner.CurrentSelectedPos) != null) return;
+                if (CropsManager.Instance.GetCropAtWorldPosition(_owner.CurrentSelectedPos) != null) return;
                 _owner.Animator.SetTrigger("Dig");
                 _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.Shovel);
                 _owner.GetAbility<PlayerInputAbility>()?.SetPlayerMoveInputLock(true);
@@ -49,9 +51,10 @@ public class PlayerAnimAbility : PlayerAbility
                     _owner.Animator.SetTrigger("Forage_Tree");
                     _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.Axe);
                 }
-
                 else
+                {
                     _owner.Animator.SetTrigger("Forage_Plant");
+                }
 
 
                 _owner.GetAbility<PlayerInputAbility>()?.SetPlayerMoveInputLock(true);

@@ -5,8 +5,8 @@ public enum EPlayerMode
     BlockEdit,    
     Farming,      
     Construction, 
+    Forage,
     Vehicle,
-    Forage
 }
 public class PlayerModeAbility : PlayerAbility
 {

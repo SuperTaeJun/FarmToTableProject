@@ -10,11 +10,14 @@ public class PlayerForageAbility : PlayerAbility
     public bool CanForaging(out EForageType type)
     {
         ForageObject forage = ForageManager.Instance.GetForageAtWorldPosition(_owner.CurrentSelectedPos);
-        Debug.Log(forage.Type);
 
-        // 캐싱
+        if (forage == null)
+        {
+            type = EForageType.None;
+            return false;
+        }
+
         _currentForage = forage;
-        //타입에 따라서 애니메이션이 분기되어야해 out으로 값 반환
         type = forage.Type;
         return true;
     }

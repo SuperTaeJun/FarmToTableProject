@@ -78,7 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpPower: 2
   duration: 1.5
-  rotationAngle: 75
+  rotationAngle: 70
   fadeDuration: 0.8
 --- !u!65 &4311393885662869640
 BoxCollider:

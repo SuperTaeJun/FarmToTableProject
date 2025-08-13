@@ -320,6 +320,8 @@ public class CropsManager : MonoBehaviour
     }
     public bool CanPlant(Vector3 worldPosition)
     {
+
+
         EBlockType blockType = WorldManager.Instance.GetBlockType(worldPosition);
         return blockType == EBlockType.Farmland;
     }

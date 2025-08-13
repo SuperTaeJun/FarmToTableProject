@@ -23,14 +23,8 @@ public class PlayerBlockAbility : PlayerAbility
 
         if (isBlockEditMode)
         {
-            Debug.Log("[PlayerBlockAbility] 블럭 편집 모드 활성화");
-            // 블럭 편집 모드 진입 시 파괴 모드로 초기화
             _isDestroyMode = true;
             _lastDestroyedBlockType = EBlockType.Air;
-        }
-        else
-        {
-            Debug.Log("[PlayerBlockAbility] 블럭 편집 모드 비활성화");
         }
     }
 
@@ -42,7 +36,7 @@ public class PlayerBlockAbility : PlayerAbility
 
         if (_isDestroyMode)
         {
-            // 파괴 모드: 바닥 블럭 파괴
+
             Vector3 belowPosition = groundPosition + Vector3.down * 0.25f;
             EBlockType belowBlockType = WorldManager.Instance.GetBlockType(belowPosition);
 
@@ -50,10 +44,7 @@ public class PlayerBlockAbility : PlayerAbility
             {
                 DestroyBlockAtPosition(belowPosition);
             }
-            else
-            {
-                Debug.Log("[PlayerBlockAbility] 파괴할 블럭이 없습니다.");
-            }
+
         }
         else
         {

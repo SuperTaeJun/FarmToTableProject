@@ -4,4 +4,5 @@ public enum EForageType
     Stone,
     Plant1,
     Plant2,
+    None
 }

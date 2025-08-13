@@ -8,9 +8,10 @@ public class MainHudManager : MonoBehaviour
     [SerializeField] private Button _seedSelectButton;
     [SerializeField] private Button _buildingSelectButton;
     [SerializeField] private Button _InventoryButton;
-    [SerializeField] private Sprite[] _modeIconsSprite;
-    [SerializeField] private Image _playerModeIcon;
-    
+
+    [SerializeField] private Image[] _selectedImage;
+    [SerializeField] private Image[] _modeImage;
+
     [Header("재화 UI")]
     [SerializeField] private UI_CurrencyPanel _currencyPanel;
     private void Awake()
@@ -22,8 +23,8 @@ public class MainHudManager : MonoBehaviour
         _seedSelectButton.onClick.AddListener(OnClikedSeedSelectButton);
         _buildingSelectButton.onClick.AddListener(OnClikedBuildingSelectButton);
         _InventoryButton.onClick.AddListener(OnClikedInventoryButton);
-        
         InitializeCurrencyUI();
+        RefreshPlayerModeIcon(EPlayerMode.BlockEdit);
     }
     
     private void InitializeCurrencyUI()
@@ -38,10 +39,19 @@ public class MainHudManager : MonoBehaviour
     private void OnClikedInventoryButton() => PopupManager.Instance.Open(EPopupType.UI_InventoryPopup);
     public void RefreshPlayerModeIcon(EPlayerMode curmode)
     {
-        _playerModeIcon.sprite = _modeIconsSprite[(int)curmode];
+        foreach (var image in _selectedImage)
+        {
+            image.gameObject.SetActive(false);
+        }
+        foreach (var image in _modeImage)
+        {
+            image.enabled = true;
+        }
+
+        _selectedImage[(int)curmode].gameObject.SetActive(true);
+        _modeImage[(int)curmode].enabled = false;
     }
     
-    #region 재화 UI 관리
     public void RefreshCurrencyUI()
     {
         if (_currencyPanel != null)
@@ -67,6 +77,5 @@ public class MainHudManager : MonoBehaviour
     {
         return _currencyPanel?.GetCurrencyDisplay(currencyType);
     }
-    #endregion
 
 }

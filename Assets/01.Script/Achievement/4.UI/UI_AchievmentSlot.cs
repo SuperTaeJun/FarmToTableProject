@@ -19,7 +19,7 @@ public class UI_AchievmentSlot : MonoBehaviour
     {
         if (_achievement == null) return;
 
-        Name.text = "¢Ã "+_achievement.Name;
+        Name.text = "¡à "+_achievement.Name;
         Description.text = _achievement.Description;
         Progress.text = $"ÁøÇà·ü : {_achievement.CurrentValue}/{_achievement.TargetValue}";
     }
