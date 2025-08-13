@@ -1209,6 +1209,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: _plant
+      value: 
+      objectReference: {fileID: -4959001946541982571, guid: 2aa6f439924534d4ba7c49b72cabeae9, type: 3}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: _plant2
+      value: 
+      objectReference: {fileID: -68051614601671534, guid: 66cdd2d2d8e23cc4d948e93db6c62c36, type: 3}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: _treePrefab
+      value: 
+      objectReference: {fileID: 3828618601825048515, guid: 3e493e32f19032f46a4d58696dfee1f2, type: 3}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: _stonePrefab
+      value: 
+      objectReference: {fileID: -4959001946541982571, guid: 2aa6f439924534d4ba7c49b72cabeae9, type: 3}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: _plant1Prefab
+      value: 
+      objectReference: {fileID: -4959001946541982571, guid: 2aa6f439924534d4ba7c49b72cabeae9, type: 3}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: _plant2Prefab
+      value: 
+      objectReference: {fileID: -68051614601671534, guid: 66cdd2d2d8e23cc4d948e93db6c62c36, type: 3}
     - target: {fileID: 4951161886087320331, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

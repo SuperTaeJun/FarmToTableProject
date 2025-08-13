@@ -1,5 +1,7 @@
 public enum EForageType
 {
     Tree,
-    Stone
+    Stone,
+    Plant1,
+    Plant2,
 }

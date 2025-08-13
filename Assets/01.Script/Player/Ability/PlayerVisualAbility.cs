@@ -6,7 +6,8 @@ public enum EVisualPart
 {
     Shovel,
     WateringCan,
-    Rake
+    Rake,
+    Axe
 }
 public class PlayerVisualAbility : PlayerAbility
 {

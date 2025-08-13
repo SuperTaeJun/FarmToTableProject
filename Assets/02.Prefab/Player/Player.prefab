@@ -1334,7 +1334,7 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 069da37677dc28642a777c086d1bdd2f, type: 2}
@@ -17853,6 +17853,8 @@ MonoBehaviour:
     PartObject: {fileID: 5198987303323980385}
   - PartType: 2
     PartObject: {fileID: 1499345972467250633}
+  - PartType: 3
+    PartObject: {fileID: 1499345972467250633}
 --- !u!1 &4354862732610193935
 GameObject:
   m_ObjectHideFlags: 0
@@ -24159,7 +24161,7 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 069da37677dc28642a777c086d1bdd2f, type: 2}
@@ -25490,7 +25492,7 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 069da37677dc28642a777c086d1bdd2f, type: 2}
@@ -44757,6 +44759,7 @@ GameObject:
   - component: {fileID: 3895801814691742375}
   - component: {fileID: 6516623167027615155}
   - component: {fileID: 1354092938928838169}
+  - component: {fileID: 6980921840722933570}
   m_Layer: 3
   m_Name: Ability
   m_TagString: Untagged
@@ -44895,6 +44898,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentMode: 0
+--- !u!114 &6980921840722933570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874816458260195903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb270594ebe69a45b57cda9f1fddf52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8898918429081247116
 GameObject:
   m_ObjectHideFlags: 0

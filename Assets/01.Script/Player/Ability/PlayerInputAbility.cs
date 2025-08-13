@@ -97,6 +97,11 @@ public class PlayerInputAbility : PlayerAbility
             OnModeChangeInput.Invoke(EPlayerMode.Construction);
             _currentMode = EPlayerMode.Construction;
         }
+        else if(Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            OnModeChangeInput.Invoke(EPlayerMode.Forage);
+            _currentMode = EPlayerMode.Forage;
+        }
     }
     private void HandleRightMouseInput()
     {

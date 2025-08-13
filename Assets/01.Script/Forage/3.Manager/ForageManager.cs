@@ -12,13 +12,15 @@ public class ForageManager : MonoBehaviour
     private List<ForageObject> _forages;
     public List<ForageObject> Forages => _forages;
 
-    [Header("ä���� ������")]
+    [Header("참조")]
     [SerializeField] private ForageObject _treePrefab;
+    [SerializeField] private ForageObject _plant1Prefab;
+    [SerializeField] private ForageObject _plant2Prefab;
     [SerializeField] private ForageObject _stonePrefab;
-
 
     private Dictionary<string, List<Forage>> _chunkForages = new Dictionary<string, List<Forage>>();
 
+    private const float Y_OFFSET = 0.3f;
     private void Awake()
     {
         if (Instance == null)
@@ -36,28 +38,6 @@ public class ForageManager : MonoBehaviour
 
     }
 
-    private async void Start()
-    {
-        // LoadAllForages()는 WorldLoadingScene에서 호출됨
-    }
-    public async Task GenerateAndSaveAllChunks()
-    {
-        int worldWidth = WorldManager.Instance.worldWidth;
-        int worldDepth = WorldManager.Instance.worldDepth;
-
-        ClearForages();
-
-        for (int cx = 0; cx < worldWidth; cx++)
-        {
-            for (int cz = 0; cz < worldDepth; cz++)
-            {
-                string chunkId = $"{cx}_0_{cz}";
-                var randomForages = GenerateRandomForages(chunkId);
-                await _repo.SaveForages(chunkId, randomForages);
-                InstantiateForages(randomForages);
-            }
-        }
-    }
     public async Task LoadAllForages()
     {
         var loadedChunks = WorldManager.Instance.LoadedChunks;
@@ -92,11 +72,10 @@ public class ForageManager : MonoBehaviour
             var prefab = GetPrefab(forage.Type);
             if (prefab == null)
             {
-                Debug.LogWarning($"Prefab not found for type: {forage.Type}");
                 continue;
             }
 
-            var obj = Instantiate(prefab,transform);
+            var obj = Instantiate(prefab, transform);
             obj.Init(forage);
             _forages.Add(obj);
         }
@@ -112,8 +91,6 @@ public class ForageManager : MonoBehaviour
         InstantiateForages(randomForages);
 
         await _repo.SaveForages(chunkId, randomForages);
-
-        Debug.Log($"[ForageManager] Generated and saved forages in chunk {chunkId}");
     }
     private List<Forage> GenerateRandomForages(string chunkId)
     {
@@ -135,21 +112,19 @@ public class ForageManager : MonoBehaviour
         {
             var type = GetRandomType();
 
-            float localX = UnityEngine.Random.Range(0f, Chunk.ChunkSize) * blockOffsetX;
-            float localZ = UnityEngine.Random.Range(0f, Chunk.ChunkSize) * blockOffsetZ;
+            int localX = UnityEngine.Random.Range(0, Chunk.ChunkSize);
+            int localZ = UnityEngine.Random.Range(0, Chunk.ChunkSize);
 
-            float worldX = Mathf.Floor(chunkWorldOriginX + localX);
-            float worldZ = Mathf.Floor(chunkWorldOriginZ + localZ);
+            // 그리드에 맞는 월드 좌표 계산
+            float worldX = chunkWorldOriginX * blockOffsetX + localX * blockOffsetX;
+            float worldZ = chunkWorldOriginZ * blockOffsetZ + localZ * blockOffsetZ;
+
 
             float groundY = WorldManager.Instance.GetGroundHeight(new Vector3(worldX, 0, worldZ));
 
-            var pos = new Vector3(worldX, groundY - 0.7f, worldZ);
+            var pos = new Vector3(worldX, groundY - Y_OFFSET, worldZ);
 
-            var rot = new Vector3(
-                0,
-                UnityEngine.Random.Range(0f, 360f),
-                0
-            );
+            var rot = new Vector3(0, UnityEngine.Random.Range(0f, 360f), 0);
 
             var forage = new Forage(type, chunkId, pos, rot);
             result.Add(forage);
@@ -176,7 +151,7 @@ public class ForageManager : MonoBehaviour
         if (_forages.Contains(obj))
         {
             _forages.Remove(obj);
-            Destroy(obj.gameObject);
+            obj.RemoveWithAnim();
         }
 
         if (_chunkForages.TryGetValue(obj.ChunkId, out var forageList))
@@ -187,21 +162,29 @@ public class ForageManager : MonoBehaviour
             {
                 forageList.Remove(domain);
 
-                Debug.Log($"[ForageManager] Forage removed from domain list: {domain.Type}");
-
-                // ��� Firebase �ݿ�
                 await SaveForages(obj.ChunkId);
             }
         }
     }
-
-    private void ClearForages()
+    public ForageObject GetForageAtWorldPosition(Vector3 worldPosition)
     {
-        foreach (var obj in _forages)
+        // 가장 가까운 거리의 ForageObject 찾기
+        float tolerance = 0.1f; // 부동소수점 오차 허용
+        ForageObject closestForage = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var forageObject in _forages)
         {
-            Destroy(obj.gameObject);
+            float distance = Vector3.Distance(new Vector3(forageObject.transform.position.x, 0, forageObject.transform.position.z), new Vector3(worldPosition.x, 0, worldPosition.z));
+
+            if (distance < tolerance && distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestForage = forageObject;
+            }
         }
-        _forages.Clear();
+
+        return closestForage;
     }
 
     private ForageObject GetPrefab(EForageType type)
@@ -212,8 +195,10 @@ public class ForageManager : MonoBehaviour
                 return _treePrefab;
             case EForageType.Stone:
                 return _stonePrefab;
-            //case EForageType.Flower:
-            //    return _flowerPrefab;
+            case EForageType.Plant1:
+                return _plant1Prefab;
+            case EForageType.Plant2:
+                return _plant2Prefab;
             default:
                 return null;
         }

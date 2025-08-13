@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerAnimAbility : PlayerAbility
 {
     private Dictionary<string, IFarmingAnimationStrategy> _farmingAnimationStrategies;
     private void Start()
     {
-        _owner.GetAbility<PlayerInputAbility>()?.OnRightMouseInput.AddListener(OnTriggerLeftMouseAnim);
+        _owner.GetAbility<PlayerInputAbility>()?.OnRightMouseInput.AddListener(OnTriggerRightMouseAnim);
         InitFarmingAnimStrategies();
     }
 
@@ -22,7 +23,7 @@ public class PlayerAnimAbility : PlayerAbility
             { ECropGrowthStage.Harvest.ToString(), new HarvestStageAnimationStrategy() }
         };
     }
-    private void OnTriggerLeftMouseAnim(EPlayerMode currentMode)
+    private void OnTriggerRightMouseAnim(EPlayerMode currentMode)
     {
         switch (currentMode)
         {
@@ -36,10 +37,24 @@ public class PlayerAnimAbility : PlayerAbility
                 _owner.GetAbility<PlayerInputAbility>()?.SetPlayerMoveInputLock(true);
                 HandleFarmingAnimation();
                 break;
-
             case EPlayerMode.Construction:
                 break;
             case EPlayerMode.Vehicle:
+                break;
+            case EPlayerMode.Forage:
+                if (_owner.GetAbility<PlayerForageAbility>().CanForaging(out EForageType type) == false) return;
+
+                if (type == EForageType.Tree)
+                {
+                    _owner.Animator.SetTrigger("Forage_Tree");
+                    _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.Axe);
+                }
+
+                else
+                    _owner.Animator.SetTrigger("Forage_Plant");
+
+
+                _owner.GetAbility<PlayerInputAbility>()?.SetPlayerMoveInputLock(true);
                 break;
         }
     }
@@ -110,5 +125,8 @@ public class PlayerAnimAbility : PlayerAbility
         _owner.GetAbility<PlayerInputAbility>()?.SetPlayerMoveInputLock(false);
         _owner.GetAbility<PlayerVisualAbility>()?.SetDisActiveVisualAllPart();
     }
-
+    private void OnCompleteForage()
+    {
+        _owner.GetAbility<PlayerForageAbility>().OnForage();
+    }
 }
