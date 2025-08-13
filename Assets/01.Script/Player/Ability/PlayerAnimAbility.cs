@@ -132,4 +132,8 @@ public class PlayerAnimAbility : PlayerAbility
     {
         _owner.GetAbility<PlayerForageAbility>().OnForage();
     }
+    private void OnChopSound()
+    {
+        SoundManager.Instance.PlaySFX(SFXType.ForageTree);
+    }
 }

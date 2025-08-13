@@ -41,13 +41,11 @@ public class PlayerVehicleAbility : PlayerAbility
         
         currentVehicle.SetInput(horizontal, vertical);
         
-        // 하차 입력 (E키)
         if (Input.GetKeyDown(KeyCode.E))
         {
             DismountVehicle();
         }
-        
-        // 트랙터 전용 - V키로 농사 작업
+
         if (currentVehicle is Tractor tractor && Input.GetKeyDown(KeyCode.V))
         {
             tractor.HandleFarming();
@@ -58,20 +56,16 @@ public class PlayerVehicleAbility : PlayerAbility
     {
         if (newMode == EPlayerMode.Vehicle)
         {
-            // Vehicle 모드로 전환 시
             currentVehicle = VehicleManager.Instance.GetPlayerVehicle(_owner);
             if (currentVehicle != null)
             {
-                Debug.Log($"{currentVehicle.VehicleType} 조작 모드 활성화");
                 IsMounted = true;
             }
         }
         else
         {
-            // Vehicle 모드에서 벗어날 때
             if (currentVehicle != null)
             {
-                Debug.Log("차량 조작 모드 비활성화");
                 currentVehicle = null;
                 IsMounted = false;
             }
@@ -93,6 +87,7 @@ public class PlayerVehicleAbility : PlayerAbility
         vehicle.MountPlayer(_owner);
 
         SoundManager.Instance.PlaySFX(SFXType.Mount);
+        
     }
     
     public void DismountVehicle()

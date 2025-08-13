@@ -15000,7 +15000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2989eff007176542937e5e24199c508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsPerDay: 60
+  secondsPerDay: 180
   startHour: 8
 --- !u!1 &1397404187
 GameObject:

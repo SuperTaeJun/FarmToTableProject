@@ -24,9 +24,11 @@ public enum SFXType
     Step,
     ForagePlant,
     ForageTree,
+
     StoreCash,
     Mount,
-    Dismount
+    Dismount,
+    CarLoop
 }
 
 [System.Serializable]
@@ -50,6 +52,7 @@ public class SoundManager : MonoBehaviour
     [Header("Audio Sources")]
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource loopSfxSource;
 
     [Header("Audio Clips")]
     [SerializeField] private BGMData[] bgmData;
@@ -65,10 +68,23 @@ public class SoundManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             InitializeAudioDictionaries();
+            SetupLoopSfxSource();
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    void SetupLoopSfxSource()
+    {
+        if (loopSfxSource == null)
+        {
+            GameObject loopSfxObj = new GameObject("LoopSFXSource");
+            loopSfxObj.transform.SetParent(transform);
+            loopSfxSource = loopSfxObj.AddComponent<AudioSource>();
+            loopSfxSource.loop = true;
+            loopSfxSource.volume = 0f;
         }
     }
 
@@ -105,4 +121,62 @@ public class SoundManager : MonoBehaviour
     public void StopBGM() => bgmSource.Stop();
     public void PauseBGM() => bgmSource.Pause();
     public void ResumeBGM() => bgmSource.UnPause();
+
+    public void PlayLoopSFX(SFXType sfxType)
+    {
+        if (sfxDictionary.TryGetValue(sfxType, out AudioClip clip))
+        {
+            if (loopSfxSource.clip != clip)
+            {
+                loopSfxSource.clip = clip;
+            }
+            
+            if (!loopSfxSource.isPlaying)
+            {
+                loopSfxSource.Play();
+            }
+        }
+    }
+
+    public void SetLoopSFXVolume(float targetVolume, float fadeSpeed = 2f)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeLoopSFXVolume(targetVolume, fadeSpeed));
+    }
+
+    public void StopLoopSFX(float fadeSpeed = 2f)
+    {
+        StartCoroutine(FadeOutAndStop(fadeSpeed));
+    }
+
+    private System.Collections.IEnumerator FadeLoopSFXVolume(float targetVolume, float fadeSpeed)
+    {
+        float startVolume = loopSfxSource.volume;
+        float time = 0f;
+
+        while (time < 1f)
+        {
+            time += Time.deltaTime * fadeSpeed;
+            loopSfxSource.volume = Mathf.Lerp(startVolume, targetVolume, time);
+            yield return null;
+        }
+        
+        loopSfxSource.volume = targetVolume;
+    }
+
+    private System.Collections.IEnumerator FadeOutAndStop(float fadeSpeed)
+    {
+        float startVolume = loopSfxSource.volume;
+        float time = 0f;
+
+        while (time < 1f && loopSfxSource.volume > 0f)
+        {
+            time += Time.deltaTime * fadeSpeed;
+            loopSfxSource.volume = Mathf.Lerp(startVolume, 0f, time);
+            yield return null;
+        }
+        
+        loopSfxSource.volume = 0f;
+        loopSfxSource.Stop();
+    }
 }

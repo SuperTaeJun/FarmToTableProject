@@ -39,18 +39,10 @@ public class Tractor : Vehicle
 
         Sequence farmingSequence = DOTween.Sequence();
         farmingSequence
-            // 작아지면서 움츠러드는 느낌
             .Append(transform.DOScale(originalScale * 0.7f, animationDuration * 0.2f).SetEase(Ease.InQuad))
-
-            // 빠르게 커지면서 통통 튀는 느낌
             .Append(transform.DOScale(originalScale * 1.3f, animationDuration * 0.3f).SetEase(Ease.OutBounce))
-
-            // 살짝 작아졌다가
             .Append(transform.DOScale(originalScale * 0.85f, animationDuration * 0.2f).SetEase(Ease.InOutSine))
-
-            // 원래 크기로 부드럽게 복귀
             .Append(transform.DOScale(originalScale, animationDuration * 0.3f).SetEase(Ease.OutElastic))
-
             .OnComplete(() => HandleFarmingAtPosition(currentSelectedPos));
 
         yield return farmingSequence.WaitForCompletion();

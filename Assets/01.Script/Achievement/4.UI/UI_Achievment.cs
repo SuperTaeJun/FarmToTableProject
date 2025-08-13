@@ -27,23 +27,19 @@ public class UI_Achievment : MonoBehaviour
 
     private void OnAchievementCompleted(Achievment completedAchievement)
     {
-        // 완료된 업적의 슬롯을 찾아서 삭제
-        var slotToRemove = SlotList.FirstOrDefault(slot => 
-            slot.GetAchievement()?.Name == completedAchievement.Name);
+        var slotToRemove = SlotList.FirstOrDefault(slot => slot.GetAchievement()?.Name == completedAchievement.Name);
 
         if (slotToRemove != null)
         {
             SlotList.Remove(slotToRemove);
-            Destroy(slotToRemove.gameObject);
+            slotToRemove.GetComponent<UI_AchievmentSlot>()?.PlayCompletionEffect();
         }
     }
 
     private void OnProgressUpdated(Achievment updatedAchievement)
     {
-        // 해당 슬롯의 UI 업데이트
-        var slot = SlotList.FirstOrDefault(s => 
-            s.GetAchievement()?.Name == updatedAchievement.Name);
-        
+        var slot = SlotList.FirstOrDefault(slot => slot.GetAchievement()?.Name == updatedAchievement.Name);
+
         slot?.UpdateUI();
     }
 
@@ -54,18 +50,13 @@ public class UI_Achievment : MonoBehaviour
 
     public void RefreshAchievementUI()
     {
-        // 기존 슬롯들 정리
         ClearSlots();
 
         if (AchievmentManager.Instance == null) return;
 
-        // 미완료된 업적들만 가져와서 카테고리별로 정렬
         var incompleteAchievements = AchievmentManager.Instance.GetIncompleteAchievements();
-        
-        // 튜토리얼 -> 일간 -> 주간 순서로 정렬
-        var sortedAchievements = incompleteAchievements
-            .OrderBy(a => GetCategoryOrder(a.Category))
-            .ToList();
+
+        var sortedAchievements = incompleteAchievements.OrderBy(a => GetCategoryOrder(a.Category)).ToList();
 
         foreach (var achievement in sortedAchievements)
         {
@@ -101,9 +92,9 @@ public class UI_Achievment : MonoBehaviour
     {
         return category switch
         {
-            EAchievmentCategory.Tutorial => 0,  // 튜토리얼이 제일 위
-            EAchievmentCategory.Daily => 1,     // 일간이 두번째
-            EAchievmentCategory.Weekly => 2,    // 주간이 세번째
+            EAchievmentCategory.Tutorial => 0,
+            EAchievmentCategory.Daily => 1,
+            EAchievmentCategory.Weekly => 2,
             _ => 3
         };
     }

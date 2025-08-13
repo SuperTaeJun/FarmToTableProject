@@ -28,9 +28,11 @@ public abstract class Vehicle : MonoBehaviour
 
     [Header("Player 탑승위치")]
     public Transform playerMountPoint;
-
-    [Header("파티클 시스템")]
-    [SerializeField] private float minSpeedForParticles = 2f; // 파티클 재생 최소 속도
+    
+    [Header("사운드 설정")]
+    [SerializeField] private float minSpeedForSound = 0.1f; // 소리 재생 최소 속도
+    [SerializeField] private float maxSoundVolume = 1f; // 최대 볼륨
+    [SerializeField] private float soundFadeSpeed = 3f; // 페이드 속도
 
     protected bool isOccupied = false;
     protected Player currentDriver;
@@ -41,6 +43,7 @@ public abstract class Vehicle : MonoBehaviour
     protected float verticalInput;
 
     protected bool isLockMovement = false;
+    protected bool isCarSoundPlaying = false;
     protected virtual void Awake()
     {
         vehicleController = GetComponent<CharacterController>();
@@ -69,7 +72,6 @@ public abstract class Vehicle : MonoBehaviour
 
             UpdateWheels();
             UpdateSteering();
-            UpdateMovementParticles();
         }
     }
     
@@ -131,6 +133,9 @@ public abstract class Vehicle : MonoBehaviour
 
         // 청크 경계 검사 및 이동 적용
         ApplyMovementWithChunkCheck();
+
+        // 자동차 소리 관리
+        HandleCarSound();
     }
     protected void HandleSteering()
     {
@@ -185,22 +190,6 @@ public abstract class Vehicle : MonoBehaviour
             wheel.localEulerAngles = euler;
         }
     }
-    protected void UpdateMovementParticles()
-    {
-        float currentSpeed = moveVelocity.magnitude;
-
-        if (currentSpeed >= minSpeedForParticles)
-        {
-
-        }
-        else
-        {
-
-        }
-    }
-
-
-
     protected virtual void OnPlayerMounted(Player player) 
     {
         ObjectPoolManager.Instance.Get(PoolType.SmokeS, transform.position);
@@ -209,6 +198,39 @@ public abstract class Vehicle : MonoBehaviour
     protected virtual void OnPlayerDismounted(Player player) 
     {
         ObjectPoolManager.Instance.Get(PoolType.SmokeS, transform.position);
+        
+        // 자동차 소리 페이드 아웃 후 정지
+        if (isCarSoundPlaying)
+        {
+            SoundManager.Instance.StopLoopSFX(soundFadeSpeed);
+            isCarSoundPlaying = false;
+        }
+    }
+
+    protected void HandleCarSound()
+    {
+        float currentSpeed = moveVelocity.magnitude;
+        bool shouldPlaySound = currentSpeed > minSpeedForSound;
+
+        if (shouldPlaySound)
+        {
+            if (!isCarSoundPlaying)
+            {
+                SoundManager.Instance.PlayLoopSFX(SFXType.CarLoop);
+                isCarSoundPlaying = true;
+            }
+            
+            // 속도에 따른 볼륨 조절 (0.1f에서 maxSpeed까지의 범위를 0에서 maxSoundVolume으로 매핑)
+            float volumeRatio = Mathf.Clamp01((currentSpeed - minSpeedForSound) / (maxSpeed - minSpeedForSound));
+            float targetVolume = volumeRatio * maxSoundVolume;
+            
+            SoundManager.Instance.SetLoopSFXVolume(targetVolume, soundFadeSpeed);
+        }
+        else if (isCarSoundPlaying)
+        {
+            SoundManager.Instance.StopLoopSFX(soundFadeSpeed);
+            isCarSoundPlaying = false;
+        }
     }
 
     private void ApplyMovementWithChunkCheck()
