@@ -187,6 +187,21 @@ public class ForageManager : MonoBehaviour
         return closestForage;
     }
 
+    public List<ForageObject> GetForagesInChunk(string chunkId)
+    {
+        List<ForageObject> chunkForages = new List<ForageObject>();
+        
+        foreach (var forageObject in _forages)
+        {
+            if (forageObject != null && forageObject.ChunkId == chunkId)
+            {
+                chunkForages.Add(forageObject);
+            }
+        }
+        
+        return chunkForages;
+    }
+
     private ForageObject GetPrefab(EForageType type)
     {
         switch (type)

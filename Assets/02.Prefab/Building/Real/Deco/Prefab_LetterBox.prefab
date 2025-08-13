@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3141196673726500349}
   - component: {fileID: -4066537974112723275}
   - component: {fileID: -6859438847873466076}
+  - component: {fileID: 6331028688648312249}
   m_Layer: 0
   m_Name: Prefab_LetterBox
   m_TagString: Building
@@ -29,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9111732691992568829}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -106,7 +107,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -127,7 +128,8 @@ MonoBehaviour:
   scaleUpDuration: 0.5
   scaleEase: 27
   interactionRange: 0
-  VfxPos: {fileID: 0}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 0}
 --- !u!114 &-6859438847873466076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,4 +146,26 @@ MonoBehaviour:
   scaleUpDuration: 0.5
   scaleEase: 27
   interactionRange: 3.5
-  VfxPos: {fileID: 0}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 0}
+--- !u!65 &6331028688648312249
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9111732691992568829}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5285523, y: 1.6709486, z: 0.7039703}
+  m_Center: {x: -0.020075575, y: 0.8354743, z: 0.0033390075}

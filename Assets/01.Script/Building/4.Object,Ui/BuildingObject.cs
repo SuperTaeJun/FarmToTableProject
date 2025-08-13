@@ -9,6 +9,7 @@ public class BuildingObject : MonoBehaviour
     private Vector3 _originalScale;
     [SerializeField] private float scaleUpDuration = 0.5f;
     [SerializeField] private Ease scaleEase = Ease.OutBack;
+    [SerializeField] private Vector3 targetScale = Vector3.one; // 원하는 최종 크기
     private Collider _collider;
 
     [Header("Interaction")]
@@ -23,7 +24,8 @@ public class BuildingObject : MonoBehaviour
         if (ObjectPoolManager.Instance)
             ObjectPoolManager.Instance.Get(PoolType.SomkeM, transform.position);
 
-        _originalScale = transform.localScale;
+        // targetScale을 사용하거나, 현재 스케일이 너무 작으면 Vector3.one 사용
+        _originalScale = targetScale.magnitude > 0.5f ? targetScale : Vector3.one;
 
         InitializeFunctions();
         BuildAnimation();

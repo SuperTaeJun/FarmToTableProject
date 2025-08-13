@@ -181,6 +181,12 @@ public class BuildingManager : MonoBehaviour
             return false;
         }
 
+        // Forage가 있는지 확인
+        if (IsForageInArea(worldPosition, size))
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -236,6 +242,48 @@ public class BuildingManager : MonoBehaviour
         }
         
         return false;
+    }
+
+    private bool IsForageInArea(Vector3 centerPosition, Vector2Int size)
+    {
+        if (ForageManager.Instance == null)
+        {
+            return false;
+        }
+
+        // 해당 위치의 청크 찾기
+        var chunk = WorldManager.Instance.GetChunkAtWorldPosition(centerPosition);
+        if (chunk == null) return false;
+
+        string chunkId = chunk.Position.ToChunkId();
+        
+        // 해당 청크의 forage만 가져오기
+        var chunkForages = ForageManager.Instance.GetForagesInChunk(chunkId);
+        
+        // 빌딩 크기에 따른 체크 반경
+        float checkRadius = Mathf.Max(size.x, size.y) * 1.5f;
+        
+        foreach (var forage in chunkForages)
+        {
+            if (forage == null) continue;
+            
+            float distance = Vector3.Distance(
+                new Vector3(centerPosition.x, 0, centerPosition.z),
+                new Vector3(forage.transform.position.x, 0, forage.transform.position.z)
+            );
+            
+            if (distance < checkRadius)
+            {
+                return true; // forage가 근처에 있으면 설치 불가
+            }
+        }
+
+        return false; // forage가 없으면 설치 가능
+    }
+
+    public bool HasForageAtPosition(Vector3 worldPosition, Vector2Int size)
+    {
+        return IsForageInArea(worldPosition, size);
     }
 
     public async Task<bool> TryPlaceBuilding(EBuildingType type, string chunkId, Vector3 worldPosition, Vector3 rotation)
