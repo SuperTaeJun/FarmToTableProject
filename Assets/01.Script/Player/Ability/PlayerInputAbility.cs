@@ -23,15 +23,22 @@ public class PlayerInputAbility : PlayerAbility
     }
     private void Start()
     {
-        PopupManager.Instance.OnPopupStateChanged += OnPopupStateChanged;
+        PopupManager.Instance.OnPopupStateChanged.AddListener(OnPopupStateChanged);
+        _owner.GetAbility<PlayerModeAbility>()?.OnModeChanged.AddListener(OnModeChanged);
     }
     private void OnDestroy()
     {
-        PopupManager.Instance.OnPopupStateChanged -= OnPopupStateChanged;
+        PopupManager.Instance.OnPopupStateChanged.RemoveListener(OnPopupStateChanged);
+        _owner.GetAbility<PlayerModeAbility>()?.OnModeChanged.RemoveListener(OnModeChanged);
     }
     public void SetPlayerMoveInputLock(bool able)
     {
         _playerMoveInputLock = able;
+    }
+
+    private void OnModeChanged(EPlayerMode newMode)
+    {
+        _currentMode = newMode;
     }
     private void Update()
     {
@@ -48,7 +55,7 @@ public class PlayerInputAbility : PlayerAbility
         HandleModeChangeInput();
         HandleOptionPopupInput();
 
-        if(Input.GetKeyDown(KeyCode.F3))
+        if (Input.GetKeyDown(KeyCode.F3))
         {
             PopupManager.Instance.Open(EPopupType.UI_Vehicle);
         }
@@ -82,6 +89,8 @@ public class PlayerInputAbility : PlayerAbility
     }
     private void HandleModeChangeInput()
     {
+        if (_currentMode == EPlayerMode.Vehicle) return;
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             OnModeChangeInput.Invoke(EPlayerMode.BlockEdit);
@@ -97,7 +106,7 @@ public class PlayerInputAbility : PlayerAbility
             OnModeChangeInput.Invoke(EPlayerMode.Construction);
             _currentMode = EPlayerMode.Construction;
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             OnModeChangeInput.Invoke(EPlayerMode.Forage);
             _currentMode = EPlayerMode.Forage;
@@ -105,6 +114,9 @@ public class PlayerInputAbility : PlayerAbility
     }
     private void HandleRightMouseInput()
     {
+        Debug.Log(_currentMode);
+        if (_currentMode == EPlayerMode.Vehicle) return;
+
         if (Input.GetMouseButtonDown(1))
         {
             OnRightMouseInput.Invoke(_currentMode);

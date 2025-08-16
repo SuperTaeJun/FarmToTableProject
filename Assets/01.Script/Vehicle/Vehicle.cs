@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Vehicle : MonoBehaviour
+public class Vehicle : MonoBehaviour
 {
     [Header("차량 세팅")]
     public EVehicleType vehicleType;

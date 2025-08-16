@@ -26,7 +26,7 @@ public class MainHudManager : MonoBehaviour
         InitializeCurrencyUI();
         RefreshPlayerModeIcon(EPlayerMode.BlockEdit);
     }
-    
+
     private void InitializeCurrencyUI()
     {
         if (_currencyPanel != null)
@@ -39,21 +39,16 @@ public class MainHudManager : MonoBehaviour
     private void OnClikedInventoryButton() => PopupManager.Instance.Open(EPopupType.UI_InventoryPopup);
     public void RefreshPlayerModeIcon(EPlayerMode curmode)
     {
-        if (curmode == EPlayerMode.Vehicle) return;
+        foreach (var image in _selectedImage) image.gameObject.SetActive(false);
 
-        foreach (var image in _selectedImage)
-        {
-            image.gameObject.SetActive(false);
-        }
-        foreach (var image in _modeImage)
-        {
-            image.enabled = true;
-        }
+        foreach (var image in _modeImage) image.enabled = true;
+
+        if (curmode == EPlayerMode.Vehicle) return;
 
         _selectedImage[(int)curmode].gameObject.SetActive(true);
         _modeImage[(int)curmode].enabled = false;
     }
-    
+
     public void RefreshCurrencyUI()
     {
         if (_currencyPanel != null)
@@ -61,7 +56,7 @@ public class MainHudManager : MonoBehaviour
             _currencyPanel.RefreshAllDisplays();
         }
     }
-    
+
     public void ShowCurrency(ECurrencyType currencyType, bool show = true)
     {
         if (_currencyPanel != null)
@@ -69,12 +64,12 @@ public class MainHudManager : MonoBehaviour
             _currencyPanel.ShowCurrency(currencyType, show);
         }
     }
-    
+
     public void HideCurrency(ECurrencyType currencyType)
     {
         ShowCurrency(currencyType, false);
     }
-    
+
     public UI_CurrencyDisplay GetCurrencyDisplay(ECurrencyType currencyType)
     {
         return _currencyPanel?.GetCurrencyDisplay(currencyType);

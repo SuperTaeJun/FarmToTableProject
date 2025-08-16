@@ -740,7 +740,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6092888799251430457}
   - component: {fileID: 5919489596894918137}
-  - component: {fileID: 1688747631672041506}
+  - component: {fileID: 7721311166427914314}
   m_Layer: 0
   m_Name: Bicycle
   m_TagString: Untagged
@@ -794,7 +794,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.55, z: 0}
---- !u!114 &1688747631672041506
+--- !u!114 &7721311166427914314
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -803,7 +803,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4962124714545560305}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae9222ed73add994cac2aba71e97fa51, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b380cb01bb6cba41a7b5ed06fdb0481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 6
@@ -827,7 +827,9 @@ MonoBehaviour:
   - {fileID: 6184968582688944001}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 7368814054189723183}
-  minSpeedForParticles: 2
+  minSpeedForSound: 0.2
+  maxSoundVolume: 1
+  soundFadeSpeed: 2
 --- !u!1 &5600777337556083194
 GameObject:
   m_ObjectHideFlags: 0

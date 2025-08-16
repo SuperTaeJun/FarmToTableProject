@@ -575,7 +575,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8188557692373107860}
   - component: {fileID: 721311633051895001}
-  - component: {fileID: 4134742534682200714}
+  - component: {fileID: 4955139903222724099}
   m_Layer: 0
   m_Name: Bike
   m_TagString: Untagged
@@ -629,7 +629,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!114 &4134742534682200714
+--- !u!114 &4955139903222724099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -638,13 +638,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7594353545664805592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae9222ed73add994cac2aba71e97fa51, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b380cb01bb6cba41a7b5ed06fdb0481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 3
-  acceleration: 15
-  maxSpeed: 20
-  deceleration: 20
+  acceleration: 5
+  maxSpeed: 10
+  deceleration: 5
   turnSpeed: 100
   moveVelocity: {x: 0, y: 0, z: 0}
   gravity: -9.81
@@ -659,10 +659,12 @@ MonoBehaviour:
   - {fileID: 35481439958234744}
   wheelRadius: 0.3
   steeringWheels:
-  - {fileID: 4970783951482536055}
+  - {fileID: 3063023931662823686}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 8580375633271797516}
-  minSpeedForParticles: 0.5
+  minSpeedForSound: 0.1
+  maxSoundVolume: 1
+  soundFadeSpeed: 3
 --- !u!1 &8791545247936897640
 GameObject:
   m_ObjectHideFlags: 0

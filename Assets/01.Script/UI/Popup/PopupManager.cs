@@ -18,7 +18,7 @@ public class PopupManager : MonoBehaviour
     private Stack<UI_Popup> _openPopups = new Stack<UI_Popup>();
     public Stack<UI_Popup> OpenPopups => _openPopups;
 
-    public event System.Action<bool> OnPopupStateChanged;
+    public DebugEvent<bool> OnPopupStateChanged = new DebugEvent<bool>();
     private void Awake()
     {
         if (Instance == null)
@@ -46,7 +46,7 @@ public class PopupManager : MonoBehaviour
     public void Open(EPopupType popupType, Action callBack = null)
     {
         PopUpOpen(popupType.ToString(), callBack);
-        OnPopupStateChanged?.Invoke(true);
+        OnPopupStateChanged.Invoke(true);
     }
 
     public void PopUpOpen(string popupName, Action closeCallback)
@@ -67,7 +67,7 @@ public class PopupManager : MonoBehaviour
         if (_openPopups.Count > 0)
         {
             _openPopups.Pop();
-            OnPopupStateChanged?.Invoke(_openPopups.Count > 0); // �˾� ���� �˸�
+            OnPopupStateChanged.Invoke(_openPopups.Count > 0);
         }
     }
 }

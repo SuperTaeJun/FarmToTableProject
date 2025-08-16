@@ -362,7 +362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2622851972753390526}
   - component: {fileID: 2002184321629236176}
-  - component: {fileID: 8886201279221877065}
+  - component: {fileID: 8452323376163496483}
   m_Layer: 0
   m_Name: Bike3
   m_TagString: Untagged
@@ -415,7 +415,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.1, z: 0}
---- !u!114 &8886201279221877065
+--- !u!114 &8452323376163496483
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -424,7 +424,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3559466510642736906}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae9222ed73add994cac2aba71e97fa51, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b380cb01bb6cba41a7b5ed06fdb0481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 5
@@ -437,7 +437,7 @@ MonoBehaviour:
   groundCheckDistance: 0.2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   isGrounded: 0
   verticalVelocity: 0
   wheelMeshes:
@@ -448,7 +448,9 @@ MonoBehaviour:
   - {fileID: 8714690514916374901}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 6265880343814627971}
-  minSpeedForParticles: 2
+  minSpeedForSound: 0.1
+  maxSoundVolume: 1
+  soundFadeSpeed: 3
 --- !u!1 &4825653815181459252
 GameObject:
   m_ObjectHideFlags: 0

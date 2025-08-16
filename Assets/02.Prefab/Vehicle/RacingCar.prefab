@@ -45,7 +45,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7580868299724221320}
   - component: {fileID: 2856153672096232031}
-  - component: {fileID: 8107008056164700197}
+  - component: {fileID: 5923118614147405545}
   m_Layer: 0
   m_Name: RacingCar
   m_TagString: Untagged
@@ -97,7 +97,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 2.5, z: 0}
---- !u!114 &8107008056164700197
+--- !u!114 &5923118614147405545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 480614491263500329}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae9222ed73add994cac2aba71e97fa51, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b380cb01bb6cba41a7b5ed06fdb0481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 7
@@ -133,7 +133,9 @@ MonoBehaviour:
   - {fileID: 3661449679123640874}
   maxSteerAngle: 30
   playerMountPoint: {fileID: 7753467967520666295}
-  minSpeedForParticles: 2
+  minSpeedForSound: 0.1
+  maxSoundVolume: 1
+  soundFadeSpeed: 3
 --- !u!1 &1713345412222403190
 GameObject:
   m_ObjectHideFlags: 0

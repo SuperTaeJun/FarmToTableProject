@@ -471,8 +471,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6375676876326353060}
-  - component: {fileID: 8721304954227343553}
   - component: {fileID: 683506679318925297}
+  - component: {fileID: 6315996107681258718}
   m_Layer: 0
   m_Name: Bike2
   m_TagString: Untagged
@@ -501,40 +501,6 @@ Transform:
   - {fileID: 8938935450289282239}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8721304954227343553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4346851474126254382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae9222ed73add994cac2aba71e97fa51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vehicleType: 4
-  acceleration: 25
-  maxSpeed: 40
-  deceleration: 30
-  turnSpeed: 100
-  moveVelocity: {x: 0, y: 0, z: 0}
-  gravity: -9.81
-  groundCheckDistance: 0.2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  isGrounded: 0
-  verticalVelocity: 0
-  wheelMeshes:
-  - {fileID: 6538720496835053546}
-  - {fileID: 8317982773646226216}
-  wheelRadius: 0.3
-  steeringWheels:
-  - {fileID: 7514130396222768170}
-  maxSteerAngle: 30
-  playerMountPoint: {fileID: 5034004685498521380}
-  minSpeedForParticles: 0.5
 --- !u!143 &683506679318925297
 CharacterController:
   m_ObjectHideFlags: 0
@@ -560,6 +526,42 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.55, z: 0}
+--- !u!114 &6315996107681258718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4346851474126254382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b380cb01bb6cba41a7b5ed06fdb0481, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicleType: 4
+  acceleration: 5
+  maxSpeed: 10
+  deceleration: 5
+  turnSpeed: 100
+  moveVelocity: {x: 0, y: 0, z: 0}
+  gravity: -9.81
+  groundCheckDistance: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  isGrounded: 0
+  verticalVelocity: 0
+  wheelMeshes:
+  - {fileID: 6538720496835053546}
+  - {fileID: 8317982773646226216}
+  wheelRadius: 0.3
+  steeringWheels:
+  - {fileID: 7514130396222768170}
+  maxSteerAngle: 30
+  playerMountPoint: {fileID: 5034004685498521380}
+  minSpeedForSound: 0.1
+  maxSoundVolume: 1
+  soundFadeSpeed: 3
 --- !u!1 &6268799917090844522
 GameObject:
   m_ObjectHideFlags: 0

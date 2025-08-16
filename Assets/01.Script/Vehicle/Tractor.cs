@@ -131,7 +131,7 @@ public class Tractor : Vehicle
                 Vector3 plantPosition = selectedPos + new Vector3(x * 2, 0, z * 2);
                 string chunkId = WorldManager.GetChunkId(plantPosition);
 
-                if (CropsManager.Instance.CanPlant(selectedPos)&& CropsManager.Instance != null)
+                if (CropsManager.Instance.CanPlant(plantPosition) && CropsManager.Instance != null)
                 {
                     // 이미 작물이 있는지 체크
                     var existingCrop = CropsManager.Instance.GetCropAtWorldPosition(plantPosition);
@@ -155,7 +155,7 @@ public class Tractor : Vehicle
             {
                 Vector3 waterPosition = position + new Vector3(x * 2, 0, z * 2);
                 
-                if (CropsManager.Instance.CanWatering(position))
+                if (CropsManager.Instance.CanWatering(waterPosition))
                 {
                     string chunkId = WorldManager.GetChunkId(waterPosition);
 
