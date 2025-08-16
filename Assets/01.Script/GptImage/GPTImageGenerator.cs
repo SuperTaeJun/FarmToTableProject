@@ -7,14 +7,13 @@ using UnityEngine.Networking;
 [Serializable]
 public class ImageGenerationRequest
 {
-    public string model = "dall-e-3";//"gpt-image-1";
-    //´Þ¸®3 ¸ðµ¨ °¡°Ý
-    //1024¡¿1024: ¾à $0.04 / Àå
-    //512¡¿512: ¾à $0.018 / Àå
-    //256¡¿256: ¾à $0.016 / Àå
+    public string model = "gpt-image-1";//"dall-e-3";//"gpt-image-1";
+    //ï¿½Þ¸ï¿½3 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    //1024ï¿½ï¿½1024: ï¿½ï¿½ $0.04 / ï¿½ï¿½
     public string prompt;
     public int n = 1;
-    public string size = "512¡¿512";
+    public string size = "1024x1024";
+    public string quality = "low";
 }
 
 [Serializable]
@@ -30,12 +29,29 @@ public class ImageData
     public string b64_json; 
 }
 
-public class GPTImageGenerator : MonoBehaviour
+public class ImageGenerationManager : MonoBehaviour
 {
-    [Header("¼³Á¤")]
+    public static ImageGenerationManager Instance { get; private set; }
+    
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private SO_GPTConfig config;
 
     private const string API_URL = "https://api.openai.com/v1/images/generations";
+    
+    public event Action<Texture2D> OnImageGenerationComplete;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void GenerateImage(string prompt, Action<Texture2D> onSuccess)
     {
@@ -55,7 +71,6 @@ public class GPTImageGenerator : MonoBehaviour
     private IEnumerator GenerateImageCoroutine(string prompt, Action<Texture2D> onSuccess)
     {
         string finalPrompt = config.CombinePrompts(prompt);
-        Debug.Log($"[ImageGen] finalPrompt: {finalPrompt}");
 
         var requestObj = new ImageGenerationRequest { prompt = finalPrompt };
         string jsonData = JsonUtility.ToJson(requestObj);
@@ -72,7 +87,6 @@ public class GPTImageGenerator : MonoBehaviour
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"[ImageGen] HTTP Error: {webRequest.responseCode} - {webRequest.error}\n{webRequest.downloadHandler.text}");
                 onSuccess?.Invoke(null);
                 yield break;
             }
@@ -80,7 +94,6 @@ public class GPTImageGenerator : MonoBehaviour
             var response = JsonUtility.FromJson<ImageGenerationResponse>(webRequest.downloadHandler.text);
             if (response?.data == null || response.data.Length == 0)
             {
-                Debug.LogError("[ImageGen] Empty data in response");
                 onSuccess?.Invoke(null);
                 yield break;
             }
@@ -91,7 +104,6 @@ public class GPTImageGenerator : MonoBehaviour
             }
             else
             {
-                Debug.LogError("[ImageGen] No url in response");
                 onSuccess?.Invoke(null);
             }
         }
@@ -107,6 +119,7 @@ public class GPTImageGenerator : MonoBehaviour
             {
                 Texture2D texture = DownloadHandlerTexture.GetContent(webRequest);
                 onSuccess?.Invoke(texture);
+                OnImageGenerationComplete?.Invoke(texture);
             }
         }
     }

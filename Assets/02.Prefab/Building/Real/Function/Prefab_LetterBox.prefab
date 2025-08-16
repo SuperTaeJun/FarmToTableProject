@@ -127,7 +127,8 @@ MonoBehaviour:
   buildingType: 1
   scaleUpDuration: 0.5
   scaleEase: 27
-  interactionRange: 0
+  targetScale: {x: 1, y: 1, z: 1}
+  interactionRange: 1
   ExecuteVfxTransform: {fileID: 0}
   ExecuteInfoTransform: {fileID: 0}
 --- !u!114 &-6859438847873466076
@@ -145,6 +146,7 @@ MonoBehaviour:
   buildingType: 0
   scaleUpDuration: 0.5
   scaleEase: 27
+  targetScale: {x: 1, y: 1, z: 1}
   interactionRange: 3.5
   ExecuteVfxTransform: {fileID: 0}
   ExecuteInfoTransform: {fileID: 0}

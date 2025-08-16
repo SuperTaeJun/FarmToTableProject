@@ -96,6 +96,9 @@ public class BuildingObject : MonoBehaviour
             case EBuildingType.ChickenFarm:
                 _functions = new IBuildingFunction[] { new ChickenFarmFunction(this) };
                 break;
+            case EBuildingType.LetterBox:
+                _functions = new IBuildingFunction[] { new LetterFunction(this) };
+                break;
             default:
                 _functions = new IBuildingFunction[0];
                 break;

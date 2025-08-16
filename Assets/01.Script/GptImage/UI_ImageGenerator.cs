@@ -2,21 +2,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImageGeneratorTest : MonoBehaviour
+public class UI_ImageGenerator : UI_Popup
 {
-    [Header("UI ÄÄÆ÷³ÍÆ®")]
+    [Header("UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
     [SerializeField] private TMP_InputField promptInput;
     [SerializeField] private Button generateButton;
     [SerializeField] private RawImage displayImage;
     [SerializeField] private TextMeshProUGUI statusText;
 
-    [Header("¸Å´ÏÀú")]
-    [SerializeField] private GPTImageGenerator imageGenerator;
 
     private void Start()
     {
         generateButton.onClick.AddListener(OnGenerateButtonClicked);
-        SetStatus("ÇÁ·ÒÇÁÆ®¸¦ ÀÔ·ÂÇÏ°í ÀÌ¹ÌÁö¸¦ »ı¼ºÇÏ¼¼¿ä.");
+        SetStatus("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï°ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
     }
 
     private void OnGenerateButtonClicked()
@@ -25,28 +23,24 @@ public class ImageGeneratorTest : MonoBehaviour
 
         if (string.IsNullOrEmpty(prompt))
         {
-            SetStatus("ÇÁ·ÒÇÁÆ®¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
             return;
         }
 
-        generateButton.interactable = false;
-        SetStatus("ÀÌ¹ÌÁö »ı¼º Áß...");
-
-        imageGenerator.GenerateImage(prompt, OnImageGenerated);
+        // ë°±ê·¸ë¼ìš´ë“œì—ì„œ ì´ë¯¸ì§€ ìƒì„± ì‹œì‘
+        ImageGenerationManager.Instance.GenerateImage(prompt, OnImageGenerated);
+        
+        // íŒì—… ì¦‰ì‹œ ë‹«ê¸°
+        Close();
     }
 
     private void OnImageGenerated(Texture2D texture)
     {
         if (texture == null)
         {
-            SetStatus("ÀÌ¹ÌÁö »ı¼º ½ÇÆĞ: ÇÁ·ÒÇÁÆ®/¼³Á¤/Å°¸¦ È®ÀÎÇØÁÖ¼¼¿ä.");
-            generateButton.interactable = true;
             return;
         }
 
-        displayImage.texture = texture;
-        SetStatus("ÀÌ¹ÌÁö »ı¼º ¿Ï·á!");
-        generateButton.interactable = true;
+        Debug.Log("ì´ë¯¸ì§€ ìƒì„± ì™„ë£Œ!");
     }
     private void SetStatus(string message)
     {

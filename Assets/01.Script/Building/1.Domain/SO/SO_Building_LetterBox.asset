@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SO_Building_LetterBox
   m_EditorClassIdentifier: 
   Type: 1
-  Category: 1
+  Category: 0
   BuildingName: "\uC6B0\uD3B8\uD568"
   Prefab:
     m_AssetGUID: 66d0146c7008620478136153284b7843
