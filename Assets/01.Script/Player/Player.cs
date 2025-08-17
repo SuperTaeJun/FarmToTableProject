@@ -31,9 +31,6 @@ public class Player : MonoBehaviour
     public Vector3 CurrentSelectedPos = Vector3.zero;
     private BuildingObject _currentInteractableBuilding;
     
-    // 생성된 이미지 저장
-    private List<Texture2D> _generatedImages = new List<Texture2D>();
-    public List<Texture2D> GeneratedImages => _generatedImages;
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
@@ -118,36 +115,4 @@ public class Player : MonoBehaviour
         }
     }
     
-    // 생성된 이미지 관련 메서드들
-    public void AddGeneratedImage(Texture2D image)
-    {
-        if (image != null)
-        {
-            _generatedImages.Add(image);
-            Debug.Log($"플레이어에게 이미지 추가됨. 총 이미지 수: {_generatedImages.Count}");
-        }
-    }
-    
-    public Texture2D GetLastGeneratedImage()
-    {
-        if (_generatedImages.Count > 0)
-        {
-            return _generatedImages[_generatedImages.Count - 1];
-        }
-        return null;
-    }
-    
-    public bool HasGeneratedImages()
-    {
-        return _generatedImages.Count > 0;
-    }
-    
-    public void RemoveLastGeneratedImage()
-    {
-        if (_generatedImages.Count > 0)
-        {
-            _generatedImages.RemoveAt(_generatedImages.Count - 1);
-            Debug.Log($"마지막 이미지 제거됨. 남은 이미지 수: {_generatedImages.Count}");
-        }
-    }
 }

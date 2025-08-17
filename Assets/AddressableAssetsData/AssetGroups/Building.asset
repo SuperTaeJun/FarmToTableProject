@@ -195,6 +195,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad7ae416c511d334d98adfb4f5df5d5b
+    m_Address: Prefab_Preview_Painting
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2d6ebde5b839a94b9732c9e343e482c
     m_Address: Prefab_Preview_Store
     m_ReadOnly: 0
@@ -227,6 +232,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1d2b0f525d9f8a438a837f97b2ce6ae
     m_Address: Prefab_Preview_Ballon2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d554fc2fee9dce241b2be9e17e3a654a
+    m_Address: Prefab_Painting
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

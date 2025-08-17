@@ -4,32 +4,27 @@ using UnityEngine.UI;
 
 public class UI_ImageGenerator : UI_Popup
 {
-    [Header("UI ������Ʈ")]
-    [SerializeField] private TMP_InputField promptInput;
-    [SerializeField] private Button generateButton;
-    [SerializeField] private RawImage displayImage;
-    [SerializeField] private TextMeshProUGUI statusText;
-
-
+    [Header("UI 컴포넌트")]
+    [SerializeField] private TMP_InputField _promptInput;
+    [SerializeField] private Button _generateButton;
+    [SerializeField] private Button _closeButton;
     private void Start()
     {
-        generateButton.onClick.AddListener(OnGenerateButtonClicked);
-        SetStatus("������Ʈ�� �Է��ϰ� �̹����� �����ϼ���.");
+        _generateButton.onClick.AddListener(OnGenerateButtonClicked);
+        _closeButton.onClick.AddListener(()=> { Close(); _promptInput.text = string.Empty; });
     }
 
     private void OnGenerateButtonClicked()
     {
-        string prompt = promptInput.text.Trim();
+        string prompt = _promptInput.text.Trim();
 
         if (string.IsNullOrEmpty(prompt))
         {
             return;
         }
 
-        // 백그라운드에서 이미지 생성 시작
         ImageGenerationManager.Instance.GenerateImage(prompt, OnImageGenerated);
-        
-        // 팝업 즉시 닫기
+        _promptInput.text = string.Empty;
         Close();
     }
 
@@ -41,10 +36,5 @@ public class UI_ImageGenerator : UI_Popup
         }
 
         Debug.Log("이미지 생성 완료!");
-    }
-    private void SetStatus(string message)
-    {
-        if (statusText != null)
-            statusText.text = message;
     }
 }

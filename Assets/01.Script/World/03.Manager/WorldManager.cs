@@ -33,7 +33,7 @@ public class WorldManager : MonoBehaviour
     public static string GetChunkId(Vector3 worldPosition)
     {
         Chunk chunk = WorldManager.Instance.GetChunkAtWorldPosition(worldPosition);
-        return $"{chunk.Position.X}_{chunk.Position.Y}_{chunk.Position.Z}";
+        return chunk.Position.ToChunkId();
     }
 
     private void Awake()

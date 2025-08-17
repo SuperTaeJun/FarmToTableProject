@@ -6,7 +6,8 @@ public enum EPlayerNotificationType
     Chunk,
     LackOfMoney,
     LackOfSeed,
-    BuildingInteraction
+    BuildingInteraction,
+    ReadyImage
 }
 public class PlayerNotificationAbility : PlayerAbility
 {
@@ -14,6 +15,11 @@ public class PlayerNotificationAbility : PlayerAbility
     [SerializeField] private TextMeshProUGUI _dialogText;
 
     private Coroutine _autoHideCoroutine;
+
+    private void Start()
+    {
+        ImageGenerationManager.Instance.OnImageGenerationComplete += (Texture2D texture) => ActiveDialogBox(EPlayerNotificationType.ReadyImage);
+    }
 
     public void DisActiveDialogBox()
     {
@@ -38,6 +44,10 @@ public class PlayerNotificationAbility : PlayerAbility
                 break;
             case EPlayerNotificationType.BuildingInteraction:
                 _dialogText.text = "<color=red>F</color>를 눌러서\n 상호작용하기";
+                break;
+            case EPlayerNotificationType.ReadyImage:
+                SetAutoHide(2f);
+                _dialogText.text = "주문했던 그림이 준비 된거같아!";
                 break;
         }
     }

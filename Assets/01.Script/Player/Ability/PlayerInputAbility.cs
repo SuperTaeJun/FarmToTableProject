@@ -114,7 +114,6 @@ public class PlayerInputAbility : PlayerAbility
     }
     private void HandleRightMouseInput()
     {
-        Debug.Log(_currentMode);
         if (_currentMode == EPlayerMode.Vehicle) return;
 
         if (Input.GetMouseButtonDown(1))

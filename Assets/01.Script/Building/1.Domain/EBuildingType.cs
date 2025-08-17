@@ -29,6 +29,7 @@ public enum EBuildingType
     PigFarm,
     ChickenFarm,
     EnergyFarm,
+    Painting,
 
     None
 }

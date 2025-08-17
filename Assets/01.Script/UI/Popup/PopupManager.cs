@@ -10,7 +10,9 @@ public enum EPopupType
     UI_InventoryPopup,
     UI_ShopPopup,
     UI_Vehicle,
-    UI_ImageGenerator
+    UI_ImageGenerator,
+    UI_ImagePreview,
+    UI_ImageSelector
 }
 public class PopupManager : MonoBehaviour
 {

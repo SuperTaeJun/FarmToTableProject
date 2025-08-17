@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6384675107461160470}
   - component: {fileID: 3141196673726500349}
   - component: {fileID: -4066537974112723275}
-  - component: {fileID: -6859438847873466076}
   - component: {fileID: 6331028688648312249}
   m_Layer: 0
   m_Name: Prefab_LetterBox
@@ -129,25 +128,6 @@ MonoBehaviour:
   scaleEase: 27
   targetScale: {x: 1, y: 1, z: 1}
   interactionRange: 1
-  ExecuteVfxTransform: {fileID: 0}
-  ExecuteInfoTransform: {fileID: 0}
---- !u!114 &-6859438847873466076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9111732691992568829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingType: 0
-  scaleUpDuration: 0.5
-  scaleEase: 27
-  targetScale: {x: 1, y: 1, z: 1}
-  interactionRange: 3.5
   ExecuteVfxTransform: {fileID: 0}
   ExecuteInfoTransform: {fileID: 0}
 --- !u!65 &6331028688648312249

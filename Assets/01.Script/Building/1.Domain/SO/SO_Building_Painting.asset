@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
+  m_Name: SO_Building_Painting
+  m_EditorClassIdentifier: 
+  Type: 26
+  Category: 0
+  BuildingName: "\uADF8\uB9BC\uD310"
+  Prefab:
+    m_AssetGUID: d554fc2fee9dce241b2be9e17e3a654a
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 1
+  PreviewPrefab:
+    m_AssetGUID: ad7ae416c511d334d98adfb4f5df5d5b
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  UISprite:
+    m_AssetGUID: fe5c7c74cfaf3dd42926775addce570b
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  Size: {x: 1, y: 1}
+  Cost: 0

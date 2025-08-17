@@ -118,7 +118,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6204031823007126097}
   - component: {fileID: -7490733900565113903}
-  - component: {fileID: 1242535046944434167}
   m_Layer: 0
   m_Name: Prefab_Fence
   m_TagString: Building
@@ -157,22 +156,7 @@ MonoBehaviour:
   buildingType: 0
   scaleUpDuration: 0.5
   scaleEase: 27
+  targetScale: {x: 1, y: 1, z: 1}
   interactionRange: 0
-  VfxPos: {fileID: 0}
---- !u!114 &1242535046944434167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139351033768652737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0e1c7f2316b93946a44564d667f9b22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingType: 0
-  scaleUpDuration: 0.5
-  scaleEase: 27
-  interactionRange: 3.5
-  VfxPos: {fileID: 0}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 0}

@@ -20,6 +20,7 @@ public class LetterFunction : IBuildingFunction
         if (ImageGenerationManager.Instance != null)
         {
             ImageGenerationManager.Instance.OnImageGenerationComplete += OnImageGenerationComplete;
+            ImageGenerationManager.Instance.OnImageConfirmed += OnImageConfirmed;
         }
     }
 
@@ -28,18 +29,19 @@ public class LetterFunction : IBuildingFunction
         switch (currentState)
         {
             case ELetterState.Empty:
-                // 이미지 생성 팝업 열기
-                FadeManager.Instance.FadeScreenWithEvent(() => PopupManager.Instance.Open(EPopupType.UI_ImageGenerator));
+                PopupManager.Instance.Open(EPopupType.UI_ImageGenerator);
                 break;
             
             case ELetterState.Generating:
-                // 생성 중일 때는 상태 메시지 표시
                 Debug.Log("이미지 생성 중입니다...");
                 break;
             
             case ELetterState.Ready:
-                // 이미지 수령 - 플레이어에게 전달
-                DeliverImageToPlayer();
+                // 생성된 이미지를 대기중 이미지로 설정
+                ImageGenerationManager.Instance.SetPendingImage(generatedImage);
+                
+                // 이미지 프리뷰 팝업 열기
+                PopupManager.Instance.Open(EPopupType.UI_ImagePreview);
                 break;
         }
     }
@@ -57,36 +59,15 @@ public class LetterFunction : IBuildingFunction
         Debug.Log("이미지 생성이 완료되었습니다!");
     }
 
-    private void DeliverImageToPlayer()
+    private void OnImageConfirmed()
     {
-        if (generatedImage != null)
-        {
-            // 플레이어에게 이미지 전달
-            Player player = _buildingObject.Player.GetComponent<Player>();
-            if (player != null)
-            {
-                player.AddGeneratedImage(generatedImage);
-                Debug.Log("이미지를 플레이어에게 전달했습니다!");
-            }
-            else
-            {
-                Debug.LogError("플레이어를 찾을 수 없습니다!");
-            }
-            
-            // 상태 초기화
-            generatedImage = null;
-            currentState = ELetterState.Empty;
-        }
+        // 이미지 확정 후 상태 초기화
+        currentState = ELetterState.Empty;
+        generatedImage = null;
     }
+
     public void Update()
     {
     }
 
-    private void OnDestroy()
-    {
-        if (ImageGenerationManager.Instance != null)
-        {
-            ImageGenerationManager.Instance.OnImageGenerationComplete -= OnImageGenerationComplete;
-        }
-    }
 }

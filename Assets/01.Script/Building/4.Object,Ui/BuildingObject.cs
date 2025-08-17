@@ -99,6 +99,9 @@ public class BuildingObject : MonoBehaviour
             case EBuildingType.LetterBox:
                 _functions = new IBuildingFunction[] { new LetterFunction(this) };
                 break;
+            case EBuildingType.Painting:
+                _functions = new IBuildingFunction[] { new PaintingFunction(this) };
+                break;
             default:
                 _functions = new IBuildingFunction[0];
                 break;
@@ -184,11 +187,11 @@ public class BuildingObject : MonoBehaviour
     {
         return _playerInRange && HasFunction();
     }
-    
+
     public bool IsFarmReadyToHarvest()
     {
         if (_functions == null) return false;
-        
+
         foreach (var function in _functions)
         {
             if (function is ChickenFarmFunction chickenFarm)
@@ -202,11 +205,11 @@ public class BuildingObject : MonoBehaviour
         }
         return true; // 농장이 아닌 경우 항상 상호작용 가능
     }
-    
+
     public float GetFarmHoursUntilReady()
     {
         if (_functions == null) return 0f;
-        
+
         foreach (var function in _functions)
         {
             if (function is ChickenFarmFunction chickenFarm)
