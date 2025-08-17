@@ -609,10 +609,9 @@ public class WorldManager : MonoBehaviour
     {
         HashSet<ChunkPosition> affectedChunks = new HashSet<ChunkPosition>();
         bool success = true;
-
         int halfSize = size / 2;
         Vector3 blockOffset = dynamicGenerator.blockOffset;
-
+        //사이즈에 따라 블록 설정
         for (int x = -halfSize; x <= halfSize; x++)
         {
             for (int z = -halfSize; z <= halfSize; z++)
@@ -625,13 +624,12 @@ public class WorldManager : MonoBehaviour
                 }
             }
         }
-
+        // 변경된 청크들 재구성
         foreach (var chunkPos in affectedChunks)
         {
             RebuildChunk(chunkPos);
-            //_ = _repo.SaveChunkAsync(LoadedChunks[chunkPos]);
+            _ = _repo.SaveChunkAsync(LoadedChunks[chunkPos]);
         }
-
         return success;
     }
 

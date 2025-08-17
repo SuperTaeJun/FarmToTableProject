@@ -25,7 +25,6 @@ public class CropsManager : MonoBehaviour
 
     public DebugEvent<EAchievementType,int> OnReportAchievement = new DebugEvent<EAchievementType,int>();
 
-
     // 성장 시간에 따라 호출되는 이벤트, 성장 중단 등도 포함
     public DebugEvent<Crop> OnCropGrowthUpdated = new DebugEvent<Crop>();
     public DebugEvent<Crop> OnCropGrowthStopped = new DebugEvent<Crop>();
@@ -164,7 +163,7 @@ public class CropsManager : MonoBehaviour
 
     private void StartGrowthUpdate()
     {
-        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f); // 1초 후 시작, 5초마다 반복
+        InvokeRepeating(nameof(UpdateCropGrowth), 1f, 5f);
     }
 
     public SO_Crop GetCropData(ECropType cropType)
