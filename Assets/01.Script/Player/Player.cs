@@ -111,8 +111,8 @@ public class Player : MonoBehaviour
     {
         if (_currentInteractableBuilding != null && _currentInteractableBuilding.CanInteract())
         {
+            _=_dataController.SavePlayerDataAsync();
             _currentInteractableBuilding.FunctionInteract();
         }
     }
-    
 }

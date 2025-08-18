@@ -16,7 +16,7 @@ public class LetterFunction : IBuildingFunction
     public LetterFunction(BuildingObject buildingObject)
     {
         _buildingObject = buildingObject;
-        
+
         if (ImageGenerationManager.Instance != null)
         {
             ImageGenerationManager.Instance.OnImageGenerationComplete += OnImageGenerationComplete;
@@ -29,39 +29,50 @@ public class LetterFunction : IBuildingFunction
         switch (currentState)
         {
             case ELetterState.Empty:
+                //돈없으면 못만듬
+                if (CanAffordImageGeneration() == false) return;
+
+                _ = CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Money, 2000);
+                _ = CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Gem, 2);
+
                 PopupManager.Instance.Open(EPopupType.UI_ImageGenerator);
+                currentState = ELetterState.Generating;
                 break;
-            
+
             case ELetterState.Generating:
                 Debug.Log("이미지 생성 중입니다...");
                 break;
-            
+
             case ELetterState.Ready:
                 // 생성된 이미지를 대기중 이미지로 설정
                 ImageGenerationManager.Instance.SetPendingImage(generatedImage);
-                
+
                 // 이미지 프리뷰 팝업 열기
                 PopupManager.Instance.Open(EPopupType.UI_ImagePreview);
                 break;
         }
     }
 
-    public void StartImageGeneration()
+    private bool CanAffordImageGeneration()
     {
-        currentState = ELetterState.Generating;
-        Debug.Log("이미지 생성을 시작합니다.");
+        if (CurrencyManager.Instance.CanAfford(ECurrencyType.Money, 2000) == false
+            || CurrencyManager.Instance.CanAfford(ECurrencyType.Gem, 2) == false)
+        {
+            _buildingObject.Player.GetComponent<Player>().GetAbility<PlayerNotificationAbility>().ActiveDialogBox(EPlayerNotificationType.LackOfMoney);
+            return false;
+        }
+
+        return true;
     }
 
     public void OnImageGenerationComplete(Texture2D image)
     {
         generatedImage = image;
         currentState = ELetterState.Ready;
-        Debug.Log("이미지 생성이 완료되었습니다!");
     }
 
     private void OnImageConfirmed()
     {
-        // 이미지 확정 후 상태 초기화
         currentState = ELetterState.Empty;
         generatedImage = null;
     }

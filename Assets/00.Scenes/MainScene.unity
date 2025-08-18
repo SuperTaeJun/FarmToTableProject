@@ -21476,20 +21476,28 @@ MonoBehaviour:
   _vehicles:
   - Type: 3
     Prefab: {fileID: 7594353545664805592, guid: 6b462c5eea8f1c34a8fa270732ac1e37, type: 3}
+    Sprite: {fileID: 21300000, guid: 1ff36d05e45862d4bb99c2e917a7ce13, type: 3}
   - Type: 4
     Prefab: {fileID: 4346851474126254382, guid: b1cec567acce4584e96f86625d4482ef, type: 3}
+    Sprite: {fileID: 21300000, guid: bf5e348fda3c16248988069534716355, type: 3}
   - Type: 5
     Prefab: {fileID: 3559466510642736906, guid: 9d42cf451fea12344baf7eff7f618b34, type: 3}
+    Sprite: {fileID: 21300000, guid: e68aefb7931aad040a793e74ed58bf44, type: 3}
   - Type: 1
     Prefab: {fileID: 6193747972577514202, guid: 19cea127a6e3a0742b11d12e96de36fc, type: 3}
+    Sprite: {fileID: 21300000, guid: 8c5d0fd29d3f7464eb8f10484026086d, type: 3}
   - Type: 2
     Prefab: {fileID: 7479474908317246216, guid: d701c87db809b6e408f802c3835ffcad, type: 3}
+    Sprite: {fileID: 21300000, guid: 80d844a02e7c4704b9b42fbf8f9ce755, type: 3}
   - Type: 7
     Prefab: {fileID: 480614491263500329, guid: 2a85d8538741ab545b2394277751760a, type: 3}
+    Sprite: {fileID: 21300000, guid: 26b4d397e7b35e64cba7128c88329f45, type: 3}
   - Type: 8
     Prefab: {fileID: 4602978812330850017, guid: 0a3ae2e999e700747bd4987fe91391f8, type: 3}
+    Sprite: {fileID: 21300000, guid: 67239de930e58f34283c4d93e3096aec, type: 3}
   - Type: 6
     Prefab: {fileID: 4962124714545560305, guid: 9f76fc26bfd873d44875ec9f0ea35af6, type: 3}
+    Sprite: {fileID: 21300000, guid: 11213a1172f529d499ae14ee1b95c1b6, type: 3}
 --- !u!4 &1855986861
 Transform:
   m_ObjectHideFlags: 0

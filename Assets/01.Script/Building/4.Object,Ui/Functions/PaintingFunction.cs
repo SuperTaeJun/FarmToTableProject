@@ -18,14 +18,13 @@ public class PaintingFunction : IBuildingFunction
         // Manager 인스턴스 존재 여부 확인
         if (ImageGenerationManager.Instance == null)
         {
-            Debug.Log("ImageGenerationManager가 초기화되지 않았습니다!");
             return;
         }
 
         // 저장된 이미지가 없는 경우 처리
         if (ImageGenerationManager.Instance.GeneratedImages.Count == 0)
         {
-            Debug.Log("저장된 이미지가 없습니다!");
+            _buildingObject.Player.GetComponent<Player>().GetAbility<PlayerNotificationAbility>().ActiveDialogBox(EPlayerNotificationType.DontHavePaint);
             return;
         }
 

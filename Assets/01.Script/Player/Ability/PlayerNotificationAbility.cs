@@ -7,7 +7,8 @@ public enum EPlayerNotificationType
     LackOfMoney,
     LackOfSeed,
     BuildingInteraction,
-    ReadyImage
+    ReadyImage,
+    DontHavePaint,
 }
 public class PlayerNotificationAbility : PlayerAbility
 {
@@ -47,7 +48,11 @@ public class PlayerNotificationAbility : PlayerAbility
                 break;
             case EPlayerNotificationType.ReadyImage:
                 SetAutoHide(2f);
-                _dialogText.text = "주문했던 그림이 준비 된거같아!";
+                _dialogText.text = "주문했던 그림이\n 준비 된거같아!";
+                break;
+            case EPlayerNotificationType.DontHavePaint:
+                SetAutoHide(2f);
+                _dialogText.text = "가지고있는 그림이 없어...";
                 break;
         }
     }

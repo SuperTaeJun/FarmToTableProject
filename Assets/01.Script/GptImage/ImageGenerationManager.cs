@@ -266,6 +266,19 @@ public class ImageGenerationManager : MonoBehaviour
             _selectedImageCallback = null;
         }
     }
+    public static void DeleteAllData()
+    {
+        int imageCount = PlayerPrefs.GetInt(PREFS_KEY_COUNT, 0);
+
+        // 저장된 모든 이미지 키 삭제
+        for (int i = 0; i < imageCount; i++)
+        {
+            PlayerPrefs.DeleteKey(PREFS_KEY_IMAGE_PREFIX + i);
+        }
+
+        PlayerPrefs.DeleteKey(PREFS_KEY_COUNT);
+        PlayerPrefs.Save();
+    }
 }
 
 [Serializable]

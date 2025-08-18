@@ -8,6 +8,7 @@ public class VehicleManager : MonoBehaviour
 
     [Header("Vehicle Prefabs")]
     [SerializeField] private List<VehiclePrefabWithType> _vehicles;
+    public List<VehiclePrefabWithType> Vehicles => _vehicles;
 
     private Dictionary<EVehicleType, GameObject> _vehiclePrefabs;
     private List<Vehicle> activeVehicles = new List<Vehicle>();
@@ -133,29 +134,6 @@ public class VehicleManager : MonoBehaviour
         return null;
     }
 
-    private Vector3 SnapToGrid(Vector3 position)
-    {
-        Vector3 blockOffset = ChunkGenerator.Instance.blockOffset;
-
-        float snappedX = Mathf.Round(position.x / blockOffset.x) * blockOffset.x;
-        float snappedZ = Mathf.Round(position.z / blockOffset.z) * blockOffset.z;
-
-        // 지면 높이 가져오기
-        float groundHeight = WorldManager.Instance.GetGroundHeight(new Vector3(snappedX, position.y, snappedZ));
-
-        return new Vector3(snappedX, groundHeight + blockOffset.y, snappedZ);
-    }
-
-    public List<Vehicle> GetActiveVehicles()
-    {
-        return new List<Vehicle>(activeVehicles);
-    }
-
-    public int GetActiveVehicleCount()
-    {
-        return activeVehicles.Count;
-    }
-
     // 해금 시스템 메서드들
     public bool IsVehicleUnlocked(EVehicleType vehicleType)
     {
@@ -228,4 +206,5 @@ public struct VehiclePrefabWithType
 {
     public EVehicleType Type;
     public GameObject Prefab;
+    public Sprite Sprite;
 }
