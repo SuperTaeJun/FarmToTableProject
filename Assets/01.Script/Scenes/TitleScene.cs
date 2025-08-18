@@ -69,7 +69,7 @@ public class TitleScene : MonoBehaviour
                 new BuildingRepository().DeleteAllData(),
                 new CropRepository().DeleteAllData()
             );
-            ImageGenerationManager.DeleteAllData();
+            //ImageGenerationManager.DeleteAllData();
             Debug.Log("게임 데이터 삭제 완료!");
         }
         catch (System.Exception e)

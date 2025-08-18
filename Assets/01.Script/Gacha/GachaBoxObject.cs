@@ -20,15 +20,14 @@ public class GachaBoxObject : MonoBehaviour
         _selectedVfx.SetActive(true);
         GachaScene.Instance.OnGachaButtonClicked();
         StartCoroutine(WaitForParticleEnd());
+
     }
     private void OnMouseEnter()
     {
-        Debug.Log("마우스가 박스 위에 들어옴!");
         _hoverVfx.SetActive(true);
     }
     private void OnMouseExit()
     {
-        Debug.Log("마우스가 박스에서 나감!");
         _hoverVfx.SetActive(false);
     }
     private IEnumerator WaitForParticleEnd()

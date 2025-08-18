@@ -20,7 +20,6 @@ public class UI_Billboard : MonoBehaviour
             transform.position + mainCam.rotation * Vector3.forward - transform.position,
             mainCam.rotation * Vector3.up
         );
-
         // 현재 회전에서 목표 회전으로 부드럽게 보간
         transform.rotation = Quaternion.Slerp(
             transform.rotation,

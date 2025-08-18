@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1739858652662122297}
   - component: {fileID: 2747927590053015457}
   - component: {fileID: 4140354505190906495}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,17 +43,17 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 2
-  m_Color: {r: 0.8792453, g: 0.79924494, b: 0.6353791, a: 1}
-  m_Intensity: 4
-  m_Range: 10
+  m_Color: {r: 0.995283, g: 0.93016255, b: 0.7934096, a: 1}
+  m_Intensity: 15
+  m_Range: 40
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.2
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -81,7 +81,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 3
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_LightLayerMask: 1
   m_RenderingLayers: 1
   m_CustomShadowLayers: 0
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 2288919420801988781}
   - component: {fileID: 5949055898897216349}
   - component: {fileID: -6357779649186427189}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Prefab_LightingProp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,5 +247,7 @@ MonoBehaviour:
   buildingType: 0
   scaleUpDuration: 0.5
   scaleEase: 27
+  targetScale: {x: 1, y: 1, z: 1}
   interactionRange: 0
-  VfxPos: {fileID: 0}
+  ExecuteVfxTransform: {fileID: 0}
+  ExecuteInfoTransform: {fileID: 0}
