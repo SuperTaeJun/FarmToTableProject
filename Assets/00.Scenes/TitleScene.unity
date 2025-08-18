@@ -361,6 +361,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: b1e689dd4a330854cae85079ce0c09f2, type: 3}
   - type: 5
     clip: {fileID: 8300000, guid: fa43a5297ee66214483f2ee71c84b370, type: 3}
+  - type: 6
+    clip: {fileID: 8300000, guid: 675c0045be35e494f9c88ca4fa896764, type: 3}
   sfxData:
   - type: 0
     clip: {fileID: 8300000, guid: a443a7258813b434d87bde43d326ed96, type: 3}
@@ -392,6 +394,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d65f3b9ea2c5e3a4e99d9c65b3624b40, type: 3}
   - type: 13
     clip: {fileID: 8300000, guid: 65f40cac2a2acee469cd225ff04cd69f, type: 3}
+  - type: 14
+    clip: {fileID: 8300000, guid: ed810b822c3049f49add26955812e324, type: 3}
+  - type: 15
+    clip: {fileID: 8300000, guid: a7aca1d549d39ae49a5cabf99bed1d5b, type: 3}
 --- !u!4 &224449687
 Transform:
   m_ObjectHideFlags: 0

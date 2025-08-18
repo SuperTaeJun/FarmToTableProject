@@ -22,6 +22,7 @@ public class GachaScene : MonoBehaviour
     }
     private void Start()
     {
+        SoundManager.Instance.PlayBGM(BGMType.Gacha);
         InitializeVehiclePool();
     }
 
@@ -99,6 +100,7 @@ public class GachaScene : MonoBehaviour
 
         }
 
+        SoundManager.Instance.PlaySFX(SFXType.GachaReward);
         _rewardUI.SetActive(true);
         var CurrentVehicle = VehicleManager.Instance.Vehicles.Find(v => v.Type == vehicleType);
         OnVehicleRewarded.Invoke(CurrentVehicle.Sprite, GetVehicleName(vehicleType));

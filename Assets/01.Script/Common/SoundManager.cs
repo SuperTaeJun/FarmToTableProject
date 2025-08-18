@@ -9,7 +9,7 @@ public enum BGMType
     Store,
     Loading,
     Clothing,
-    
+    Gacha,
 }
 
 public enum SFXType
@@ -28,7 +28,10 @@ public enum SFXType
     StoreCash,
     Mount,
     Dismount,
-    CarLoop
+    CarLoop,
+
+    Gacha,
+    GachaReward,
 }
 
 [System.Serializable]

@@ -16,6 +16,7 @@ public class GachaBoxObject : MonoBehaviour
     private void OnMouseDown()
     {
         if (isSelected) return;
+        SoundManager.Instance.PlaySFX(SFXType.Gacha);
         _hoverVfx.SetActive(false);
         _selectedVfx.SetActive(true);
         GachaScene.Instance.OnGachaButtonClicked();
