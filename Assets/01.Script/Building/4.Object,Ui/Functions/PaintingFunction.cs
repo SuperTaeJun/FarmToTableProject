@@ -52,8 +52,8 @@ public class PaintingFunction : IBuildingFunction
                     SaveAppliedImage(imageIndex);
                     Debug.Log($"그림이 변경되고 저장되었습니다! (인덱스: {imageIndex})");
                 }
-
             }
+            _buildingObject.ExecuteVfxTransform?.gameObject.SetActive(true);
         }
     }
 

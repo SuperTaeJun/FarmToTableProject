@@ -55,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b03936f029803945a00c954cbf57cc5
+    m_Address: Prefab_Preview_GachaMachine
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e5738f7ab8411d4c96fdfcc2ae8b215
     m_Address: Prefab_Flowers1
     m_ReadOnly: 0
@@ -187,6 +192,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a635a12c266c5da4ea52613c20a98131
     m_Address: Prefab_Preview_Home
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a949395208c0bd14faf716dd05818a50
+    m_Address: Prefab_GachaMachine
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

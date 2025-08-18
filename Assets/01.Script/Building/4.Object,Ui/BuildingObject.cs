@@ -102,6 +102,9 @@ public class BuildingObject : MonoBehaviour
             case EBuildingType.Painting:
                 _functions = new IBuildingFunction[] { new PaintingFunction(this) };
                 break;
+            case EBuildingType.GachaMachine:
+                _functions = new IBuildingFunction[] { new GachaMachineFunction(this) };
+                break;
             default:
                 _functions = new IBuildingFunction[0];
                 break;

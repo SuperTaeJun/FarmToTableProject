@@ -42,7 +42,9 @@ public class CurrencyManager : MonoBehaviour
 
         //임시로
         _currencies[0].SetAmount(99999);
+        _currencies[1].SetAmount(10);
         OnCurrencyChanged.Invoke(ECurrencyType.Money, 0,_currencies[0].Amount);
+        OnCurrencyChanged.Invoke(ECurrencyType.Gem, 0, _currencies[1].Amount);
     }
     
     public async Task LoadCurrencies()
