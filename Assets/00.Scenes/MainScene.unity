@@ -16973,6 +16973,12 @@ MonoBehaviour:
   - poolType: 6
     prefab: {fileID: 7100892537102872886, guid: 74077ad9a92c8f84b95b989aa49a3bfa, type: 3}
     poolSize: 20
+  - poolType: 7
+    prefab: {fileID: 5509107431082089894, guid: f89bb1c541bd3a6438b23115f11ed300, type: 3}
+    poolSize: 3
+  - poolType: 8
+    prefab: {fileID: 2859467044933389089, guid: 35f9044c92c0f7447be0243c2102b071, type: 3}
+    poolSize: 3
 --- !u!4 &1455252551
 Transform:
   m_ObjectHideFlags: 0

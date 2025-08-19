@@ -9,7 +9,9 @@ public enum PoolType
     SmokeS,
     SomkeM,
     SomkeL,
-    CropWater
+    CropWater,
+    TreeFragment,
+    StoneFragment,
 }
 
 public class ObjectPoolManager : MonoBehaviour

@@ -46,7 +46,7 @@ public class PlayerAnimAbility : PlayerAbility
             case EPlayerMode.Forage:
                 if (_owner.GetAbility<PlayerForageAbility>().CanForaging(out EForageType type) == false) return;
 
-                if (type == EForageType.Tree)
+                if (type == EForageType.Tree || type == EForageType.Stone)
                 {
                     _owner.Animator.SetTrigger("Forage_Tree");
                     _owner.GetAbility<PlayerVisualAbility>()?.SetActiveVisualPart(EVisualPart.Axe);

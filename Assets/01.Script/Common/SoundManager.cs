@@ -32,6 +32,7 @@ public enum SFXType
 
     Gacha,
     GachaReward,
+    FragmentSound,
 }
 
 [System.Serializable]

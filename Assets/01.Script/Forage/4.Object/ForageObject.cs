@@ -10,6 +10,9 @@ public class ForageObject : MonoBehaviour
     [SerializeField] private float duration = 1f;
     [SerializeField] private float rotationAngle = 720f;
 
+
+    [SerializeField] private GameObject _mesh;
+
     public void Init(Forage forage)
     {
         Type = forage.Type;
@@ -25,19 +28,30 @@ public class ForageObject : MonoBehaviour
 
     public void PlayDisappear()
     {
-        Sequence seq = DOTween.Sequence();
+        if (gameObject.TryGetComponent<FractureExplosion>(out var fractureExplosion))
+        {
+            _mesh.SetActive(false);
+            fractureExplosion.Explode();
+            return;
+        }
+        else
+        {
 
-        seq.Append(transform
-            .DOJump(transform.position, jumpPower, 1, duration)
-            .SetEase(Ease.OutQuad));
+            Sequence seq = DOTween.Sequence();
 
-        seq.Join(transform
-            .DORotate(new Vector3(0, rotationAngle, rotationAngle), duration, RotateMode.FastBeyond360)
-            .SetEase(Ease.OutSine));
-        seq.Join(transform
-            .DOScale(Vector3.zero, duration)
-            .SetEase(Ease.InBack));
+            seq.Append(transform
+                .DOJump(transform.position, jumpPower, 1, duration)
+                .SetEase(Ease.OutQuad));
 
-        seq.OnComplete(() => Destroy(gameObject));
+            seq.Join(transform
+                .DORotate(new Vector3(0, rotationAngle, rotationAngle), duration, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutSine));
+            seq.Join(transform
+                .DOScale(Vector3.zero, duration)
+                .SetEase(Ease.InBack));
+
+            seq.OnComplete(() => Destroy(gameObject));
+        }
     }
+
 }
