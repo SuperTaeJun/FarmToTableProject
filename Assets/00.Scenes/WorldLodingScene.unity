@@ -1232,7 +1232,7 @@ PrefabInstance:
     - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
       propertyPath: _stonePrefab
       value: 
-      objectReference: {fileID: -4959001946541982571, guid: 2aa6f439924534d4ba7c49b72cabeae9, type: 3}
+      objectReference: {fileID: -639499089125413458, guid: 0e1bac319fdc95b40a61eddfb317252e, type: 3}
     - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
       propertyPath: _plant1Prefab
       value: 
@@ -1241,6 +1241,50 @@ PrefabInstance:
       propertyPath: _plant2Prefab
       value: 
       objectReference: {fileID: -68051614601671534, guid: 66cdd2d2d8e23cc4d948e93db6c62c36, type: 3}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: totalForagesPerChunk
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[0].weight
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[1].weight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[2].weight
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[3].weight
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[0].maxCount
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[0].minCount
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[2].maxCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[2].minCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[3].maxCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550081533066201901, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
+      propertyPath: spawnBatches.Array.data[3].minCount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4951161886087320331, guid: 2372b22351c769b4ca5ba99e8e557201, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

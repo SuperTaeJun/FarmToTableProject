@@ -100,6 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a640b12ab226c3347815ce12aaa54a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpPower: 6
+  duration: 2
+  rotationAngle: 360
 --- !u!65 &4878372546428099046
 BoxCollider:
   m_ObjectHideFlags: 0

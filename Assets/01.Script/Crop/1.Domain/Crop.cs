@@ -22,7 +22,6 @@ public class Crop
         ChunkId = chunkId;
         Position = position;
         GrowthStage = ECropGrowthStage.Seed;
-
         PlantedDay = plantedDay;
         PlantedHour = plantedHour;
 
