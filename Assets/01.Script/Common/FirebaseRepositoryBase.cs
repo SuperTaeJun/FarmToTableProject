@@ -20,9 +20,7 @@ public abstract class FirebaseRepositoryBase
         {
             // 로딩 UI 표시
             Debug.Log($"[Firebase] 시작: {context}");
-
             T result = await taskFunc.Invoke();
-
             // 로딩 UI 종료
             Debug.Log($"[Firebase] 완료: {context}");
             return result;

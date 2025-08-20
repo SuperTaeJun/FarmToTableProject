@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class GachaScene : MonoBehaviour
     private List<VehicleGachaData> vehiclePool = new List<VehicleGachaData>();
 
     public event Action OnGachaPerformed;
-    public event Action <Sprite,string> OnVehicleRewarded;
+    public event Action<Sprite, string> OnVehicleRewarded;
     private void Awake()
     {
         Instance = this;
@@ -28,7 +29,16 @@ public class GachaScene : MonoBehaviour
 
     public void SetActiveRewardUI(bool isActive)
     {
-        _rewardUI.SetActive(isActive);
+        if (isActive)
+        {
+            _rewardUI.SetActive(true);
+
+            _rewardUI.transform.localScale = Vector3.zero;
+
+            _rewardUI.transform
+                .DOScale(Vector3.one, 0.3f)
+                .SetEase(Ease.OutBack);
+        }
     }
 
 
@@ -101,7 +111,7 @@ public class GachaScene : MonoBehaviour
         }
 
         SoundManager.Instance.PlaySFX(SFXType.GachaReward);
-        _rewardUI.SetActive(true);
+        SetActiveRewardUI(true);
         var CurrentVehicle = VehicleManager.Instance.Vehicles.Find(v => v.Type == vehicleType);
         OnVehicleRewarded.Invoke(CurrentVehicle.Sprite, GetVehicleName(vehicleType));
     }

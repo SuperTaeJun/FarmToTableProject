@@ -18,7 +18,7 @@ public class UI_GachaReward : MonoBehaviour
     private void RefreshReward(Sprite sprite,string name)
     {
         _rewardImage.sprite = sprite;
-        _rewardText.text = $"{name} È¹µæ!";
+        _rewardText.text = name;
     }
 
 }
