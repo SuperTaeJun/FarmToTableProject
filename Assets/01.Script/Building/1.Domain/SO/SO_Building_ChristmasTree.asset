@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
+  m_Name: SO_Building_ChristmasTree
+  m_EditorClassIdentifier: 
+  Type: 30
+  Category: 1
+  BuildingName: "\uD2B8\uB9AC"
+  Prefab:
+    m_AssetGUID: 45b7080519fc724498c68a0f192eb069
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  PreviewPrefab:
+    m_AssetGUID: ceb3055bbe1c12040811694df2f30998
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  UISprite:
+    m_AssetGUID: 47f5f1e3dac4c9d4ba9d422b77142b79
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  Size: {x: 1, y: 1}
+  Cost: 0

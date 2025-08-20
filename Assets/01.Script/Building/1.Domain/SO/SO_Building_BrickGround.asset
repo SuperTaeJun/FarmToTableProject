@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef87fb0a52904b54a865c84a832884da, type: 3}
+  m_Name: SO_Building_BrickGround
+  m_EditorClassIdentifier: 
+  Type: 31
+  Category: 1
+  BuildingName: "\uB3CC\uAE38"
+  Prefab:
+    m_AssetGUID: 76bc22b8befd209478646c093b65f1b7
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  PreviewPrefab:
+    m_AssetGUID: a34d35053488dbc4f8a806c1ca5657ec
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  UISprite:
+    m_AssetGUID: c948ef92329de3f40b9aa7fb0bcf70d8
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  Size: {x: 1, y: 1}
+  Cost: 0

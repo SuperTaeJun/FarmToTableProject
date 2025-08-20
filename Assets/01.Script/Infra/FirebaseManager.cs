@@ -17,7 +17,7 @@ public class FirebaseManager : MonoBehaviour
     public bool IsInitialized { get; private set; } = false;
 
     private Task _initTask;
-    public Task InitTask => _initTask; // 외부 접근용
+    public Task InitTask => _initTask;
 
     public event Action OnFirebaseInitialized;
 
@@ -27,41 +27,59 @@ public class FirebaseManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            _initTask = InitFirebase(); // 초기화 Task 저장
         }
         else
         {
             Destroy(gameObject);
-            return;
         }
-        _initTask = InitFirebase(); // 초기화 Task 저장
-    }
-
-    private void Start()
-    {
-
     }
 
     private async Task InitFirebase()
     {
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
-
-        if (dependencyStatus == DependencyStatus.Available)
-        {
-            Debug.Log("Firebase 종속성 확인 완료");
-
-            App = FirebaseApp.DefaultInstance;
-            Auth = FirebaseAuth.DefaultInstance;
-            Firestore = FirebaseFirestore.DefaultInstance;
-
-            await SignInAnonymously();
-
-            IsInitialized = true;
-            OnFirebaseInitialized?.Invoke();
-        }
-        else
+        if (dependencyStatus != DependencyStatus.Available)
         {
             Debug.LogError($"Firebase 종속성 확인 실패: {dependencyStatus}");
             throw new Exception("Firebase 초기화 실패");
+        }
+
+        Debug.Log("Firebase 종속성 확인 완료");
+        App = FirebaseApp.DefaultInstance;
+        Auth = FirebaseAuth.DefaultInstance;
+        Firestore = FirebaseFirestore.DefaultInstance;
+
+        // 상태 변경 이벤트로 CurrentUser 최신화
+        Auth.StateChanged += OnAuthStateChanged;
+        OnAuthStateChanged(this, null);
+
+        if (Auth.CurrentUser != null)
+        {
+            CurrentUser = Auth.CurrentUser;
+            Debug.Log($"Reusing existing anonymous user: {CurrentUser.UserId}");
+        }
+        else
+        {
+            await SignInAnonymously();
+        }
+
+        IsInitialized = true;
+        OnFirebaseInitialized?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        if (Auth != null) Auth.StateChanged -= OnAuthStateChanged;
+    }
+
+    private void OnAuthStateChanged(object sender, EventArgs e)
+    {
+        if (Auth == null) return;
+        if (Auth.CurrentUser != CurrentUser)
+        {
+            CurrentUser = Auth.CurrentUser;
+            if (CurrentUser != null)
+                Debug.Log($"Auth state changed -> {CurrentUser.UserId}");
         }
     }
 
@@ -69,8 +87,8 @@ public class FirebaseManager : MonoBehaviour
     {
         try
         {
-            var authResult = await Auth.SignInAnonymouslyAsync();
-            CurrentUser = authResult.User;
+            var result = await Auth.SignInAnonymouslyAsync();
+            CurrentUser = result.User;
             Debug.Log($"Anonymous sign in successful: {CurrentUser.UserId}");
             return true;
         }
@@ -81,8 +99,6 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    public string GetUserId()
-    {
-        return CurrentUser?.UserId ?? "DefaultUser";
-    }
+    public string GetUserId() => CurrentUser?.UserId ?? "DefaultUser";
+
 }

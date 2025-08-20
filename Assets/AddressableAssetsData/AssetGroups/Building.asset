@@ -70,8 +70,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39d2c88a1febdc144961ff7c18b3896f
+    m_Address: Prefab_LightingProp2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ceee534c26c01c4e8df860fdc6857c9
     m_Address: Prefab_Preview_Totem1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45b7080519fc724498c68a0f192eb069
+    m_Address: Prefab_ChristmasTree
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -82,6 +92,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4de3c8a28dd83e141a2b7f3612cbc88e
     m_Address: Prefab_Preview_Table2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57366f5388e8aee4ea006f1250fb1038
+    m_Address: Prefab_Preview_LightingProp2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -112,6 +127,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6cf3d12de3512e5488575ddba3777088
     m_Address: Prefab_Store
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76bc22b8befd209478646c093b65f1b7
+    m_Address: Prefab_BrickGround
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -175,6 +195,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9754b46fe4743c941bf797f46b2f8fda
+    m_Address: Prefab_Preview_Bench
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 97b7103b97c9ef64ba20bca568bf26af
     m_Address: Prefab_Preview_Totem4
     m_ReadOnly: 0
@@ -187,6 +212,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b764bc0739284b4b84fd8d3a764c01a
     m_Address: Prefab_Preview_Scarecrow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a34d35053488dbc4f8a806c1ca5657ec
+    m_Address: Prefab_Preview_BrickGround
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -235,6 +265,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ceb3055bbe1c12040811694df2f30998
+    m_Address: Prefab_Preview_ChristmasTree
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ceb3c2f7244a192438059f43598e0ab4
     m_Address: Prefab_Fence
     m_ReadOnly: 0
@@ -242,6 +277,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1d2b0f525d9f8a438a837f97b2ce6ae
     m_Address: Prefab_Preview_Ballon2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d36244faecaa78f42b8121187279f4b6
+    m_Address: Prefab_Bench
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

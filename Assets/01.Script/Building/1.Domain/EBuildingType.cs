@@ -32,5 +32,9 @@ public enum EBuildingType
     Painting,
     GachaMachine,
 
+    Bench,
+    LightingProp2,
+    ChristmasTree,
+    BrickGround,
     None
 }

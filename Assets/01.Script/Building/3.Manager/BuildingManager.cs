@@ -110,6 +110,7 @@ public class BuildingManager : MonoBehaviour
                 return data;
             }
         }
+
         return null;
     }
 
@@ -123,7 +124,7 @@ public class BuildingManager : MonoBehaviour
 
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(building.ChunkId);
         Vector3 worldPosition = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, building.Position);
-
+        worldPosition.y += 0.01f; // 약간의 높이 조정 z파이팅 예방
         GameObject buildingObj = Instantiate(prefab, worldPosition, Quaternion.Euler(building.Rotation));
         buildingObj.transform.SetParent(transform);
         buildingObj.name = $"{building.Type}_{building.GetBuildingId()}";
@@ -148,7 +149,7 @@ public class BuildingManager : MonoBehaviour
         // 빌딩을 격자 단위로 스냅
         return new Vector3(
             Mathf.Round(position.x),
-            position.y,
+            position.y + 0.01f,// 약간의 높이 조정
             Mathf.Round(position.z)
         );
     }
@@ -224,15 +225,15 @@ public class BuildingManager : MonoBehaviour
     {
         ChunkPosition chunkPos = WorldManager.Instance.GetChunkPositionFromId(chunkId);
         Vector3 worldPosition = WorldManager.Instance.GetWorldPositionFromChunkLocal(chunkPos, centerPosition);
-        
+
         Vector3 boxSize = new Vector3(
             size.x * ChunkGenerator.Instance.blockOffset.x,
             2f, // 높이는 고정값
             size.y * ChunkGenerator.Instance.blockOffset.z
         );
-        
+
         Collider[] overlapping = Physics.OverlapBox(worldPosition, boxSize * 0.5f, Quaternion.identity);
-        
+
         foreach (var collider in overlapping)
         {
             if (collider.GetComponent<BuildingObject>() != null)
@@ -240,7 +241,7 @@ public class BuildingManager : MonoBehaviour
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -256,22 +257,22 @@ public class BuildingManager : MonoBehaviour
         if (chunk == null) return false;
 
         string chunkId = chunk.Position.ToChunkId();
-        
+
         // 해당 청크의 forage만 가져오기
         var chunkForages = ForageManager.Instance.GetForagesInChunk(chunkId);
-        
+
         // 빌딩 크기에 따른 체크 반경
         float checkRadius = Mathf.Max(size.x, size.y) * 1.5f;
-        
+
         foreach (var forage in chunkForages)
         {
             if (forage == null) continue;
-            
+
             float distance = Vector3.Distance(
                 new Vector3(centerPosition.x, 0, centerPosition.z),
                 new Vector3(forage.transform.position.x, 0, forage.transform.position.z)
             );
-            
+
             if (distance < checkRadius)
             {
                 return true; // forage가 근처에 있으면 설치 불가
