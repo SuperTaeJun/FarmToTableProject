@@ -11,7 +11,6 @@ public class UI_ImagePreview : UI_Popup
     private void Start()
     {
         confirmButton.onClick.AddListener(OnConfirmButtonClicked);
-        
     }
 
     public override void Open(System.Action callback = null)
@@ -28,10 +27,8 @@ public class UI_ImagePreview : UI_Popup
 
     private void OnConfirmButtonClicked()
     {
-        // 이미지 확정 및 저장
         ImageGenerationManager.Instance.ConfirmPendingImage();
-        
-        // 팝업 닫기
-        Close();
+
+        PopupManager.Instance.PopUpClose();
     }
 }

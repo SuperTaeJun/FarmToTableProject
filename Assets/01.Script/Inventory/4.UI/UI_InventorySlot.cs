@@ -88,7 +88,7 @@ public class UI_InventorySlot : MonoBehaviour
         if (_currentItem != null)
         {
             Debug.Log($"클릭된 아이템: {_currentItem.ItemType} x{_currentItem.Quantity}");
-            // TODO: 아이템 사용/드롭 등의 기능 구현
+
             ShowItemDetails();
         }
     }

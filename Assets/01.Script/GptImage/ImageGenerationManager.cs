@@ -27,7 +27,7 @@ public class ImageGenerationManager : MonoBehaviour
     private Action<Texture2D> _selectedImageCallback;
     public event Action<Texture2D> OnImageGenerationComplete;
     public event Action OnImageConfirmed;
-
+    public event Action OnGeneratingImage;
     public List<Texture2D> GeneratedImages => _generatedImages;
 
     private void Awake()
@@ -58,7 +58,7 @@ public class ImageGenerationManager : MonoBehaviour
         {
             return;
         }
-
+        OnGeneratingImage?.Invoke();
         StartCoroutine(GenerateImageCoroutine(prompt, onSuccess));
     }
 

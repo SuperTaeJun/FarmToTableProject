@@ -11,7 +11,7 @@ public class UI_ImageGenerator : UI_Popup
     private void Start()
     {
         _generateButton.onClick.AddListener(OnGenerateButtonClicked);
-        _closeButton.onClick.AddListener(()=> { Close(); _promptInput.text = string.Empty; });
+        _closeButton.onClick.AddListener(()=> { PopupManager.Instance.PopUpClose(); _promptInput.text = string.Empty; });
     }
 
     private void OnGenerateButtonClicked()
@@ -25,7 +25,7 @@ public class UI_ImageGenerator : UI_Popup
 
         ImageGenerationManager.Instance.GenerateImage(prompt, OnImageGenerated);
         _promptInput.text = string.Empty;
-        Close();
+        PopupManager.Instance.PopUpClose();
     }
 
     private void OnImageGenerated(Texture2D texture)

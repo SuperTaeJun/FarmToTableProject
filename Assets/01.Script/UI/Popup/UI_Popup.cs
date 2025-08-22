@@ -21,8 +21,9 @@ public class UI_Popup : MonoBehaviour
     public virtual void Close()
     {
         _closeCallback?.Invoke();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
-        PopupManager.Instance.PopUpClose();
 
         gameObject.transform.DOKill();
         gameObject.transform.DOScale(0f, 0.2f).SetEase(Ease.OutCirc).OnComplete(() =>

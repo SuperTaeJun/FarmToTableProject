@@ -12,7 +12,7 @@ public class UI_Vehicle : UI_Popup
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
-        _closeButton.onClick.AddListener(Close);
+        _closeButton.onClick.AddListener(()=>PopupManager.Instance.PopUpClose());
 
         // 각 버튼에 이벤트 연결 및 해금 상태 확인
         foreach (var buttonInfo in _vehicleButtons)
@@ -59,7 +59,6 @@ public class UI_Vehicle : UI_Popup
     {
         if (VehicleManager.Instance == null)
         {
-            Debug.LogError("VehicleManager가 없습니다!");
             return;
         }
 
@@ -68,7 +67,7 @@ public class UI_Vehicle : UI_Popup
 
         if (vehicle != null)
         {
-            Close();
+            PopupManager.Instance.PopUpClose();
         }
     }
 
@@ -86,7 +85,6 @@ public class UI_Vehicle : UI_Popup
             Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             buttonInfo.Button.onClick.AddListener(() => { SpawnVehicle(vehicleType, player); });
 
-            Debug.Log($"{vehicleType} 차량 UI가 해금 상태로 업데이트되었습니다.");
         }
     }
 
@@ -138,6 +136,5 @@ public class VehicleButtonInfo
     public Image IconImage;
 
     [Header("잠금 오브젝트")]
-    [Tooltip("잠금 상태일 때 활성화될 오브젝트 (자물쇠 아이콘 등)")]
     public GameObject LockObject;
 }

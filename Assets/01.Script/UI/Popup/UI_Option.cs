@@ -10,20 +10,20 @@ public class UI_Option : UI_Popup
 
     void Start()
     {
-        SaveButton.onClick.AddListener(OnClikedSaveButton);
-        ReturnGameButton.onClick.AddListener(OnClikedReturnGameButton);
-        ExitButton.onClick.AddListener(OnClikedReturnToTitle);
+        SaveButton.onClick.AddListener(OnClickedSaveButton);
+        ReturnGameButton.onClick.AddListener(OnClickedReturnGameButton);
+        ExitButton.onClick.AddListener(OnClickedReturnToTitle);
     }
 
-    private void OnClikedSaveButton()
+    private void OnClickedSaveButton()
     {
         WorldManager.Instance.SaveWorld();
     }
-    private void OnClikedReturnGameButton()
+    private void OnClickedReturnGameButton()
     {
-        Close();
+        PopupManager.Instance.PopUpClose();
     }
-    private void OnClikedReturnToTitle()
+    private void OnClickedReturnToTitle()
     {
         SceneManager.LoadScene("TitleScene"); // 타이틀 씬 로드
     }

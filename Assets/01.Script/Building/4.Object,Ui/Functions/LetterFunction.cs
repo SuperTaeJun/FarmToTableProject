@@ -13,15 +13,18 @@ public class LetterFunction : IBuildingFunction
     private ELetterState currentState = ELetterState.Empty;
     private Texture2D generatedImage;
 
+    bool isSubscribe = false;
+
     public LetterFunction(BuildingObject buildingObject)
     {
         _buildingObject = buildingObject;
 
-        if (ImageGenerationManager.Instance != null)
-        {
-            ImageGenerationManager.Instance.OnImageGenerationComplete += OnImageGenerationComplete;
-            ImageGenerationManager.Instance.OnImageConfirmed += OnImageConfirmed;
-        }
+        //if (ImageGenerationManager.Instance != null)
+        //{
+        //    ImageGenerationManager.Instance.OnGeneratingImage += () => currentState = ELetterState.Generating;
+        //    ImageGenerationManager.Instance.OnImageGenerationComplete += OnImageGenerationComplete;
+        //    ImageGenerationManager.Instance.OnImageConfirmed += OnImageConfirmed;
+        //}
     }
 
     public void Execute()
@@ -36,7 +39,6 @@ public class LetterFunction : IBuildingFunction
                 _ = CurrencyManager.Instance.TrySpendCurrency(ECurrencyType.Gem, 2);
 
                 PopupManager.Instance.Open(EPopupType.UI_ImageGenerator);
-                currentState = ELetterState.Generating;
                 break;
 
             case ELetterState.Generating:
@@ -79,6 +81,14 @@ public class LetterFunction : IBuildingFunction
 
     public void Update()
     {
+        if (ImageGenerationManager.Instance && isSubscribe == false)
+        {
+            ImageGenerationManager.Instance.OnGeneratingImage += () => currentState = ELetterState.Generating;
+            ImageGenerationManager.Instance.OnImageGenerationComplete += OnImageGenerationComplete;
+            ImageGenerationManager.Instance.OnImageConfirmed += OnImageConfirmed;
+            isSubscribe = true;
+        }
+
     }
 
 }

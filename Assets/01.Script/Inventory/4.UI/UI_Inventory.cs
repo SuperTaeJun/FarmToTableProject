@@ -19,7 +19,7 @@ public class UI_Inventory : UI_Popup
     private void Awake()
     {
         if (_closeButton != null)
-            _closeButton.onClick.AddListener(Close);
+            _closeButton.onClick.AddListener(()=>PopupManager.Instance.PopUpClose());
     }
 
     private void Start()
@@ -96,6 +96,6 @@ public class UI_Inventory : UI_Popup
         }
 
         if (_closeButton != null)
-            _closeButton.onClick.RemoveListener(Close);
+            _closeButton.onClick.RemoveListener(() => PopupManager.Instance.PopUpClose());
     }
 }

@@ -13,7 +13,6 @@ public class FadeManager : MonoBehaviourSingleton<FadeManager>
     protected override void Awake()
     {
         base.Awake();
-
     }
 
     public void FadeToScene(string sceneName)

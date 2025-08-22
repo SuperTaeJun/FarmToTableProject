@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerInputAbility : PlayerAbility
@@ -53,12 +54,9 @@ public class PlayerInputAbility : PlayerAbility
         HandleMouseCursor();
         HandleInteractionInput();
         HandleModeChangeInput();
-        HandleOptionPopupInput();
+        HandlePopupInput();
 
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            PopupManager.Instance.Open(EPopupType.UI_Vehicle);
-        }
+
     }
 
     private void OnPopupStateChanged(bool isOpen)
@@ -80,11 +78,38 @@ public class PlayerInputAbility : PlayerAbility
     }
 
 
-    private void HandleOptionPopupInput()
+    private void HandlePopupInput()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            PopupManager.Instance.Open(EPopupType.UI_OptionPopup);
+            if (_isPopupOpen)
+            {
+                PopupManager.Instance.PopUpClose(() => SetPlayerMoveInputLock(true));
+                return;
+            }
+            else
+                PopupManager.Instance.Open(EPopupType.UI_OptionPopup);
+
+            return;
+        }
+
+        if (_isPopupOpen) return;
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_SeedSelectPopup);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_InventoryPopup);
+        }
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_BuildingPopup);
+        }
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            PopupManager.Instance.Open(EPopupType.UI_Vehicle);
         }
     }
     private void HandleModeChangeInput()
@@ -161,6 +186,9 @@ public class PlayerInputAbility : PlayerAbility
     }
     private void HandleInteractionInput()
     {
+        if (_isPopupOpen) return;
+
+
         if (Input.GetKeyDown(KeyCode.F))
         {
             OnBuildingInteractionInput.Invoke();

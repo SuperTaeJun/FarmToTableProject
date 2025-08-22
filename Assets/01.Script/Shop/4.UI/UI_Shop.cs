@@ -58,7 +58,7 @@ public class UI_Shop : UI_Popup
     private void SetupButtons()
     {
         if (_closeButton != null)
-            _closeButton.onClick.AddListener(Close);
+            _closeButton.onClick.AddListener(OnClose);
             
         if (_buyTabButton != null)
             _buyTabButton.onClick.AddListener(() => SwitchTab(true));
@@ -103,9 +103,9 @@ public class UI_Shop : UI_Popup
         SoundManager.Instance.PlayBGM(BGMType.Store);
     }
 
-    public override void Close()
+    public void OnClose()
     {
-        base.Close();
+        PopupManager.Instance.PopUpClose();
 
         _buyTabButton.image.color = Color.white;
         _buyTabPanel.gameObject.SetActive(true);
@@ -331,7 +331,7 @@ public class UI_Shop : UI_Popup
         }
         
         if (_closeButton != null)
-            _closeButton.onClick.RemoveListener(Close);
+            _closeButton.onClick.RemoveListener(OnClose);
     }
     
     #region 아이템 정보 시스템 (구매/판매 공통)

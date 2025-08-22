@@ -12,18 +12,18 @@ public class UI_SeedSelect : UI_Popup
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         PlayerFarmingAbility ability = player.GetAbility<PlayerFarmingAbility>();
-
-        _closeButton.onClick.AddListener(Close);
+            
+        _closeButton.onClick.AddListener(()=>PopupManager.Instance.PopUpClose());
 
         //이벤트 등록
         foreach (var button in Buttons)
         {
-            //button.Button.onClick.AddListener(() => ability.SetCurrentSeed(button.Type));
             ECropType cropType = button.Type; // 지역 변수로 복사                                           
-            button.Button.onClick.AddListener(() => { ability.SetCurrentSeed(cropType); Close(); });
+            button.Button.onClick.AddListener(() => { ability.SetCurrentSeed(cropType); PopupManager.Instance.PopUpClose(); });
 
         }
     }
+
 }
 
 [Serializable]

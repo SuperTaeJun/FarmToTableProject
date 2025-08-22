@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public enum EPopupType
@@ -69,7 +70,8 @@ public class PopupManager : MonoBehaviour
     {
         if (_openPopups.Count > 0)
         {
-            _openPopups.Pop();
+            //_openPopups.Peek()
+            _openPopups.Pop().Close();
             OnPopupStateChanged.Invoke(_openPopups.Count > 0);
         }
     }

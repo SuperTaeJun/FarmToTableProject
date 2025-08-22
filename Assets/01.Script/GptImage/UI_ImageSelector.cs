@@ -92,17 +92,15 @@ public class UI_ImageSelector : UI_Popup
     {
         if (selectedIndex >= 0)
         {
-            // 선택된 이미지를 Manager에 설정
             ImageGenerationManager.Instance.SelectImage(selectedIndex);
-            
-            // 팝업 닫기
-            Close();
+
+            PopupManager.Instance.PopUpClose();
         }
     }
 
     private void OnCancelButtonClicked()
     {
-        Close();
+        PopupManager.Instance.PopUpClose();
     }
 }
 

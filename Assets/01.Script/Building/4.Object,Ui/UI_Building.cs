@@ -35,7 +35,7 @@ public class UI_Building : UI_Popup
 
     private void SetupUI()
     {
-        _closeButton.onClick.AddListener(Close);
+        _closeButton.onClick.AddListener(()=>PopupManager.Instance.PopUpClose());
         _functionalTabButton.onClick.AddListener(() => ShowCategory(EBuildingCategory.Functional));
         _decorativeTabButton.onClick.AddListener(() => ShowCategory(EBuildingCategory.Decorative));
     }
@@ -76,7 +76,7 @@ public class UI_Building : UI_Popup
     private void OnBuildingSelected(EBuildingType buildingType)
     {
         _buildAbility.SetSelectedType(buildingType);
-        Close();
+        PopupManager.Instance.PopUpClose();
     }
 
     private void ShowCategory(EBuildingCategory category)
